@@ -1,0 +1,366 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.net.system.mapper.order.OrderRefundsMapper">
+
+<resultMap id="BaseResultMap" type="com.net.system.model.OrderRefunds">
+  <id column="id" jdbcType="VARCHAR" property="id" />
+  <result column="order_id" jdbcType="VARCHAR" property="orderId" />
+  <result column="refund_reson" jdbcType="VARCHAR" property="refundReson" />
+  <result column="describe" jdbcType="VARCHAR" property="describe" />
+  <result column="reply" jdbcType="VARCHAR" property="reply" />
+  <result column="add_time" jdbcType="TIMESTAMP" property="addTime" />
+  <result column="status" jdbcType="INTEGER" property="status" />
+  <result column="refund_time" jdbcType="TIMESTAMP" property="refundTime" />
+  <result column="goods_status" jdbcType="INTEGER" property="goodsStatus" />
+  <result column="apply_type" jdbcType="INTEGER" property="applyType" />
+  <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+  <result column="logi_code" jdbcType="VARCHAR" property="logiCode" />
+  <result column="logi_no" jdbcType="VARCHAR" property="logiNo" />
+  <result column="addressee" jdbcType="VARCHAR" property="addressee" />
+  <result column="phone" jdbcType="VARCHAR" property="phone" />
+  <result column="address" jdbcType="VARCHAR" property="address" />
+</resultMap>
+
+<resultMap id="BaseResultMapVo" type="com.net.system.model.vo.OrderRefundsVo">
+  <id column="id" jdbcType="VARCHAR" property="id" />
+  <result column="order_id" jdbcType="VARCHAR" property="orderId" />
+  <result column="refund_reson" jdbcType="VARCHAR" property="refundReson" />
+  <result column="describe" jdbcType="VARCHAR" property="describe" />
+  <result column="reply" jdbcType="VARCHAR" property="reply" />
+  <result column="add_time" jdbcType="TIMESTAMP" property="addTime" />
+  <result column="status" jdbcType="INTEGER" property="status" />
+  <result column="refund_time" jdbcType="TIMESTAMP" property="refundTime" />
+  <result column="goods_status" jdbcType="INTEGER" property="goodsStatus" />
+  <result column="apply_type" jdbcType="INTEGER" property="applyType" />
+  <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+  <result column="logi_code" jdbcType="VARCHAR" property="logiCode" />
+  <result column="logi_no" jdbcType="VARCHAR" property="logiNo" />
+  <result column="addressee" jdbcType="VARCHAR" property="addressee" />
+  <result column="phone" jdbcType="VARCHAR" property="phone" />
+  <result column="address" jdbcType="VARCHAR" property="address" />
+  <collection property="files"
+			ofType="com.net.system.model.Files"
+			select="findFilesByProId"
+			column="id" />
+</resultMap>
+
+
+
+<resultMap id="FilesBaseResultMap" type="com.net.system.model.Files">
+  <id column="id" jdbcType="VARCHAR" property="id" />
+  <result column="imageurl" jdbcType="VARCHAR" property="imageurl" />
+  <result column="imagename" jdbcType="VARCHAR" property="imagename" />
+  <result column="imagetype" jdbcType="VARCHAR" property="imagetype" />
+  <result column="productid" jdbcType="VARCHAR" property="productid" />
+  <result column="createtime" jdbcType="TIMESTAMP" property="createtime" />
+  <result column="createuser" jdbcType="INTEGER" property="createuser" />
+  <result column="sort" jdbcType="INTEGER" property="sort" />
+</resultMap>
+
+<select id="findFilesByProId" parameterType="String" resultMap="FilesBaseResultMap">
+  select
+	*
+  from  t_file
+  where productid=#{id}
+</select>
+
+  
+<sql id="Base_Column_List">
+  id, order_id, refund_reson, `describe`, reply, add_time, `status`, refund_time, goods_status, 
+  apply_type, update_time, logi_code, logi_no, addressee, phone, address
+</sql>
+
+  
+<delete id="delete" parameterType="java.lang.String">
+  delete from t_order_refunds
+  where id = #{id}
+</delete>
+
+  
+<insert id="insert" parameterType="com.net.system.model.OrderRefunds">
+  insert into t_order_refunds (id, order_id, refund_reson, 
+    describe, reply, add_time, 
+    status, refund_time, goods_status, 
+    apply_type, update_time, logi_code, 
+    logi_no, addressee, phone, 
+    address)
+  values (#{id}, #{orderId}, #{refundReson}, 
+    #{describe}, #{reply}, #{addTime}, 
+    #{status,jdbcType=INTEGER}, #{refundTime}, #{goodsStatus,jdbcType=INTEGER}, 
+    #{applyType,jdbcType=INTEGER}, #{updateTime}, #{logiCode}, 
+    #{logiNo}, #{addressee}, #{phone}, 
+    #{address})
+</insert>
+
+  
+<insert id="insertDynamic" parameterType="com.net.system.model.OrderRefunds">
+  insert into t_order_refunds
+  <trim prefix="(" suffix=")" suffixOverrides=",">
+    <if test="id != null">
+      id,
+    </if>
+    <if test="orderId != null">
+      order_id,
+    </if>
+    <if test="refundReson != null">
+      refund_reson,
+    </if>
+    <if test="describe != null">
+      `describe`,
+    </if>
+    <if test="reply != null">
+      reply,
+    </if>
+    <if test="addTime != null">
+      add_time,
+    </if>
+    <if test="status != null">
+      `status`,
+    </if>
+    <if test="refundTime != null">
+      refund_time,
+    </if>
+    <if test="goodsStatus != null">
+      goods_status,
+    </if>
+    <if test="applyType != null">
+      apply_type,
+    </if>
+    <if test="updateTime != null">
+      update_time,
+    </if>
+    <if test="logiCode != null">
+      logi_code,
+    </if>
+    <if test="logiNo != null">
+      logi_no,
+    </if>
+    <if test="addressee != null">
+      addressee,
+    </if>
+    <if test="phone != null">
+      phone,
+    </if>
+    <if test="address != null">
+      address,
+    </if>
+  </trim>
+  <trim prefix="values (" suffix=")" suffixOverrides=",">
+    <if test="id != null">
+      #{id},
+    </if>
+    <if test="orderId != null">
+      #{orderId},
+    </if>
+    <if test="refundReson != null">
+      #{refundReson},
+    </if>
+    <if test="describe != null">
+      #{describe},
+    </if>
+    <if test="reply != null">
+      #{reply},
+    </if>
+    <if test="addTime != null">
+      #{addTime},
+    </if>
+    <if test="status != null">
+      #{status,jdbcType=INTEGER},
+    </if>
+    <if test="refundTime != null">
+      #{refundTime},
+    </if>
+    <if test="goodsStatus != null">
+      #{goodsStatus,jdbcType=INTEGER},
+    </if>
+    <if test="applyType != null">
+      #{applyType,jdbcType=INTEGER},
+    </if>
+    <if test="updateTime != null">
+      #{updateTime},
+    </if>
+    <if test="logiCode != null">
+      #{logiCode},
+    </if>
+    <if test="logiNo != null">
+      #{logiNo},
+    </if>
+    <if test="addressee != null">
+      #{addressee},
+    </if>
+    <if test="phone != null">
+      #{phone},
+    </if>
+    <if test="address != null">
+      #{address},
+    </if>
+  </trim>
+</insert>
+
+  
+<update id="updateDynamic" parameterType="com.net.system.model.OrderRefunds">
+  update t_order_refunds
+  <set>
+    <if test="orderId != null">
+      order_id = #{orderId},
+    </if>
+    <if test="refundReson != null">
+      refund_reson = #{refundReson},
+    </if>
+    <if test="describe != null">
+      `describe` = #{describe},
+    </if>
+    <if test="reply != null">
+      reply = #{reply},
+    </if>
+    <if test="addTime != null">
+      add_time = #{addTime},
+    </if>
+    <if test="status != null">
+      `status` = #{status,jdbcType=INTEGER},
+    </if>
+    <if test="refundTime != null">
+      refund_time = #{refundTime},
+    </if>
+    <if test="goodsStatus != null">
+      goods_status = #{goodsStatus,jdbcType=INTEGER},
+    </if>
+    <if test="applyType != null">
+      apply_type = #{applyType,jdbcType=INTEGER},
+    </if>
+    <if test="updateTime != null">
+      update_time = #{updateTime},
+    </if>
+    <if test="logiCode != null">
+      logi_code = #{logiCode},
+    </if>
+    <if test="logiNo != null">
+      logi_no = #{logiNo},
+    </if>
+    <if test="addressee != null">
+      addressee = #{addressee},
+    </if>
+    <if test="phone != null">
+      phone = #{phone},
+    </if>
+    <if test="address != null">
+      address = #{address},
+    </if>
+  </set>
+  where id = #{id}
+</update>
+
+  
+<update id="update" parameterType="com.net.system.model.OrderRefunds">
+  update t_order_refunds
+  set order_id = #{orderId},
+    refund_reson = #{refundReson},
+    describe = #{describe},
+    reply = #{reply},
+    add_time = #{addTime},
+    status = #{status,jdbcType=INTEGER},
+    refund_time = #{refundTime},
+    goods_status = #{goodsStatus,jdbcType=INTEGER},
+    apply_type = #{applyType,jdbcType=INTEGER},
+    update_time = #{updateTime},
+    logi_code = #{logiCode},
+    logi_no = #{logiNo},
+    addressee = #{addressee},
+    phone = #{phone},
+    address = #{address}
+  where id = #{id}
+</update>
+
+  
+<select id="selectById" parameterType="java.lang.String" resultMap="BaseResultMapVo">
+  select
+	<include refid="Base_Column_List" />
+  from  t_order_refunds
+  where id = #{id}
+</select>
+
+  
+<sql id="findPageWithWhere">
+    <where> 1=1 
+	<if test="id != null and id != ''" >
+	  and id = #{id}
+	</if>
+	<if test="orderId != null and orderId != ''" >
+	  and order_id = #{orderId}
+	</if>
+	<if test="refundReson != null and refundReson != ''" >
+	  and refund_reson = #{refundReson}
+	</if>
+	<if test="describe != null and describe != ''" >
+	  and describe = #{describe}
+	</if>
+	<if test="reply != null and reply != ''" >
+	  and reply = #{reply}
+	</if>
+	<if test="addTime != null and addTime != ''" >
+	  and add_time = #{addTime}
+	</if>
+	<if test="status != null" >
+	  and status = #{status,jdbcType=INTEGER}
+	</if>
+	<if test="refundTime != null and refundTime != ''" >
+	  and refund_time = #{refundTime}
+	</if>
+	<if test="goodsStatus != null" >
+	  and goods_status = #{goodsStatus,jdbcType=INTEGER}
+	</if>
+	<if test="applyType != null" >
+	  and apply_type = #{applyType,jdbcType=INTEGER}
+	</if>
+	<if test="updateTime != null and updateTime != ''" >
+	  and update_time = #{updateTime}
+	</if>
+	<if test="logiCode != null and logiCode != ''" >
+	  and logi_code = #{logiCode}
+	</if>
+	<if test="logiNo != null and logiNo != ''" >
+	  and logi_no = #{logiNo}
+	</if>
+	<if test="addressee != null and addressee != ''" >
+	  and addressee = #{addressee}
+	</if>
+	<if test="phone != null and phone != ''" >
+	  and phone = #{phone}
+	</if>
+	<if test="address != null and address != ''" >
+	  and address = #{address}
+	</if>
+  </where>
+</sql>
+
+  
+<select id="findPageWithResult" parameterType="Map" resultType="HashMap">
+  select 
+   r.id,o.serial_number serialNumber, r.order_id orderId, r.refund_reson refundReson, r.`describe`, r.reply,r. add_time addTime,o.status orderStatus, r.`status`, r.refund_time refundTime, r.goods_status goodsStatus, 
+   r.apply_type applyType, r.update_time updateTime, r.logi_code logiCode, r.logi_no logiNo, r.addressee, r.phone, r.address 
+  from t_order_refunds r left join t_order o on r.order_id=o.id
+   <where>
+       <if test="status !=null and status!=''">
+	     and r.status = #{status}
+	 </if>
+	  <if test="applyType !=null and applyType!=''">
+	     and r.apply_type = #{applyType}
+	 </if>
+	 <if test="goodsStatus !=null and goodsStatus!=''">
+	     and r.goods_status = #{goodsStatus}
+	 </if>
+	  <if test="serialNumber !=null and serialNumber!=''">
+	     and o.serial_number = #{serialNumber}
+	 </if>
+   </where>
+</select>
+
+<select id="findByOrderId" parameterType="String" resultMap="BaseResultMapVo">
+  select
+	<include refid="Base_Column_List" />
+  from  t_order_refunds where order_id = #{id}
+</select>
+
+
+
+</mapper>

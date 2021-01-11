@@ -1,0 +1,273 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.net.system.mapper.order.CartMapper">
+
+	<resultMap id="BaseResultMap"
+		type="com.net.system.model.Cart">
+		<id column="id" jdbcType="VARCHAR" property="id" />
+		<result column="user_id" jdbcType="VARCHAR" property="userId" />
+		<result column="product_id" jdbcType="VARCHAR"
+			property="productId" />
+		<result column="quantity" jdbcType="INTEGER"
+			property="quantity" />
+		<result column="createtime" jdbcType="TIMESTAMP"
+			property="createtime" />
+		<result column="updatetime" jdbcType="TIMESTAMP"
+			property="updatetime" />
+		<result column="sku_id" jdbcType="VARCHAR" property="skuId" />
+	</resultMap>
+
+
+	<sql id="Base_Column_List">
+		id, user_id, product_id, quantity, createtime, updatetime,
+		sku_id
+	</sql>
+
+	<update id="updateNumber" parameterType="Map">
+		update t_cart set
+		quantity =
+		#{quantity},
+		updatetime =
+		#{updatetime}
+		where id = #{id}
+	</update>
+	
+	
+	
+	<update id="deleteBySku" parameterType="com.net.system.model.Cart">
+		delete from t_cart
+		where user_id=#{userId} and sku_id=#{skuId}
+	</update>
+
+
+
+
+	<delete id="delete" parameterType="Map">
+		delete from t_cart
+		where
+		id in
+		<foreach collection="id" item="item" index="index" open="("
+			close=")" separator=",">
+			#{item}
+		</foreach>
+	</delete>
+
+
+	<insert id="insert" parameterType="com.net.system.model.Cart">
+		insert into t_cart (id,
+		user_id, product_id,
+		quantity, createtime, updatetime,
+		sku_id)
+		values
+		(#{id}, #{userId},
+		#{productId},
+		#{quantity},
+		#{createtime},
+		#{updatetime},
+		#{skuId})
+	</insert>
+
+
+	<insert id="insertDynamic"
+		parameterType="com.net.system.model.Cart">
+		insert into t_cart
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				id,
+			</if>
+			<if test="userId != null">
+				user_id,
+			</if>
+			<if test="productId != null">
+				product_id,
+			</if>
+			<if test="quantity != null">
+				quantity,
+			</if>
+			<if test="createtime != null">
+				createtime,
+			</if>
+			<if test="updatetime != null">
+				updatetime,
+			</if>
+			<if test="skuId != null">
+				sku_id,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				#{id},
+			</if>
+			<if test="userId != null">
+				#{userId},
+			</if>
+			<if test="productId != null">
+				#{productId},
+			</if>
+			<if test="quantity != null">
+				#{quantity},
+			</if>
+			<if test="createtime != null">
+				#{createtime},
+			</if>
+			<if test="updatetime != null">
+				#{updatetime},
+			</if>
+			<if test="skuId != null">
+				#{skuId},
+			</if>
+		</trim>
+	</insert>
+
+
+	<update id="updateDynamic"
+		parameterType="com.net.system.model.Cart">
+		update t_cart
+		<set>
+			<if test="userId != null">
+				user_id = #{userId},
+			</if>
+			<if test="productId != null">
+				product_id = #{productId},
+			</if>
+			<if test="quantity != null">
+				quantity = #{quantity},
+			</if>
+			<if test="createtime != null">
+				createtime = #{createtime},
+			</if>
+			<if test="updatetime != null">
+				updatetime = #{updatetime},
+			</if>
+			<if test="skuId != null">
+				sku_id = #{skuId},
+			</if>
+		</set>
+		where id = #{id}
+	</update>
+
+
+	<update id="update" parameterType="com.net.system.model.Cart">
+		update t_cart
+		set user_id =
+		#{userId},
+		product_id = #{productId},
+		quantity = #{quantity},
+		createtime
+		=
+		#{createtime},
+		updatetime =
+		#{updatetime},
+		sku_id = #{skuId}
+		where id =
+		#{id}
+	</update>
+
+
+	<select id="selectById" parameterType="java.lang.String"
+		resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from t_cart
+		where id = #{id}
+	</select>
+
+	<select id="selectBySkuId" parameterType="Map"
+		resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from t_cart
+		where sku_id = #{skuId} and product_id=#{productId} and user_id=#{userId}
+	</select>
+
+
+
+	<sql id="findPageWithWhere">
+		<where>
+			1=1
+			<if test="id != null and id != ''">
+				and id = #{id}
+			</if>
+			<if test="userId != null and userId != ''">
+				and user_id = #{userId}
+			</if>
+			<if test="productId != null and productId != ''">
+				and product_id = #{productId}
+			</if>
+			<if test="quantity != null">
+				and quantity = #{quantity}
+			</if>
+			<if test="createtime != null and createtime != ''">
+				and createtime = #{createtime}
+			</if>
+			<if test="updatetime != null and updatetime != ''">
+				and updatetime = #{updatetime}
+			</if>
+			<if test="skuId != null and skuId != ''">
+				and sku_id = #{skuId}
+			</if>
+		</where>
+	</sql>
+
+	<select id="countCartNumber" parameterType="Map"
+		resultType="int">
+		select count(1) from t_cart c LEFT JOIN
+		t_product p on
+		c.product_id=p.id
+		where p.status=1 and user_id=#{userId}
+	</select>
+
+	<select id="findPageWithResult" parameterType="Map"
+		resultType="HashMap">
+		select  t.*, (select v.img from t_product_sku_key k left join
+		t_product_sku_val v on k.id=v.attr_key_id
+		where k.product_id= proid and t.customValue LIKE  CONCAT('%',v.name,'%')  and v.type=2 LIMIT 1
+
+		) skuImg from(select c.id,c.quantity,p.id proid,p.productName
+		`name`,p.mainImage,p.description,s.stock,p.`status`
+		`status`,p.subtitle
+		subtitle,title,c.createtime,
+		s.price,
+		s.sku_id skuId,
+		s.custom_value customValue
+		from t_cart c
+		LEFT JOIN
+		t_product p on
+		c.product_id=p.id
+		right join t_product_sku s on
+		c.sku_id=s.sku_id
+		where
+		c.user_id=#{userId} and p.status=1
+		<if test="keyword!='' and keyword!=null">
+			and (p.productName like CONCAT('%',#{keyword},'%') or
+			p.description like CONCAT('%',#{keyword},'%') or
+			p.subtitle like CONCAT('%',#{keyword},'%') or
+			title like CONCAT('%',#{keyword},'%')
+			)
+		</if>
+		) t
+		ORDER BY
+		DATE_FORMAT(t.createtime,'%Y-%m-%d
+		%H:%i:%s') desc
+	</select>
+
+	<select id="findCartById" parameterType="Map"
+		resultType="HashMap">
+		select c.id,c.quantity,p.id proid,p.productName
+		`name`,p.mainImage,p.description,s.stock,p.`status`
+		`status`,p.subtitle
+		subtitle,title,c.createtime,
+		p.price,
+		s.price
+		presentPrice,
+		c.sku_id skuId
+		from t_cart c LEFT JOIN
+		t_product p on
+		c.product_id=p.id
+		left join t_product_sku s on c.sku_id=s.sku_id
+		where
+		c.id=#{id}
+
+	</select>
+
+</mapper>

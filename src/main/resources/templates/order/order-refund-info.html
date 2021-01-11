@@ -1,0 +1,635 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+<meta charset="UTF-8">
+<title>商品类型添加</title>
+<meta name="renderer" content="webkit">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<meta name="viewport"
+	content="width=device-width,user-scalable=yes, minimum-scale=0.4, initial-scale=0.8,target-densitydpi=low-dpi" />
+<link rel="shortcut icon" type="image/x-icon" th:href="@{/favicon.ico}" />
+<link rel="stylesheet" th:href="@{/lib/layui/css/layui.css}">
+<link rel="stylesheet" th:href="@{/css/common.css}">
+<link rel="stylesheet" th:href="@{/css/animate.min.css}">
+<link rel="stylesheet" th:href="@{/css/orderInfo.css}">
+</head>
+<style>
+.detail-container {
+	width: 86%;
+	padding: 20px;
+	margin: 20px auto;
+}
+
+.el-table--border th, .el-table__fixed-right-patch {
+	background: #f2f6fc;
+}
+
+.img {
+	height: 100px;
+	margin-right: 5px;
+}
+
+.layui-form-label {
+	width: 100px !important;
+	text-align: center !important;
+}
+</style>
+
+<body>
+	<div class="z-body animated fadeIn">
+		<form action="" method="post" class="layui-form " onsubmit="return false;">
+			<input type="hidden" th:value="${order.id}" id="orderId" />
+			<input type="hidden" id="refundId"
+					th:value="${order.orderRefunds?.id}" />
+			<input type="hidden" id="applyType"
+					th:value="${order.orderRefunds?.applyType}" />
+			<div class="detail-container">
+				<div>
+					<div data-v-dbd3fea4="" class="el-steps el-steps--horizontal">
+					
+					
+					
+
+						
+
+					</div>
+
+					<div class="el-card is-never-shadow" style="margin-top: 15px;">
+						<div class="el-card__body">
+							<div class="operate-container">
+								<i class="layui-icon layui-icon-tips"
+									style="font-size: 24px; color: #f56c6c; margin-left: 10px; margin-right: 5px;"
+									title=""></i> <span th:if="${order.orderRefunds.status==1}"
+									class="color-danger">当前售后状态：待审核</span> <span
+									th:if="${order.orderRefunds.status==3}" class="color-danger">当前订单状态：驳回</span><span
+									th:if="${order.orderRefunds.status==2}"> 
+									 <span th:if="${order.orderRefunds.applyType==2}"> <span
+										th:if="${order.orderRefunds.goodsStatus==1}"
+										class="color-danger">当前售后状态：待发退款货</span> <span
+										th:if="${order.orderRefunds.goodsStatus==2}"
+										class="color-danger">当前售后状态：待收退款货</span> <span
+										th:if="${order.orderRefunds.goodsStatus==3}"
+										class="color-danger">当前售后状态：已收退款货</span>
+								</span>
+								</span>
+								<span th:if="${order.orderRefunds.status==4}"
+									class="color-danger">当前售后状态：待退款</span>
+								<span th:if="${order.orderRefunds.status==5}"
+									class="color-danger">当前售后状态：退款成功</span>
+
+								<div data-v-dbd3fea4="" class="operate-button-container"
+									style="">
+									
+									<button data-v-dbd3fea4="" type="button" id="orderInfo"
+										class="el-button el-button--default el-button--mini">
+										<span>订单详情</span>
+									</button>
+								</div>
+							</div>
+
+							<div data-v-dbd3fea4="" style="margin-top: 20px;">
+								<svg data-v-81d70f2a="" data-v-dbd3fea4="" aria-hidden="true"
+									class="svg-icon" style="color: rgb(96, 98, 102);">
+										<i class="layui-icon layui-icon-read"
+										style="font-size: 20px; color: #606266;"></i>
+										<use data-v-81d70f2a="" xlink:href="#icon-marker"></use>
+									</svg>
+								<span data-v-dbd3fea4="" class="font-small">基本信息</span>
+							</div>
+
+							<div data-v-dbd3fea4="" class="table-layout">
+								<div data-v-dbd3fea4="" class="el-row">
+									<div data-v-dbd3fea4=""
+										class="table-cell-title el-col el-col-6">订单编号</div>
+									<div data-v-dbd3fea4=""
+										class="table-cell-title el-col el-col-6">售后类型</div>
+									<div data-v-dbd3fea4=""
+										class="table-cell-title el-col el-col-6">退款原因</div>
+									<div data-v-dbd3fea4=""
+										class="table-cell-title el-col el-col-6">退款金额</div>
+								</div>
+								<div data-v-dbd3fea4="" class="el-row">
+									<div th:text="${order.serialNumber}"
+										data-v-dbd3fea4="" class="table-cell el-col el-col-6"></div>
+									<div data-v-dbd3fea4="" class="table-cell el-col el-col-6">
+										<span th:if="${order.orderRefunds.applyType==1}">仅退款</span> <span
+											th:if="${order.orderRefunds.applyType==2}">退款退货</span>
+									</div>
+									<div data-v-dbd3fea4="" class="table-cell el-col el-col-6"
+										th:text="${order.orderRefunds.refundReson}">暂无</div>
+									<div data-v-dbd3fea4=""
+										th:text="${order.actual}"
+										class="table-cell el-col el-col-6" style="color: red;">未确定</div>
+								</div>
+							</div>
+							<div data-v-dbd3fea4="" style="margin-top: 20px;">
+								<svg data-v-81d70f2a="" data-v-dbd3fea4="" aria-hidden="true"
+									class="svg-icon" style="color: rgb(96, 98, 102);">
+										<i class="layui-icon layui-icon-read"
+										style="font-size: 20px; color: #606266;"></i>
+										<use data-v-81d70f2a="" xlink:href="#icon-marker"></use>
+									</svg>
+								<span data-v-dbd3fea4="" class="font-small">照片凭证</span>
+							</div>
+							<div class="layui-form-item">
+								<div class="layui-inline"
+									style="margin-right: 80px;">
+									<div style="float: left; margin-top: 10px; width: auto;"
+										class="">
+										<img th:each="files:${order.orderRefunds.files}"
+											class="img" th:src="${files.imageurl}">
+									</div>
+								</div>
+							</div>
+							<div class="layui-inline">
+								<label class="layui-form-label">问题描述:</label>
+								<textarea placeholder="请输入内容"
+									th:text="${order.orderRefunds?.describe!=''?order.orderRefunds.describe:'暂无描述'}"
+									disabled="disabled" class="layui-textarea"></textarea>
+							</div>
+							<div class="layui-inline">
+								<label class="layui-form-label">回复信息:</label>
+								<textarea placeholder="请输入内容" name="reply"
+									th:text="${order.orderRefunds?.reply!=''?order.orderRefunds.reply:''}"
+									class="layui-textarea"></textarea>
+							</div>
+
+							<div data-v-dbd3fea4="" style="margin-top: 20px;">
+								<svg data-v-81d70f2a="" data-v-dbd3fea4="" aria-hidden="true"
+									class="svg-icon" style="color: rgb(96, 98, 102);">
+										<i class="layui-icon layui-icon-read"
+										style="font-size: 20px; color: #606266;"></i>
+										<use data-v-81d70f2a="" xlink:href="#icon-marker"></use>
+									</svg>
+								<span data-v-dbd3fea4="" class="font-small" >退换货邮寄信息</span>
+							</div>
+							<div
+								th:if="${order.orderRefunds?.applyType==2}"	
+								class="layui-form-item">
+
+								<div class="layui-inline">
+									<label class="layui-form-label">收件人:</label>
+									<div class="layui-input-inline">
+										<input type="text" name="collect_member"
+											lay-verify="collect_member" autocomplete="off"
+											placeholder="收件人" class="layui-input"
+											th:disabled="${order.orderRefunds?.addressee!=null && order.orderRefunds?.addressee!=''}"
+											th:value="${(order.orderRefunds?.addressee!='' && order.orderRefunds?.addressee!=null)?order.orderRefunds.addressee:businessAddress.addressee}">
+									</div>
+								</div>
+
+								<div class="layui-inline">
+									<label class="layui-form-label">联系方式:</label>
+									<div class="layui-input-inline">
+										<input type="text" name="collect_phone"
+											lay-verify="collect_phone"
+											th:disabled="${order.orderRefunds?.phone!=null && order.orderRefunds?.phone!=''}"
+											autocomplete="off" placeholder="联系方式" class="layui-input"
+											th:value="${(order.orderRefunds?.phone!='' && order.orderRefunds?.phone!=null)?order.orderRefunds.phone:businessAddress.phone}">
+									</div>
+								</div>
+								<div class="layui-inline">
+									<label class="layui-form-label">邮寄地址:</label>
+									<div class="layui-input-inline">
+										<input type="text" name="collect_address"
+											lay-verify="collect_address"
+											th:disabled="${order.orderRefunds?.address!=null && order.orderRefunds?.address!=''}"
+											autocomplete="off" placeholder="邮寄地址" class="layui-input"
+											th:value="${(order.orderRefunds?.address!='' && order.orderRefunds?.address!=null)?order.orderRefunds.address:businessAddress.address}">
+									</div>
+								</div>
+								<div class="layui-inline"
+									th:if="${order.orderRefunds?.status==2 && order.orderRefunds?.applyType==2}">
+									<label class="layui-form-label">退货状态:</label>
+									<div style="float: left; margin-top: 10px; width: 200px;"
+										class="sign">
+										<span th:if="${order.orderRefunds.goodsStatus==1}">待发退货</span>
+										<span th:if="${order.orderRefunds.goodsStatus==2}">待收退货</span>
+										<span th:if="${order.orderRefunds.goodsStatus==3}">已收退货</span>
+									</div>
+								</div>
+								<div class="layui-inline"
+									th:if="${order.orderRefunds?.status==2 && order.orderRefunds?.applyType==2}">
+									<label class="layui-form-label">快递公司:</label>
+									<div class="layui-input-inline">
+										<input type="text" name="collect_member" lay-verify="required"
+											disabled autocomplete="off" class="layui-input"
+											th:value="${order.orderRefunds?.logiCode}">
+									</div>
+								</div>
+								<div class="layui-inline"
+									th:if="${order.orderRefunds?.status==2 && order.orderRefunds?.applyType==2}">
+									<label class="layui-form-label">快递单号:</label>
+									<div class="layui-input-inline">
+										<input type="text" name="collect_member" lay-verify="required"
+											disabled autocomplete="off" class="layui-input"
+											th:value="${order.orderRefunds?.logiNo}">
+									</div>
+								</div>
+
+
+							</div>
+							<div class="layui-form-item" style="margin-top: 40px;">
+								<div class="layui-input-block"
+									style="margin-left: 0; text-align: center;">
+									<button
+										th:if="${(order?.status==3 || order?.status==10 || order?.status==2) && order?.orderType==1 && (order?.refundStatus=='0' || order?.refundStatus==0)}"
+										class="layui-btn" lay-submit="" id="editAddr"
+										data-th-lay-filter="editAddr">修改收件人</button>
+									
+								
+									
+									
+									<button class="layui-btn"
+										th:if="${order?.orderRefunds.status==1}"
+										lay-submit="" id="adopt" data-th-lay-filter="adopt">审核通过</button>
+									<button class="layui-btn"
+										th:if="${order?.orderRefunds.status==1}"
+										id="reject" data-th-lay-filter="reject">驳回申请</button>
+									<button class="layui-btn"
+										th:if="${order?.orderRefunds.status==4}"
+										id="refunds" data-th-lay-filter="deliverGoods">确认退款</button>
+									<button class="layui-btn"
+										th:if="${order?.orderRefunds.goodsStatus==2}"
+										id="confirmReceipt" data-th-lay-filter="confirmReceipt">签收退款货</button>
+								</div>
+
+							</div>
+
+						</div>
+					</div>
+				</div>	
+			</div>
+		</form>
+	</div>
+
+
+
+
+
+	<script th:src="@{/lib/jquery/jquery.min.js}"></script>
+	<script th:src="@{/lib/layui/layui.js}"></script>
+	<script th:src="@{/js/common.js}"></script>
+
+	<script>
+		layui.config({
+			base : projectName()+'/lib/layui/extend/'
+		}).use([ 'element', 'form', 'layer', 'layarea' ], function() {
+			$ = layui.jquery;
+			var table = layui.table;
+			var $ = layui.$;
+			var form = layui.form;
+			var layer = layui.layer;
+			var layarea = layui.layarea;
+
+			layarea.render({
+				elem : '#area-picker',
+				// data: {
+				//     province: '广东省',
+				//     city: '深圳市',
+				//     county: '龙岗区',
+				// },
+				change : function(res) {
+					//选择结果
+					console.log(res);
+				}
+			});
+
+			
+			
+
+			
+			//订单驳回
+			$("#rejectOrder").click(function() {
+				var orderId = $("#orderId").val();
+				var text = $("#reject_text").val();
+
+				var $this = $(this);
+				var data = {
+					id : orderId,
+					businessMessage : text
+				};
+				$.post(
+
+				'/order/orderReject', data, function(result) {
+					handlerResult(result, orderDeliverGoodsDone);
+					$this.parents(".el-dialog__wrapper").hide();
+				});
+
+			});
+
+			//订单详情
+			$("#orderInfo").click(function() {
+				var orderId=$("#orderId").val();
+				layer.open({
+						content : projectName() + '/order/orderProductInfo/'+orderId,
+						title : "订单详情",
+						area : [ '100%', '100%' ],
+						type : 2,
+						maxmin : true,
+						shadeClose : true,
+						end : function() {
+							/* table.reload('specs-table'); */
+						}
+				});
+
+			});
+			
+			
+			//审核通过
+			$("#adopt").click(function() {
+				
+				var applyType=$("#applyType").val();
+					if(applyType==2){
+						form.verify({
+							collect_member : function(value) {
+								if (value=='' || value.length==0) {
+									return '收件人不能为空!';
+								}
+							},
+							collect_phone : function(value) {
+								var phone = /^1[3456789]\d{9}$/;
+								if (!phone.test(value)) {
+									return '请输入正确手机号!';
+								}
+							},
+							collect_address : function(value) {
+								if (value=='' || value.length==0) {
+									return '邮寄地址不能为空!';
+								}
+							}
+						});
+						
+					}
+				
+				layer.confirm("确定审核通过吗?", {
+					icon : 3,
+					title : '提示'
+				}, function(index) {//确定回调
+				
+				
+					
+					var orderId = $("#orderId").val();
+					var refundId = $("#refundId").val();
+					var reply = $("[name='reply']").val();
+					var data = {};
+					if(applyType==2){
+						var collect_member = $("[name='collect_member']").val();
+						var collect_phone = $("[name='collect_phone']").val();
+						var collect_address = $("[name='collect_address']").val();
+						 data = {
+							orderId: orderId,
+							id: refundId,
+							status: 2,
+							reply:reply,
+							goodsStatus:1,
+							addressee:collect_member,
+							phone:collect_phone,
+							address:collect_address
+						}
+					}else{
+						 data = {
+							orderId: orderId,
+							id: refundId,
+							status: 4,
+							reply:reply
+						 }
+					}
+
+					$.ajax({
+						type : "POST", //提交的方法
+						dataType : "json",
+						contentType : 'application/json',//添加这句话
+						url : projectName()+"/refunds/updateStatus", //提交的地址    
+						async : false,
+						data : JSON.stringify(data),
+
+						error : function(result) { //失败的话
+							handlerResult(result, confirmReceiptDone);
+						},
+						success : function(result) { //成功
+							handlerResult(result, confirmReceiptDone);
+						}
+					});
+					layer.close(index);
+				}, function(index) {//取消回调
+					layer.close(index);
+				});
+
+			});
+			
+			//驳回申请
+			$("#reject").click(function() {
+				layer.confirm("确定驳回申请吗?", {
+					icon : 3,
+					title : '提示'
+				}, function(index) {//确定回调
+					var orderId = $("#orderId").val();
+					var refundId = $("#refundId").val();
+					var reply = $("[name='reply']").val();
+					
+					var data = {
+					orderId: orderId,
+					 id: refundId,
+					 status: 3,
+					 reply:reply
+					}
+
+					$.ajax({
+						type : "POST", //提交的方法
+						dataType : "json",
+						contentType : 'application/json',//添加这句话
+						url : projectName()+"/refunds/updateStatus", //提交的地址    
+						async : false,
+						data : JSON.stringify(data),
+
+						error : function(result) { //失败的话
+							handlerResult(result, rejectDone);
+						},
+						success : function(result) { //成功
+							handlerResult(result, rejectDone);
+						}
+					});
+					layer.close(index);
+				}, function(index) {//取消回调
+					layer.close(index);
+				});
+
+			});
+			
+			//签收退款货物
+			$("#confirmReceipt").click(function() {
+				
+		
+				layer.confirm("确定收到退款的货物吗?", {
+					icon : 3,
+					title : '提示'
+				}, function(index) {//确定回调
+				
+				
+					var refundId = $("#refundId").val();
+					var reply = $("[name='reply']").val();
+
+					
+					var data = {
+					 id: refundId,
+					 goodsStatus: 3,
+					 status:4,
+					 reply:reply
+					
+					}
+				
+					$.ajax({
+						type : "POST", //提交的方法
+						dataType : "json",
+						contentType : 'application/json',//添加这句话
+						url : projectName()+"/refunds/updateStatus", //提交的地址    
+						async : false,
+						data : JSON.stringify(data),
+
+						error : function(result) { //失败的话
+							handlerResult(result, confirmReceiptDone);
+						},
+						success : function(result) { //成功
+							handlerResult(result, confirmReceiptDone);
+						}
+					});
+					layer.close(index);
+				}, function(index) {//取消回调
+					layer.close(index);
+				});
+
+			});
+			
+
+			//退款
+			$("#refunds").click(function() {
+				
+		
+				layer.confirm("确定执行退款操作?", {
+					icon : 3,
+					title : '提示'
+				}, function(index) {//确定回调
+				
+				
+					var orderId = $("#orderId").val();
+					var refundId = $("#refundId").val();
+					
+					var data = {
+					 id: refundId,
+					 orderId:orderId,
+					 status:5
+					
+					}
+
+					$.ajax({
+						type : "POST", //提交的方法
+						dataType : "json",
+						contentType : 'application/json',//添加这句话
+						url : projectName()+"/refunds/updateStatus", //提交的地址    
+						async : false,
+						data : JSON.stringify(data),
+
+						error : function(result) { //失败的话
+							handlerResult(result, refundsDone);
+						},
+						success : function(result) { //成功
+							handlerResult(result, refundsDone);
+						}
+					});
+					layer.close(index);
+				}, function(index) {//取消回调
+					layer.close(index);
+				});
+
+			});
+
+			function getReceiptDone(data) {
+				parent.layer.msg("取件成功", {
+					icon : 6
+				});
+				setTimeout('window.location.reload()',1000);
+			}
+
+			function rejectDone(data) {
+				parent.layer.msg("驳回申请成功", {
+					icon : 6
+				});
+				setTimeout('window.location.reload()',1000);
+			}
+
+			function stockupCompleteDone(data) {
+				parent.layer.msg("备货成功", {
+					icon : 6
+				});
+				setTimeout('window.location.reload()',1000);
+
+			}
+
+			function editAddrDone(data) {
+				parent.layer.msg("修改成功", {
+					icon : 6
+				});
+				setTimeout('window.location.reload()',1000);
+
+			}
+
+			function confirmReceiptDone(data) {
+				parent.layer.msg("修改成功", {
+					icon : 6
+				});
+				setTimeout('window.location.reload()',1000);
+
+			}
+
+			function deliverGoodsDone(data) {
+				parent.layer.msg("发货成功", {
+					icon : 6
+				});
+				setTimeout('window.location.reload()',1000);
+
+			}
+
+			function refundsDone(data) {
+				parent.layer.msg("退款成功", {
+					icon : 6
+				});
+				setTimeout('window.location.reload()',1000);
+			}
+
+			function stockUpDone(data) {
+				parent.layer.msg("确认备货成功", {
+					icon : 6
+				});
+				setTimeout('window.location.reload()',1000);
+			}
+
+			$("#remarks").click(function() {
+				$("#remarks_html").show();
+			});
+
+			$("#receivingInfo").click(function() {
+				$("#receiving_html").show();
+
+			});
+
+			$("#deliverGoodsOpen").click(function() {
+				$("#deliverGoods_html").show();
+
+			});
+
+			$("#rejectOpen").click(function() {
+				$("#reject_html").show();
+
+			});
+
+			$(".closeOpen").click(function() {
+				$(this).parents(".el-dialog__wrapper").hide();
+
+			});
+		});
+	</script>
+</body>
+
+</html>

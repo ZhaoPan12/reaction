@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.net.system.mapper.product.TichtextMapper">
+  
+<resultMap id="BaseResultMap" type="com.net.system.model.Tichtext">
+  <id column="id" jdbcType="VARCHAR" property="id" />
+  <result column="item_id" jdbcType="VARCHAR" property="itemId" />
+  <result column="content" jdbcType="VARCHAR" property="content" />
+  <result column="productid" jdbcType="VARCHAR" property="productid" />
+</resultMap>
+
+  
+<sql id="Base_Column_List">
+  id, item_id, content, productid
+</sql>
+
+  
+<delete id="delete" parameterType="java.lang.String">
+  delete from t_richtext
+  where id = #{id,jdbcType=VARCHAR}
+</delete>
+
+  
+<insert id="insert" parameterType="com.net.system.model.Tichtext">
+  insert into t_richtext (id, item_id, content, 
+    productid)
+  values (#{id,jdbcType=VARCHAR}, #{itemId,jdbcType=VARCHAR}, #{content,jdbcType=VARCHAR}, 
+    #{productid,jdbcType=VARCHAR})
+</insert>
+
+  
+<insert id="insertDynamic" parameterType="com.net.system.model.Tichtext">
+  insert into t_richtext
+  <trim prefix="(" suffix=")" suffixOverrides=",">
+    <if test="id != null">
+      id,
+    </if>
+    <if test="itemId != null">
+      item_id,
+    </if>
+    <if test="content != null">
+      content,
+    </if>
+    <if test="productid != null">
+      productid,
+    </if>
+  </trim>
+  <trim prefix="values (" suffix=")" suffixOverrides=",">
+    <if test="id != null">
+      #{id,jdbcType=VARCHAR},
+    </if>
+    <if test="itemId != null">
+      #{itemId,jdbcType=VARCHAR},
+    </if>
+    <if test="content != null">
+      #{content,jdbcType=VARCHAR},
+    </if>
+    <if test="productid != null">
+      #{productid,jdbcType=VARCHAR},
+    </if>
+  </trim>
+</insert>
+
+  
+<update id="updateDynamic" parameterType="com.net.system.model.Tichtext">
+  update t_richtext
+  <set>
+    <if test="itemId != null">
+      item_id = #{itemId,jdbcType=VARCHAR},
+    </if>
+    <if test="content != null">
+      content = #{content,jdbcType=VARCHAR},
+    </if>
+    <if test="productid != null">
+      productid = #{productid,jdbcType=VARCHAR},
+    </if>
+  </set>
+  where id = #{id,jdbcType=VARCHAR}
+</update>
+
+  
+<update id="update" parameterType="com.net.system.model.Tichtext">
+  update t_richtext
+  set item_id = #{itemId,jdbcType=VARCHAR},
+    content = #{content,jdbcType=VARCHAR},
+    productid = #{productid,jdbcType=VARCHAR}
+  where id = #{id,jdbcType=VARCHAR}
+</update>
+
+  
+<select id="selectById" parameterType="java.lang.String" resultMap="BaseResultMap">
+  select
+	<include refid="Base_Column_List" />
+  from  t_richtext
+  where id = #{id,jdbcType=VARCHAR}
+</select>
+
+  
+<sql id="findPageWithWhere">
+    <where> 1=1 
+	<if test="id != null and id != ''" >
+	  and id = #{id,jdbcType=VARCHAR}
+	</if>
+	<if test="itemId != null and itemId != ''" >
+	  and item_id = #{itemId,jdbcType=VARCHAR}
+	</if>
+	<if test="content != null and content != ''" >
+	  and content = #{content,jdbcType=VARCHAR}
+	</if>
+	<if test="productid != null and productid != ''" >
+	  and productid = #{productid,jdbcType=VARCHAR}
+	</if>
+  </where>
+</sql>
+
+  
+<select id="findPageWithResult" parameterType="map" resultMap="BaseResultMap">
+  select
+	<include refid="Base_Column_List" />
+  from  t_richtext
+  <include refid="findPageWithWhere" />
+</select>
+
+  
+<select id="findPageWithCount" parameterType="map" resultType="Integer">
+  select count(1)
+  from t_richtext
+  <include refid="findPageWithWhere" />
+</select>
+
+</mapper>

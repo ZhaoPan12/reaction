@@ -1,0 +1,563 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+<meta charset="UTF-8">
+<title>商品类型添加</title>
+<meta name="renderer" content="webkit">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<meta name="viewport"
+	content="width=device-width,user-scalable=yes, minimum-scale=0.4, initial-scale=0.8,target-densitydpi=low-dpi" />
+<link rel="shortcut icon" type="image/x-icon" th:href="@{/favicon.ico}" />
+<link rel="stylesheet" th:href="@{/lib/layui/css/layui.css}">
+<link rel="stylesheet" th:href="@{/css/common.css}">
+<link rel="stylesheet" th:href="@{/css/animate.min.css}">
+<link rel="stylesheet" th:href="@{/css/orderInfo.css}">
+</head>
+<style>
+.detail-container {
+	width: 86%;
+	padding: 20px;
+	margin: 20px auto;
+}
+
+.is-red{
+color: #FF7B7B;
+
+}
+</style>
+
+<body>
+	<div class="z-body animated fadeIn">
+		<form action="" method="post" class="layui-form layui-form-pane">
+			<input type="hidden" th:value="${order.orderInfo.id}" id="orderId" />
+			<div class="detail-container">
+				<div>
+					<div data-v-dbd3fea4="" class="el-steps el-steps--horizontal">
+							<div data-v-dbd3fea4="" class="el-step is-horizontal is-center"
+							style="flex-basis: 25%; margin-right: 0px;margin-left: 200px;">
+							<div class="el-step__head is-success"
+							>
+								<div class="el-step__line" style="margin-right: 0px;">
+									<i class="el-step__line-inner" style="transition-delay: 0ms;"
+										th:styleappend="${order.orderInfo.status!=1}?' border-width: 1px; width: 100%;':' border-width: 0px; width: 0%;'"></i>
+								</div>
+								<div class="el-step__icon is-text">
+									<i class="el-step__icon-inner is-status el-icon-check"></i>
+									
+								</div>
+							</div>
+							<div class="el-step__main">
+								<div class="el-step__title is-success">提交订单/待支付</div>
+								<div class="el-step__description is-success"
+									th:text="${#dates.format(order.orderInfo.addTime, 'yyyy-MM-dd hh:mm:ss')}"></div>
+							</div>
+						</div>
+						<div th:if="${order.orderInfo.status==1}" data-v-dbd3fea4="" class="el-step is-horizontal is-center"
+							style="flex-basis: 25%; margin-right: 0px;">
+							<div class="el-step__head is-wait">
+								<div class="el-step__line" style="margin-right: 0px;">
+									<i class="el-step__line-inner" style="transition-delay: 0ms; border-width: 0px;"></i>
+								</div>
+								<div class="el-step__icon is-text">
+									
+									<div class="el-step__icon-inner">2</div>
+								</div>
+							</div>
+							<div class="el-step__main">
+								<div class="el-step__title is-wait">已支付</div>
+								<div class="el-step__description is-wait"
+									th:text="${#dates.format(order.orderInfo.paymentTime, 'yyyy-MM-dd hh:mm:ss')}"></div>
+							</div>
+						</div>
+						<div th:if="${order.orderInfo.status==2}" data-v-dbd3fea4="" class="el-step is-horizontal is-center"
+							style="flex-basis: 25%; margin-right: 0px;">
+							<div class="el-step__head is-success">
+								<div class="el-step__line" style="margin-right: 0px;">
+									<i class="el-step__line-inner" style="transition-delay: 0ms; border-width: 1px; width: 100%;"></i>
+								</div>
+								<div class="el-step__icon is-text">
+									
+									<i class="el-step__icon-inner is-status el-icon-check"></i>
+								</div>
+							</div>
+							<div class="el-step__main">
+								<div class="el-step__title is-success">已支付</div>
+								<div class="el-step__description is-success"
+									th:text="${#dates.format(order.orderInfo.paymentTime, 'yyyy-MM-dd hh:mm:ss')}"></div>
+							</div>
+						</div>
+						<div th:if="${order.orderInfo.status==3}" data-v-dbd3fea4="" class="el-step is-horizontal is-center"
+							style="flex-basis: 25%; margin-right: 0px;">
+							<div class="el-step__head is-red">
+								<div class="el-step__line" style="margin-right: 0px;">
+									<i class="el-step__line-inner" style="transition-delay: 0ms; border-width: 1px; width: 100%;"></i>
+								</div>
+								<div class="el-step__icon is-text">
+									
+									<i class="el-step__icon-inner is-status el-icon-check"></i>
+								</div>
+							</div>
+							<div class="el-step__main">
+								<div class="el-step__title is-red">已取消</div>
+								<div class="el-step__description is-red"
+									th:text="${#dates.format(order.orderInfo.closeTime, 'yyyy-MM-dd hh:mm:ss')}"></div>
+							</div>
+						</div>
+						
+
+					</div>
+
+					<div class="el-card is-never-shadow" style="margin-top: 15px;">
+						<div class="el-card__body">
+							<div class="operate-container"
+								th:switch="${order.orderInfo.status}">
+								<i class="layui-icon layui-icon-tips"
+									style="font-size: 24px; color: #f56c6c; margin-left: 10px; margin-right: 5px;"
+									title=""></i> <span th:case="1" class="color-danger">当前订单状态：待支付</span>
+								<span th:case="2" class="color-danger">当前订单状态：待发货</span> <span
+									th:case="3" class="color-danger">当前订单状态：已取消</span> <span
+									th:case="4" class="color-danger">当前订单状态：订单驳回 <span
+									th:text="'('+${order.orderInfo.businessMessage}+')'"></span></span> <span
+									th:case="5" class="color-danger">当前订单状态：已发货</span> <span
+									th:case="6" class="color-danger">当前订单状态：已完成</span>
+								<div data-v-dbd3fea4="" class="operate-button-container"
+									style="">
+									
+								</div>
+							</div>
+
+							<div data-v-dbd3fea4="" style="margin-top: 20px;">
+								<svg data-v-81d70f2a="" data-v-dbd3fea4="" aria-hidden="true"
+									class="svg-icon" style="color: rgb(96, 98, 102);">
+								<i class="layui-icon layui-icon-read"
+										style="font-size: 20px; color: #606266;"></i>
+							<use data-v-81d70f2a="" xlink:href="#icon-marker"></use></svg>
+								<span data-v-dbd3fea4="" class="font-small">基本信息</span>
+							</div>
+
+							<div data-v-dbd3fea4="" class="table-layout">
+								<div data-v-dbd3fea4="" class="el-row">
+									<div data-v-dbd3fea4=""
+										class="table-cell-title el-col el-col-6">订单编号</div>
+									<div data-v-dbd3fea4=""
+										class="table-cell-title el-col el-col-6">卡编号</div>
+									<div data-v-dbd3fea4=""
+										class="table-cell-title el-col el-col-6">用户账号</div>
+									<div data-v-dbd3fea4=""
+										class="table-cell-title el-col el-col-6">订单类型</div>
+								</div>
+								<div data-v-dbd3fea4="" class="el-row"
+									th:switch="${order.orderInfo.activityType}">
+									<div th:text="${order.orderInfo.serialNumber}"
+										data-v-dbd3fea4="" class="table-cell el-col el-col-6">201809150101000001</div>
+									<div data-v-dbd3fea4="" class="table-cell el-col el-col-6">暂无</div>
+									<div data-v-dbd3fea4="" class="table-cell el-col el-col-6">未确定</div>
+									<div th:case="1" data-v-dbd3fea4=""
+										class="table-cell el-col el-col-6">商品订单</div>
+									<div th:case="2" data-v-dbd3fea4=""
+										class="table-cell el-col el-col-6">pass订单</div>
+									<div th:case="3" data-v-dbd3fea4=""
+										class="table-cell el-col el-col-6">预约订单</div>
+								</div>
+								
+								
+							</div>
+							
+
+							<div data-v-dbd3fea4="" style="margin-top: 20px;">
+								<svg data-v-81d70f2a="" data-v-dbd3fea4="" aria-hidden="true"
+									class="svg-icon" style="color: rgb(96, 98, 102);">
+								<i class="layui-icon layui-icon-read"
+										style="font-size: 20px; color: #606266;" title=""></i>
+							<use data-v-81d70f2a="" xlink:href="#icon-marker"></use></svg>
+								<span data-v-dbd3fea4="" class="font-small">商品信息</span>
+							</div>
+
+							<div data-v-dbd3fea4=""
+								class="el-table el-table--fit el-table--border el-table--enable-row-hover el-table--enable-row-transition"
+								style="width: 100%; margin-top: 20px;">
+								<div class="hidden-columns">
+									<div data-v-dbd3fea4=""></div>
+									<div data-v-dbd3fea4=""></div>
+									<div data-v-dbd3fea4=""></div>
+									<div data-v-dbd3fea4=""></div>
+									<div data-v-dbd3fea4=""></div>
+									<div data-v-dbd3fea4=""></div>
+								</div>
+								<div class="el-table__header-wrapper">
+									<table cellspacing="0" cellpadding="0" border="0"
+										class="el-table__header" style="width: 783px;">
+										<colgroup>
+											<col name="el-table_1_column_1" width="120">
+											<col name="el-table_1_column_2" width="183">
+											<col name="el-table_1_column_3" width="120">
+											<col name="el-table_1_column_4" width="120">
+											<col name="el-table_1_column_5" width="120">
+											<col name="el-table_1_column_6" width="120">
+											<col name="gutter" width="0">
+										</colgroup>
+										<thead class="has-gutter">
+											<tr class="">
+												<th colspan="1" rowspan="1"
+													class="el-table_1_column_1  is-center   is-leaf"><div
+														class="cell">商品图片</div></th>
+												<th colspan="1" rowspan="1"
+													class="el-table_1_column_2  is-center   is-leaf"><div
+														class="cell">商品名称</div></th>
+												<th colspan="1" rowspan="1"
+													class="el-table_1_column_3  is-center   is-leaf"><div
+														class="cell">价格/货号</div></th>
+												<th colspan="1" rowspan="1"
+													class="el-table_1_column_4  is-center   is-leaf"><div
+														class="cell">属性</div></th>
+												<th colspan="1" rowspan="1"
+													class="el-table_1_column_5  is-center   is-leaf"><div
+														class="cell">数量</div></th>
+												<th colspan="1" rowspan="1"
+													class="el-table_1_column_6  is-center   is-leaf"><div
+														class="cell">小计</div></th>
+												<th class="gutter" style="width: 0px; display: none;"></th>
+											</tr>
+										</thead>
+									</table>
+								</div>
+								<div class="el-table__body-wrapper is-scrolling-none">
+									<table cellspacing="0" cellpadding="0" border="0"
+										class="el-table__body" style="width: 783px;">
+										<colgroup>
+											<col name="el-table_1_column_1" width="120">
+											<col name="el-table_1_column_2" width="183">
+											<col name="el-table_1_column_3" width="120">
+											<col name="el-table_1_column_4" width="120">
+											<col name="el-table_1_column_5" width="120">
+											<col name="el-table_1_column_6" width="120">
+										</colgroup>
+										<tbody>
+											<tr class="el-table__row">
+												<td class="el-table_1_column_1 is-center "><div
+														class="cell">
+														<img data-v-dbd3fea4=""
+															th:src="${order.orderProduct.proImage}"
+															style="height: 80px;">
+													</div></td>
+												<td class="el-table_1_column_2 is-center "><div
+														class="cell">
+														<p data-v-dbd3fea4=""
+															th:text="${order.orderProduct.proName}"></p>
+														<p data-v-dbd3fea4=""></p>
+													</div></td>
+												<td class="el-table_1_column_3 is-center "><div
+														class="cell">
+														<p data-v-dbd3fea4="">
+															价格：￥<span th:text="${order.orderProduct.unitPrice}"></span>
+														</p>
+														<p data-v-dbd3fea4="">
+															货号：<span th:text="${order.orderProduct.productSn}"></span>
+														</p>
+													</div></td>
+												<td class="el-table_1_column_4 is-center "><div
+														class="cell"
+													>暂无</div></td>
+												<td class="el-table_1_column_5 is-center "><div
+														class="cell" th:text="${order.orderProduct.quantity}">1</div></td>
+												<td class="el-table_1_column_6 is-center "><div
+														class="cell"
+														th:text="￥+''+${order.orderProduct.totalPrice}"></div></td>
+											</tr>
+
+
+
+										</tbody>
+									</table>
+
+								</div>
+
+							</div>
+
+							<div data-v-dbd3fea4="" style="float: right; margin: 20px;">
+								合计：<span data-v-dbd3fea4="" class="color-danger"
+									th:text="￥+''+${order.orderProduct.totalPrice}"></span>
+							</div>
+							<div data-v-dbd3fea4="" style="margin-top: 20px;">
+								<svg data-v-81d70f2a="" data-v-dbd3fea4="" aria-hidden="true"
+									class="svg-icon" style="color: rgb(96, 98, 102);">
+								<i class="layui-icon layui-icon-read"
+										style="font-size: 20px; color: #606266;" title="属性列表"></i>
+							<use data-v-81d70f2a="" xlink:href="#icon-marker"></use></svg>
+								<span data-v-dbd3fea4="" class="font-small">费用信息</span>
+							</div>
+
+
+							<div data-v-dbd3fea4="" class="table-layout">
+								<div data-v-dbd3fea4="" class="el-row">
+									<div data-v-dbd3fea4=""
+										class="table-cell-title el-col el-col-6">运费</div>
+									<div data-v-dbd3fea4=""
+										class="table-cell-title el-col el-col-6">优惠劵</div>
+									<div data-v-dbd3fea4=""
+										class="table-cell-title el-col el-col-6">订单总金额</div>
+									<div data-v-dbd3fea4=""
+										class="table-cell-title el-col el-col-6">应付款金额</div>
+								</div>
+								<div data-v-dbd3fea4="" class="el-row">
+									<div data-v-dbd3fea4="" class="table-cell el-col el-col-6">暂无</div>
+									<div data-v-dbd3fea4="" class="table-cell el-col el-col-6">暂无</div>
+									<div data-v-dbd3fea4="" class="table-cell el-col el-col-6">
+										<span data-v-dbd3fea4="" class="color-danger"
+											th:text="'￥'+${order.orderInfo.total}"></span>
+									</div>
+									<div data-v-dbd3fea4="" class="table-cell el-col el-col-6">
+										<span data-v-dbd3fea4="" class="color-danger"
+											th:text="'￥'+${order.orderInfo.actual}"></span>
+									</div>
+								</div>
+
+							</div>
+
+
+						</div>
+					</div>
+
+
+				</div>
+			</div>
+		</form>
+	</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+	<script th:src="@{/lib/jquery/jquery.min.js}"></script>
+	<script th:src="@{/lib/layui/layui.js}"></script>
+	<script th:src="@{/js/common.js}"></script>
+
+	<script>
+		layui
+				.config({
+					base : projectName() + '/lib/layui/extend/'
+				})
+				.use(
+						[ 'element', 'form', 'layer', 'layarea' ],
+						function() {
+							$ = layui.jquery;
+							var table = layui.table;
+							var $ = layui.$;
+							var form = layui.form;
+							var layer = layui.layer;
+							var layarea = layui.layarea;
+
+							layarea.render({
+								elem : '#area-picker',
+								// data: {
+								//     province: '广东省',
+								//     city: '深圳市',
+								//     county: '龙岗区',
+								// },
+								change : function(res) {
+									//选择结果
+									console.log(res);
+								}
+							});
+
+							//订单备注提交
+							$("#addRemarks")
+									.click(
+											function() {
+												var id = $("#orderId").val();
+												var t = $("#remarks_text")
+														.val();
+												var $this = $(this);
+												var data = {
+													id : id,
+													businessMessage : t
+												};
+												$
+														.post(
+																projectName()
+																		+ '/order/addRemarks',
+																data,
+																function(result) {
+																	handlerResult(
+																			result,
+																			editDone);
+																	$this
+																			.parents(
+																					".el-dialog__wrapper")
+																			.hide();
+																});
+
+											});
+
+							//修改收货人信息
+							$("#updateReceivingInfo")
+									.click(
+											function() {
+												var id = $("#receivingId")
+														.val();
+												var name = $("#receiverName")
+														.val();
+												var phone = $("#phone").val();
+												var province = $("#province")
+														.val();
+												var city = $("#city").val();
+												var county = $("#county").val();
+												var receiverAddress = $(
+														"#receiverAddress")
+														.val();
+
+												var $this = $(this);
+												var data = {
+													id : id,
+													receiverName : name,
+													receiverPhone : phone,
+													receiverProvince : province,
+													receiverCity : city,
+													receiverDistrict : county,
+													receiverAddress : receiverAddress
+												};
+												$
+														.post(
+																projectName()
+																		+ '/order/updateReceivingInfo',
+																data,
+																function(result) {
+																	handlerResult(
+																			result,
+																			editDone);
+																	$this
+																			.parents(
+																					".el-dialog__wrapper")
+																			.hide();
+																});
+
+											});
+
+							//订单发货
+							$("#deliverGoods")
+									.click(
+											function() {
+												var orderId = $("#orderId")
+														.val();
+												var number = $(
+														"#logisticsNumber")
+														.val();
+												var name = $("#logisticsName")
+														.val();
+
+												var $this = $(this);
+												var data = {
+													orderId : orderId,
+													logisticsNumber : number,
+													logisticsName : name
+												};
+												$
+														.post(
+																projectName()
+																		+ '/order/orderDeliverGoods',
+																data,
+																function(result) {
+																	handlerResult(
+																			result,
+																			orderDeliverGoodsDone);
+																	$this
+																			.parents(
+																					".el-dialog__wrapper")
+																			.hide();
+																});
+
+											});
+
+							//订单驳回
+							$("#rejectOrder")
+									.click(
+											function() {
+												var orderId = $("#orderId")
+														.val();
+												var text = $("#reject_text")
+														.val();
+
+												var $this = $(this);
+												var data = {
+													id : orderId,
+													businessMessage : text
+												};
+												$
+														.post(
+																projectName()
+																		+ '/order/orderReject',
+																data,
+																function(result) {
+																	handlerResult(
+																			result,
+																			orderDeliverGoodsDone);
+																	$this
+																			.parents(
+																					".el-dialog__wrapper")
+																			.hide();
+																});
+
+											});
+
+							function orderDeliverGoodsDone(data) {
+								layer.msg("操作成功", {
+									icon : 6
+								});
+								var index = parent.layer
+										.getFrameIndex(window.name); //先得到当前iframe层的索引
+								parent.layer.close(index); //再执行关闭
+							}
+
+							function addDone(data) {
+								layer.msg("添加成功", {
+									icon : 6
+								});
+								var index = parent.layer
+										.getFrameIndex(window.name); //先得到当前iframe层的索引
+								parent.layer.close(index); //再执行关闭
+							}
+
+							function editDone(data) {
+								layer.msg("修改成功", {
+									icon : 6
+								});
+
+							}
+
+							$("#remarks").click(function() {
+								$("#remarks_html").show();
+							});
+
+							$("#receivingInfo").click(function() {
+								$("#receiving_html").show();
+
+							});
+
+							$("#deliverGoodsOpen").click(function() {
+								$("#deliverGoods_html").show();
+
+							});
+
+							$("#rejectOpen").click(function() {
+								$("#reject_html").show();
+
+							});
+
+							$(".closeOpen").click(function() {
+								$(this).parents(".el-dialog__wrapper").hide();
+
+							});
+						});
+	</script>
+</body>
+
+</html>

@@ -1,0 +1,986 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.net.system.mapper.order.OrderMapper">
+
+	<resultMap id="BaseResultMap"
+		type="com.net.system.model.Order">
+		<id column="id" jdbcType="VARCHAR" property="id" />
+		<result column="serial_number" jdbcType="VARCHAR"
+			property="serialNumber" />
+		<result column="member_id" jdbcType="INTEGER"
+			property="memberId" />
+		<result column="freight" jdbcType="DECIMAL" property="freight" />
+		<result column="delivery_time" jdbcType="TIMESTAMP"
+			property="deliveryTime" />
+		<result column="status" jdbcType="INTEGER" property="status" />
+		<result column="business_id" jdbcType="VARCHAR"
+			property="businessId" />
+		<result column="total" jdbcType="DECIMAL" property="total" />
+		<result column="actual" jdbcType="DECIMAL" property="actual" />
+		<result column="add_time" jdbcType="TIMESTAMP"
+			property="addTime" />
+		<result column="payment_type" jdbcType="INTEGER"
+			property="paymentType" />
+		<result column="transaction_id" jdbcType="VARCHAR"
+			property="transactionId" />
+		<result column="notify_result" jdbcType="VARCHAR"
+			property="notifyResult" />
+		<result column="payment_time" jdbcType="TIMESTAMP"
+			property="paymentTime" />
+		<result column="end_time" jdbcType="TIMESTAMP"
+			property="endTime" />
+		<result column="update_time" jdbcType="TIMESTAMP"
+			property="updateTime" />
+		<result column="close_time" jdbcType="TIMESTAMP"
+			property="closeTime" />
+		<result column="payment_status" jdbcType="INTEGER"
+			property="paymentStatus" />
+		<result column="super_serial_number" jdbcType="VARCHAR"
+			property="superSerialNumber" />
+		<result column="member_role" jdbcType="VARCHAR"
+			property="memberRole" />
+		<result column="buyer_message" jdbcType="VARCHAR"
+			property="buyerMessage" />
+		<result column="payment_end_time" jdbcType="TIMESTAMP"
+			property="paymentEndTime" />
+		<result column="extraction_code" jdbcType="VARCHAR"
+			property="extractionCode" />
+		<result column="order_type" jdbcType="INTEGER"
+			property="orderType" />
+		<result column="logistics_number" jdbcType="VARCHAR"
+			property="logisticsNumber" />
+		<result column="business_phone" jdbcType="VARCHAR"
+			property="businessPhone" />
+		<result column="extract_time" jdbcType="TIMESTAMP"
+			property="extractTime" />
+		<result column="extract_phone" jdbcType="VARCHAR"
+			property="extractPhone" />
+		<result column="coupon_id" jdbcType="VARCHAR"
+			property="couponId" />
+		<result column="discount" jdbcType="DECIMAL"
+			property="discount" />
+		<result column="activity_id" jdbcType="VARCHAR"
+			property="activityId" />
+		<result column="activity_type" jdbcType="INTEGER"
+			property="activityType" />
+		<result column="refund_status" jdbcType="INTEGER"
+			property="refundStatus" />
+		<result column="obtain_address" jdbcType="VARCHAR"
+			property="obtainAddress" />
+		<result column="logistics_name" jdbcType="VARCHAR"
+			property="logisticsName" />
+		<result column="business_message" jdbcType="VARCHAR"
+			property="businessMessage" />
+		<collection property="productList"
+			ofType="com.net.system.model.OrderProduct"
+			select="com.net.system.mapper.order.OrderProductMapper.findOrderProduct"
+			column="id" />
+
+	</resultMap>
+    
+	<resultMap id="BaseResultMapVo"
+		type="com.net.system.model.vo.OrderVo">
+		<id column="id" jdbcType="VARCHAR" property="id" />
+		<result column="serial_number" jdbcType="VARCHAR"
+			property="serialNumber" />
+		<result column="member_id" jdbcType="INTEGER"
+			property="memberId" />
+		<result column="freight" jdbcType="DECIMAL" property="freight" />
+		<result column="delivery_time" jdbcType="TIMESTAMP"
+			property="deliveryTime" />
+		<result column="status" jdbcType="INTEGER" property="status" />
+		<result column="business_id" jdbcType="VARCHAR"
+			property="businessId" />
+		<result column="total" jdbcType="DECIMAL" property="total" />
+		<result column="actual" jdbcType="DECIMAL" property="actual" />
+		<result column="add_time" jdbcType="TIMESTAMP"
+			property="addTime" />
+		<result column="payment_type" jdbcType="INTEGER"
+			property="paymentType" />
+		<result column="transaction_id" jdbcType="VARCHAR"
+			property="transactionId" />
+		<result column="notify_result" jdbcType="VARCHAR"
+			property="notifyResult" />
+		<result column="payment_time" jdbcType="TIMESTAMP"
+			property="paymentTime" />
+		<result column="end_time" jdbcType="TIMESTAMP"
+			property="endTime" />
+		<result column="update_time" jdbcType="TIMESTAMP"
+			property="updateTime" />
+		<result column="close_time" jdbcType="TIMESTAMP"
+			property="closeTime" />
+		<result column="payment_status" jdbcType="INTEGER"
+			property="paymentStatus" />
+		<result column="super_serial_number" jdbcType="VARCHAR"
+			property="superSerialNumber" />
+		<result column="member_role" jdbcType="VARCHAR"
+			property="memberRole" />
+		<result column="buyer_message" jdbcType="VARCHAR"
+			property="buyerMessage" />
+		<result column="payment_end_time" jdbcType="TIMESTAMP"
+			property="paymentEndTime" />
+		<result column="extraction_code" jdbcType="VARCHAR"
+			property="extractionCode" />
+		<result column="order_type" jdbcType="INTEGER"
+			property="orderType" />
+		<result column="logistics_number" jdbcType="VARCHAR"
+			property="logisticsNumber" />
+		<result column="business_phone" jdbcType="VARCHAR"
+			property="businessPhone" />
+		<result column="extract_time" jdbcType="TIMESTAMP"
+			property="extractTime" />
+		<result column="extract_phone" jdbcType="VARCHAR"
+			property="extractPhone" />
+		<result column="coupon_id" jdbcType="VARCHAR"
+			property="couponId" />
+		<result column="discount" jdbcType="DECIMAL"
+			property="discount" />
+		<result column="activity_id" jdbcType="VARCHAR"
+			property="activityId" />
+		<result column="activity_type" jdbcType="INTEGER"
+			property="activityType" />
+		<result column="refund_status" jdbcType="INTEGER"
+			property="refundStatus" />
+		<result column="obtain_address" jdbcType="VARCHAR"
+			property="obtainAddress" />
+		<result column="logistics_name" jdbcType="VARCHAR"
+			property="logisticsName" />
+		<result column="pro_image" jdbcType="VARCHAR"
+			property="proImage" />
+		<result column="pro_name" jdbcType="VARCHAR" property="proName" />
+		<result column="quantity" jdbcType="INTEGER"
+			property="quantity" />
+		<result column="business_message" jdbcType="VARCHAR"
+			property="businessMessage" />
+		<result column="refundStatus" jdbcType="VARCHAR"
+			property="refundStatus" />
+	</resultMap>
+	
+	
+	
+	<resultMap id="BaseResultMapInfoVo"
+		type="com.net.system.model.vo.ShopOrderVo">
+		<id column="id" jdbcType="VARCHAR" property="id" />
+		<result column="serial_number" jdbcType="VARCHAR"
+			property="serialNumber" />
+		<result column="member_id" jdbcType="INTEGER"
+			property="memberId" />
+		<result column="freight" jdbcType="DECIMAL" property="freight" />
+		<result column="delivery_time" jdbcType="TIMESTAMP"
+			property="deliveryTime" />
+		<result column="status" jdbcType="INTEGER" property="status" />
+		<result column="business_id" jdbcType="VARCHAR"
+			property="businessId" />
+		<result column="total" jdbcType="DECIMAL" property="total" />
+		<result column="actual" jdbcType="DECIMAL" property="actual" />
+		<result column="add_time" jdbcType="TIMESTAMP"
+			property="addTime" />
+		<result column="payment_type" jdbcType="INTEGER"
+			property="paymentType" />
+		<result column="transaction_id" jdbcType="VARCHAR"
+			property="transactionId" />
+		<result column="notify_result" jdbcType="VARCHAR"
+			property="notifyResult" />
+		<result column="payment_time" jdbcType="TIMESTAMP"
+			property="paymentTime" />
+		<result column="end_time" jdbcType="TIMESTAMP"
+			property="endTime" />
+		<result column="update_time" jdbcType="TIMESTAMP"
+			property="updateTime" />
+		<result column="close_time" jdbcType="TIMESTAMP"
+			property="closeTime" />
+		<result column="payment_status" jdbcType="INTEGER"
+			property="paymentStatus" />
+		<result column="super_serial_number" jdbcType="VARCHAR"
+			property="superSerialNumber" />
+		<result column="member_role" jdbcType="VARCHAR"
+			property="memberRole" />
+		<result column="buyer_message" jdbcType="VARCHAR"
+			property="buyerMessage" />
+		<result column="payment_end_time" jdbcType="TIMESTAMP"
+			property="paymentEndTime" />
+		<result column="extraction_code" jdbcType="VARCHAR"
+			property="extractionCode" />
+		<result column="order_type" jdbcType="INTEGER"
+			property="orderType" />
+		<result column="logistics_number" jdbcType="VARCHAR"
+			property="logisticsNumber" />
+		<result column="business_phone" jdbcType="VARCHAR"
+			property="businessPhone" />
+		<result column="extract_time" jdbcType="TIMESTAMP"
+			property="extractTime" />
+		<result column="extract_phone" jdbcType="VARCHAR"
+			property="extractPhone" />
+		<result column="coupon_id" jdbcType="VARCHAR"
+			property="couponId" />
+		<result column="discount" jdbcType="DECIMAL"
+			property="discount" />
+		<result column="activity_id" jdbcType="VARCHAR"
+			property="activityId" />
+		<result column="activity_type" jdbcType="INTEGER"
+			property="activityType" />
+		<result column="refund_status" jdbcType="INTEGER"
+			property="refundStatus" />
+		<result column="obtain_address" jdbcType="VARCHAR"
+			property="obtainAddress" />
+		<result column="logistics_name" jdbcType="VARCHAR"
+			property="logisticsName" />
+		<collection property="orderProductList"
+			ofType="com.net.system.model.OrderProduct"
+			select="com.net.system.mapper.order.OrderProductMapper.findOrderProduct"
+			column="id" />
+		<collection property="orderReceivingInfo"
+			ofType="com.net.system.model.OrderReceivingInfo"
+			select="com.net.system.mapper.order.OrderReceivingInfoMapper.findOrderReceivingInfo"
+			column="id" />
+		<collection property="orderLogistics"
+			ofType="com.net.system.model.OrderLogistics"
+			select="com.net.system.mapper.order.OrderLogisticsMapper.findOrderLogistics"
+			column="id" />
+		<collection property="orderRefunds"
+			ofType="com.net.system.model.OrderRefunds"
+			select="com.net.system.mapper.order.OrderRefundsMapper.findByOrderId"
+			column="id" />
+	</resultMap>
+
+
+
+
+
+	<sql id="Base_Column_List">
+		id, serial_number, member_id, freight, delivery_time, status,
+		business_id, total,
+		actual, add_time, payment_type, transaction_id, notify_result, payment_time,
+		end_time,
+		update_time, close_time, payment_status, super_serial_number, member_role,
+		buyer_message,
+		payment_end_time, extraction_code, order_type, logistics_number, business_phone,
+		extract_time, extract_phone, coupon_id, discount, activity_id,
+		activity_type, refund_status,
+		obtain_address, logistics_name,business_message
+	</sql>
+
+
+	<delete id="delete" parameterType="java.lang.String">
+		delete from t_order
+		where id = #{id,jdbcType=VARCHAR}
+	</delete>
+
+
+	<insert id="insert" parameterType="com.net.system.model.Order">
+		insert into t_order (id, serial_number, member_id,
+		freight, delivery_time, status,
+		business_id, total, actual,
+		add_time, payment_type, transaction_id,
+		notify_result, payment_time, end_time,
+		update_time, close_time, payment_status,
+		super_serial_number, member_role, buyer_message,
+		payment_end_time, extraction_code, order_type,
+		logistics_number, business_phone, extract_time,
+		extract_phone, coupon_id, discount,
+		activity_id, activity_type, refund_status,
+		obtain_address, logistics_name)
+		values (#{id,jdbcType=VARCHAR}, #{serialNumber,jdbcType=VARCHAR},
+		#{memberId,jdbcType=INTEGER},
+		#{freight,jdbcType=DECIMAL}, #{deliveryTime,jdbcType=TIMESTAMP}, #{status,jdbcType=INTEGER},
+		#{businessId,jdbcType=VARCHAR}, #{total,jdbcType=DECIMAL},
+		#{actual,jdbcType=DECIMAL},
+		#{addTime,jdbcType=TIMESTAMP}, #{paymentType,jdbcType=INTEGER}, #{transactionId,jdbcType=VARCHAR},
+		#{notifyResult,jdbcType=VARCHAR}, #{paymentTime,jdbcType=TIMESTAMP},
+		#{endTime,jdbcType=TIMESTAMP},
+		#{updateTime,jdbcType=TIMESTAMP}, #{closeTime,jdbcType=TIMESTAMP}, #{paymentStatus,jdbcType=INTEGER},
+		#{superSerialNumber,jdbcType=VARCHAR}, #{memberRole,jdbcType=VARCHAR},
+		#{buyerMessage,jdbcType=VARCHAR},
+		#{paymentEndTime,jdbcType=TIMESTAMP},
+		#{extractionCode,jdbcType=VARCHAR}, #{orderType,jdbcType=INTEGER},
+		#{logisticsNumber,jdbcType=VARCHAR},
+		#{businessPhone,jdbcType=VARCHAR}, #{extractTime,jdbcType=TIMESTAMP},
+		#{extractPhone,jdbcType=VARCHAR}, #{couponId,jdbcType=VARCHAR},
+		#{discount,jdbcType=DECIMAL},
+		#{activityId,jdbcType=VARCHAR}, #{activityType,jdbcType=INTEGER}, #{refundStatus,jdbcType=INTEGER},
+		#{obtainAddress,jdbcType=VARCHAR}, #{logisticsName,jdbcType=VARCHAR})
+	</insert>
+
+
+	<insert id="insertDynamic"
+		parameterType="com.net.system.model.Order">
+		insert into t_order
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				id,
+			</if>
+			<if test="serialNumber != null">
+				serial_number,
+			</if>
+			<if test="memberId != null">
+				member_id,
+			</if>
+			<if test="freight != null">
+				freight,
+			</if>
+			<if test="deliveryTime != null">
+				delivery_time,
+			</if>
+			<if test="status != null">
+				status,
+			</if>
+			<if test="businessId != null">
+				business_id,
+			</if>
+			<if test="total != null">
+				total,
+			</if>
+			<if test="actual != null">
+				actual,
+			</if>
+			<if test="addTime != null">
+				add_time,
+			</if>
+			<if test="paymentType != null">
+				payment_type,
+			</if>
+			<if test="transactionId != null">
+				transaction_id,
+			</if>
+			<if test="notifyResult != null">
+				notify_result,
+			</if>
+			<if test="paymentTime != null">
+				payment_time,
+			</if>
+			<if test="endTime != null">
+				end_time,
+			</if>
+			<if test="updateTime != null">
+				update_time,
+			</if>
+			<if test="closeTime != null">
+				close_time,
+			</if>
+			<if test="paymentStatus != null">
+				payment_status,
+			</if>
+			<if test="superSerialNumber != null">
+				super_serial_number,
+			</if>
+			<if test="memberRole != null">
+				member_role,
+			</if>
+			<if test="buyerMessage != null">
+				buyer_message,
+			</if>
+			<if test="paymentEndTime != null">
+				payment_end_time,
+			</if>
+			<if test="extractionCode != null">
+				extraction_code,
+			</if>
+			<if test="orderType != null">
+				order_type,
+			</if>
+			<if test="logisticsNumber != null">
+				logistics_number,
+			</if>
+			<if test="businessPhone != null">
+				business_phone,
+			</if>
+			<if test="extractTime != null">
+				extract_time,
+			</if>
+			<if test="extractPhone != null">
+				extract_phone,
+			</if>
+			<if test="couponId != null">
+				coupon_id,
+			</if>
+			<if test="discount != null">
+				discount,
+			</if>
+			<if test="activityId != null">
+				activity_id,
+			</if>
+			<if test="activityType != null">
+				activity_type,
+			</if>
+			<if test="refundStatus != null">
+				refund_status,
+			</if>
+			<if test="obtainAddress != null">
+				obtain_address,
+			</if>
+			<if test="logisticsName != null">
+				logistics_name,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				#{id,jdbcType=VARCHAR},
+			</if>
+			<if test="serialNumber != null">
+				#{serialNumber,jdbcType=VARCHAR},
+			</if>
+			<if test="memberId != null">
+				#{memberId,jdbcType=INTEGER},
+			</if>
+			<if test="freight != null">
+				#{freight,jdbcType=DECIMAL},
+			</if>
+			<if test="deliveryTime != null">
+				#{deliveryTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="status != null">
+				#{status,jdbcType=INTEGER},
+			</if>
+			<if test="businessId != null">
+				#{businessId,jdbcType=VARCHAR},
+			</if>
+			<if test="total != null">
+				#{total,jdbcType=DECIMAL},
+			</if>
+			<if test="actual != null">
+				#{actual,jdbcType=DECIMAL},
+			</if>
+			<if test="addTime != null">
+				#{addTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="paymentType != null">
+				#{paymentType,jdbcType=INTEGER},
+			</if>
+			<if test="transactionId != null">
+				#{transactionId,jdbcType=VARCHAR},
+			</if>
+			<if test="notifyResult != null">
+				#{notifyResult,jdbcType=VARCHAR},
+			</if>
+			<if test="paymentTime != null">
+				#{paymentTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="endTime != null">
+				#{endTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="updateTime != null">
+				#{updateTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="closeTime != null">
+				#{closeTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="paymentStatus != null">
+				#{paymentStatus,jdbcType=INTEGER},
+			</if>
+			<if test="superSerialNumber != null">
+				#{superSerialNumber,jdbcType=VARCHAR},
+			</if>
+			<if test="memberRole != null">
+				#{memberRole,jdbcType=VARCHAR},
+			</if>
+			<if test="buyerMessage != null">
+				#{buyerMessage,jdbcType=VARCHAR},
+			</if>
+			<if test="paymentEndTime != null">
+				#{paymentEndTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="extractionCode != null">
+				#{extractionCode,jdbcType=VARCHAR},
+			</if>
+			<if test="orderType != null">
+				#{orderType,jdbcType=INTEGER},
+			</if>
+			<if test="logisticsNumber != null">
+				#{logisticsNumber,jdbcType=VARCHAR},
+			</if>
+			<if test="businessPhone != null">
+				#{businessPhone,jdbcType=VARCHAR},
+			</if>
+			<if test="extractTime != null">
+				#{extractTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="extractPhone != null">
+				#{extractPhone,jdbcType=VARCHAR},
+			</if>
+			<if test="couponId != null">
+				#{couponId,jdbcType=VARCHAR},
+			</if>
+			<if test="discount != null">
+				#{discount,jdbcType=DECIMAL},
+			</if>
+			<if test="activityId != null">
+				#{activityId,jdbcType=VARCHAR},
+			</if>
+			<if test="activityType != null">
+				#{activityType,jdbcType=INTEGER},
+			</if>
+			<if test="refundStatus != null">
+				#{refundStatus,jdbcType=INTEGER},
+			</if>
+			<if test="obtainAddress != null">
+				#{obtainAddress,jdbcType=VARCHAR},
+			</if>
+			<if test="logisticsName != null">
+				#{logisticsName,jdbcType=VARCHAR},
+			</if>
+		</trim>
+	</insert>
+
+
+	<update id="updateDynamic"
+		parameterType="com.net.system.model.Order">
+		update t_order
+		<set>
+			<if test="serialNumber != null">
+				serial_number = #{serialNumber,jdbcType=VARCHAR},
+			</if>
+			<if test="memberId != null">
+				member_id = #{memberId,jdbcType=INTEGER},
+			</if>
+			<if test="freight != null">
+				freight = #{freight,jdbcType=DECIMAL},
+			</if>
+			<if test="deliveryTime != null">
+				delivery_time = #{deliveryTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="status != null">
+				status = #{status,jdbcType=INTEGER},
+			</if>
+			<if test="businessId != null">
+				business_id = #{businessId,jdbcType=VARCHAR},
+			</if>
+			<if test="total != null">
+				total = #{total,jdbcType=DECIMAL},
+			</if>
+			<if test="actual != null">
+				actual = #{actual,jdbcType=DECIMAL},
+			</if>
+			<if test="addTime != null">
+				add_time = #{addTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="paymentType != null">
+				payment_type = #{paymentType,jdbcType=INTEGER},
+			</if>
+			<if test="transactionId != null">
+				transaction_id = #{transactionId,jdbcType=VARCHAR},
+			</if>
+			<if test="notifyResult != null">
+				notify_result = #{notifyResult,jdbcType=VARCHAR},
+			</if>
+			<if test="paymentTime != null">
+				payment_time = #{paymentTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="endTime != null">
+				end_time = #{endTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="updateTime != null">
+				update_time = #{updateTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="closeTime != null">
+				close_time = #{closeTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="paymentStatus != null">
+				payment_status = #{paymentStatus,jdbcType=INTEGER},
+			</if>
+			<if test="superSerialNumber != null">
+				super_serial_number = #{superSerialNumber,jdbcType=VARCHAR},
+			</if>
+			<if test="memberRole != null">
+				member_role = #{memberRole,jdbcType=VARCHAR},
+			</if>
+			<if test="buyerMessage != null">
+				buyer_message = #{buyerMessage,jdbcType=VARCHAR},
+			</if>
+			<if test="paymentEndTime != null">
+				payment_end_time = #{paymentEndTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="extractionCode != null">
+				extraction_code = #{extractionCode,jdbcType=VARCHAR},
+			</if>
+			<if test="orderType != null">
+				order_type = #{orderType,jdbcType=INTEGER},
+			</if>
+			<if test="logisticsNumber != null">
+				logistics_number = #{logisticsNumber,jdbcType=VARCHAR},
+			</if>
+			<if test="businessPhone != null">
+				business_phone = #{businessPhone,jdbcType=VARCHAR},
+			</if>
+			<if test="extractTime != null">
+				extract_time = #{extractTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="extractPhone != null">
+				extract_phone = #{extractPhone,jdbcType=VARCHAR},
+			</if>
+			<if test="couponId != null">
+				coupon_id = #{couponId,jdbcType=VARCHAR},
+			</if>
+			<if test="discount != null">
+				discount = #{discount,jdbcType=DECIMAL},
+			</if>
+			<if test="activityId != null">
+				activity_id = #{activityId,jdbcType=VARCHAR},
+			</if>
+			<if test="activityType != null">
+				activity_type = #{activityType,jdbcType=INTEGER},
+			</if>
+			<if test="refundStatus != null">
+				refund_status = #{refundStatus,jdbcType=INTEGER},
+			</if>
+			<if test="obtainAddress != null">
+				obtain_address = #{obtainAddress,jdbcType=VARCHAR},
+			</if>
+			<if test="logisticsName != null">
+				logistics_name = #{logisticsName,jdbcType=VARCHAR},
+			</if>
+			<if test="businessMessage != null">
+				business_message = #{businessMessage,jdbcType=VARCHAR},
+			</if>
+
+
+
+		</set>
+		where id = #{id,jdbcType=VARCHAR}
+	</update>
+
+
+	<update id="update" parameterType="com.net.system.model.Order">
+		update t_order
+		set serial_number = #{serialNumber,jdbcType=VARCHAR},
+		member_id = #{memberId,jdbcType=INTEGER},
+		freight = #{freight,jdbcType=DECIMAL},
+		delivery_time = #{deliveryTime,jdbcType=TIMESTAMP},
+		status = #{status,jdbcType=INTEGER},
+		business_id = #{businessId,jdbcType=VARCHAR},
+		total = #{total,jdbcType=DECIMAL},
+		actual = #{actual,jdbcType=DECIMAL},
+		add_time = #{addTime,jdbcType=TIMESTAMP},
+		payment_type = #{paymentType,jdbcType=INTEGER},
+		transaction_id = #{transactionId,jdbcType=VARCHAR},
+		notify_result = #{notifyResult,jdbcType=VARCHAR},
+		payment_time = #{paymentTime,jdbcType=TIMESTAMP},
+		end_time = #{endTime,jdbcType=TIMESTAMP},
+		update_time = #{updateTime,jdbcType=TIMESTAMP},
+		close_time = #{closeTime,jdbcType=TIMESTAMP},
+		payment_status = #{paymentStatus,jdbcType=INTEGER},
+		super_serial_number = #{superSerialNumber,jdbcType=VARCHAR},
+		member_role = #{memberRole,jdbcType=VARCHAR},
+		buyer_message = #{buyerMessage,jdbcType=VARCHAR},
+		payment_end_time = #{paymentEndTime,jdbcType=TIMESTAMP},
+		extraction_code = #{extractionCode,jdbcType=VARCHAR},
+		order_type = #{orderType,jdbcType=INTEGER},
+		logistics_number = #{logisticsNumber,jdbcType=VARCHAR},
+		business_phone = #{businessPhone,jdbcType=VARCHAR},
+		extract_time = #{extractTime,jdbcType=TIMESTAMP},
+		extract_phone = #{extractPhone,jdbcType=VARCHAR},
+		coupon_id = #{couponId,jdbcType=VARCHAR},
+		discount = #{discount,jdbcType=DECIMAL},
+		activity_id = #{activityId,jdbcType=VARCHAR},
+		activity_type = #{activityType,jdbcType=INTEGER},
+		refund_status = #{refundStatus,jdbcType=INTEGER},
+		obtain_address = #{obtainAddress,jdbcType=VARCHAR},
+		logistics_name = #{logisticsName,jdbcType=VARCHAR}
+		where id = #{id,jdbcType=VARCHAR}
+	</update>
+
+	<update id="updateStatus" parameterType="map">
+		update t_order
+		set
+		status = #{status,jdbcType=INTEGER},
+		end_time = #{endTime,jdbcType=TIMESTAMP},
+		close_time = #{closeTime,jdbcType=TIMESTAMP}
+		where id = #{id,jdbcType=VARCHAR}
+	</update>
+	<select id="selectById" parameterType="java.lang.String"
+		resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from t_order
+		where id = #{id,jdbcType=VARCHAR}
+	</select>
+
+	<select id="selectByOrderNo" parameterType="java.lang.String"
+		resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from t_order
+		where serial_number = #{serialNumber,jdbcType=VARCHAR}
+	</select>
+
+	<sql id="findPageWithWhere">
+		<where>
+			1=1
+			<if test="id != null and id != ''">
+				and id = #{id,jdbcType=VARCHAR}
+			</if>
+			<if test="serialNumber != null and serialNumber != ''">
+				and serial_number = #{serialNumber,jdbcType=VARCHAR}
+			</if>
+			<if test="memberId != null">
+				and member_id = #{memberId,jdbcType=INTEGER}
+			</if>
+			<if test="freight != null">
+				and freight = #{freight,jdbcType=DECIMAL}
+			</if>
+			<if test="deliveryTime != null">
+				and delivery_time = #{deliveryTime,jdbcType=TIMESTAMP}
+			</if>
+			<if test="status != null and status!=''">
+				and status = #{status}
+			</if>
+			<if test="businessId != null and businessId != ''">
+				and business_id = #{businessId,jdbcType=VARCHAR}
+			</if>
+			<if test="total != null">
+				and total = #{total,jdbcType=DECIMAL}
+			</if>
+			<if test="actual != null">
+				and actual = #{actual,jdbcType=DECIMAL}
+			</if>
+			<if test="addTime != null">
+				and add_time = #{addTime,jdbcType=TIMESTAMP}
+			</if>
+			<if test="paymentType != null">
+				and payment_type = #{paymentType,jdbcType=INTEGER}
+			</if>
+			<if test="transactionId != null and transactionId != ''">
+				and transaction_id = #{transactionId,jdbcType=VARCHAR}
+			</if>
+			<if test="notifyResult != null and notifyResult != ''">
+				and notify_result = #{notifyResult,jdbcType=VARCHAR}
+			</if>
+			<if test="paymentTime != null">
+				and payment_time = #{paymentTime,jdbcType=TIMESTAMP}
+			</if>
+			<if test="endTime != null">
+				and end_time = #{endTime,jdbcType=TIMESTAMP}
+			</if>
+			<if test="updateTime != null">
+				and update_time = #{updateTime,jdbcType=TIMESTAMP}
+			</if>
+			<if test="closeTime != null">
+				and close_time = #{closeTime,jdbcType=TIMESTAMP}
+			</if>
+			<if test="paymentStatus != null">
+				and payment_status = #{paymentStatus,jdbcType=INTEGER}
+			</if>
+			<if test="superSerialNumber != null and superSerialNumber != ''">
+				and super_serial_number = #{superSerialNumber,jdbcType=VARCHAR}
+			</if>
+			<if test="memberRole != null and memberRole != ''">
+				and member_role = #{memberRole,jdbcType=VARCHAR}
+			</if>
+			<if test="buyerMessage != null and buyerMessage != ''">
+				and buyer_message = #{buyerMessage,jdbcType=VARCHAR}
+			</if>
+			<if test="paymentEndTime != null">
+				and payment_end_time = #{paymentEndTime,jdbcType=TIMESTAMP}
+			</if>
+			<if test="extractionCode != null and extractionCode != ''">
+				and extraction_code = #{extractionCode,jdbcType=VARCHAR}
+			</if>
+			<if test="orderType != null">
+				and order_type = #{orderType,jdbcType=INTEGER}
+			</if>
+			<if test="logisticsNumber != null and logisticsNumber != ''">
+				and logistics_number = #{logisticsNumber,jdbcType=VARCHAR}
+			</if>
+			<if test="businessPhone != null and businessPhone != ''">
+				and business_phone = #{businessPhone,jdbcType=VARCHAR}
+			</if>
+			<if test="extractTime != null">
+				and extract_time = #{extractTime,jdbcType=TIMESTAMP}
+			</if>
+			<if test="extractPhone != null and extractPhone != ''">
+				and extract_phone = #{extractPhone,jdbcType=VARCHAR}
+			</if>
+			<if test="couponId != null and couponId != ''">
+				and coupon_id = #{couponId,jdbcType=VARCHAR}
+			</if>
+			<if test="discount != null">
+				and discount = #{discount,jdbcType=DECIMAL}
+			</if>
+			<if test="activityId != null and activityId != ''">
+				and activity_id = #{activityId,jdbcType=VARCHAR}
+			</if>
+			<if test="activityType != null">
+				and activity_type = #{activityType,jdbcType=INTEGER}
+			</if>
+			<if test="refundStatus != null">
+				and refund_status = #{refundStatus,jdbcType=INTEGER}
+			</if>
+			<if test="obtainAddress != null and obtainAddress != ''">
+				and obtain_address = #{obtainAddress,jdbcType=VARCHAR}
+			</if>
+			<if test="logisticsName != null and logisticsName != ''">
+				and logistics_name = #{logisticsName,jdbcType=VARCHAR}
+			</if>
+		</where>
+	</sql>
+
+
+	<select id="findPageWithResult" parameterType="map"
+		resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from t_order
+		<include refid="findPageWithWhere" />
+		order by add_time desc
+	</select>
+
+
+	<select id="findPageWithCount" parameterType="map"
+		resultType="Integer">
+		select count(1)
+		from t_order
+		<include refid="findPageWithWhere" />
+	</select>
+
+
+
+
+	<select id="findPageWithResultByType" parameterType="map"
+		resultMap="BaseResultMapVo">
+		<if test="type==1 or type=='1'">
+			select o.id, serial_number, member_id,business_message, freight,
+			delivery_time, status, o.business_id, total,
+			actual, add_time, payment_type, transaction_id, notify_result, payment_time,
+			end_time,
+			o.update_time, close_time, payment_status, super_serial_number, member_role,
+			buyer_message,
+			payment_end_time, extraction_code, order_type, logistics_number, business_phone,
+			extract_time, extract_phone, coupon_id, discount, activity_id,
+			activity_type, refund_status,
+			obtain_address, logistics_name,p.pro_image,p.pro_name,p.quantity
+			 from t_order o left
+			join t_order_product p on o.id=p.order_id
+			left join t_order_receiving_info r on o.id=r.order_id
+			where
+			o.status not in(1,3) and o.activity_type=1
+			<if test="status!=null and status!=''">
+				and o.status=#{status}
+			</if>
+			<if test="proName!=null and proName!=''">
+				and p.pro_name like CONCAT('%',#{proName},'%')
+			</if>
+			
+			<if test="serialNumber!=null and serialNumber!=''">
+				and o.serial_number like CONCAT('%',#{serialNumber},'%')
+			</if>
+			<if test="consignee!=null and consignee!=''">
+				and (r.receiver_name like CONCAT('%',#{consignee},'%') or
+				r.receiver_phone like CONCAT('%',#{consignee},'%'))
+			</if>
+			<if test="rangeTime!=null and rangeTime!=''">
+				and (o.add_time&gt;=DATE_FORMAT(LEFT(#{rangeTime},10),'%Y-%m-%d') and
+				o.add_time&lt;=DATE_FORMAT(RIGHT(#{rangeTime},10),'%Y-%m-%d'))
+			</if>
+			order by o.add_time
+		</if>
+		<if test="type==2 or type=='2'">
+			select o.id, serial_number, member_id,business_message, freight,
+			delivery_time, status, o.business_id, total,
+			actual, add_time, payment_type, transaction_id, notify_result, payment_time,
+			end_time,
+			o.update_time, close_time, payment_status, super_serial_number, member_role,
+			buyer_message,
+			payment_end_time, extraction_code, order_type, logistics_number, business_phone,
+			extract_time, extract_phone, coupon_id, discount, activity_id,
+			activity_type, refund_status,
+			obtain_address, logistics_name,p.pro_image,p.pro_name,p.quantity
+			 from t_order o left
+			join t_order_product p on o.id=p.order_id
+			where
+			o.status not in(1,3) and o.activity_type=2
+			<if test="status!=null and status!=''">
+				and o.status=#{status}
+			</if>
+			
+			<if test="proName!=null and proName!=''">
+				and p.pro_name like CONCAT('%',#{proName},'%')
+			</if>
+			<if test="serialNumber!=null and serialNumber!=''">
+				and o.serial_number like CONCAT('%',#{serialNumber},'%')
+			</if>
+			<if test="rangeTime!=null and rangeTime!=''">
+				and (o.add_time&gt;=DATE_FORMAT(LEFT(#{rangeTime},10),'%Y-%m-%d') and
+				o.add_time&lt;=DATE_FORMAT(RIGHT(#{rangeTime},10),'%Y-%m-%d'))
+			</if>
+			order by o.add_time
+		</if>
+		<if test="type==3 or type=='3'">
+		</if>
+	</select>
+
+
+	
+	<update id="updateOrderStatus"
+		parameterType="com.net.system.model.Order">
+		update t_order
+		set
+		payment_status=#{paymentStatus},
+		payment_type=#{paymentType},
+		transaction_id = #{transactionId,jdbcType=VARCHAR},
+		notify_result = #{notifyResult,jdbcType=VARCHAR},
+		payment_time = #{paymentTime},
+		status = #{status,jdbcType=INTEGER}
+		where id = #{id,jdbcType=VARCHAR}
+	</update>
+	
+	
+	
+    <select id="findCommodityOrder" parameterType="Map" resultMap="BaseResultMap">
+        select DISTINCT
+		  o.id,  o.serial_number,  o.member_id,  o.freight,  o.delivery_time,  o.status,
+		 o.business_id,  o.total,
+		 o.actual, add_time,  o.payment_type,  o.transaction_id,  o.notify_result,  o.payment_time,
+		 o.end_time,
+		 o.update_time,  o.close_time,  o.payment_status,  o.super_serial_number,  o.member_role,
+		 o.buyer_message,
+		 o.payment_end_time,  o.extraction_code,  o.order_type,  o.logistics_number,  o.business_phone,
+		 o.extract_time,  o.extract_phone,  o.coupon_id,  o.discount,  o.activity_id,
+		 o.activity_type,
+		 o.obtain_address,  o.logistics_name, o.business_message,(case o.refund_status when 1 then 
+         (select `status` from t_order_refunds r where r.order_id=o.id)
+     else 0 end ) refund_status
+		from t_order o left join t_order_product p on o.id=p.order_id
+		where  o.member_id=#{userId} and o.activity_type=1 
+		<if test="status!=null and status!='' and status!=0  and status!='0'">
+		   and o.status=#{status}
+		</if>
+		<if test="refundStatus!=null and refundStatus!=''">
+				and o.refund_status=#{refundStatus}
+			</if>
+		<if test="keyword!='' and keyword!=null">
+			and (
+			o.serial_number like CONCAT('%',#{keyword},'%') or
+            p.pro_name like CONCAT('%',#{keyword},'%') or  	
+            p.description like CONCAT('%',#{keyword},'%') or  	
+            p.specifications like CONCAT('%',#{keyword},'%')
+
+			)
+		</if>
+        order by o.add_time desc		
+    </select>
+    
+   
+    
+    
+     <select id="findCommodityOrderById" parameterType="Map" resultMap="BaseResultMapInfoVo">
+        select
+		<include refid="Base_Column_List" />
+		from t_order where id=#{id}
+		
+    </select>
+
+
+	<select id="selectByMemberId" parameterType="string" resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from t_order
+		where member_id = #{memberId,jdbcType=VARCHAR}
+	</select>
+	
+	<select id="findrefundsOrder" parameterType="Map" resultMap="BaseResultMapInfoVo">
+        select 
+		  o.*
+		from t_order o left join t_order_refunds r on o.id=r.order_id
+		where  o.member_id=#{userId} and o.activity_type=1  and o.refund_status=1
+        order by r.add_time desc		
+    </select>
+</mapper>

@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <title>页面添加</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport"
+          content="width=device-width,user-scalable=yes, minimum-scale=0.4, initial-scale=0.8,target-densitydpi=low-dpi"/>
+    <link rel="shortcut icon" type="image/x-icon" th:href="@{/favicon.ico}"/>
+    <link rel="stylesheet" th:href="@{/lib/layui/css/layui.css}">
+    <link rel="stylesheet" th:href="@{/css/common.css}">
+    <link rel="stylesheet" th:href="@{/css/animate.min.css}">
+</head>
+<style>
+ .layui-upload-img { width: 90px; height: 90px; margin: 0; }
+ 
+</style>
+<body>
+    <div class="z-body animated fadeIn">
+        <form action="" method="post" class="layui-form layui-form-pane">
+            <div class="layui-form-item">
+                <label for="deptName" class="layui-form-label">
+                    分类名称
+                </label>
+                <div class="layui-input-block">
+                    <input type="text" id="deptName" name="fName" th:value="${category?.fName}"
+                           lay-verify="required" lay-vertype="tips"
+                           autocomplete="off" placeholder="请输入分类名称" class="layui-input">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">
+                    上级分类
+                </label>
+                <div class="layui-input-block">
+                    <div class="layui-unselect layui-form-select" id="parentNameDiv">
+                        <div class="layui-select-title">
+                            <input type="text" id="parentName"
+                                   placeholder="请选择" class="layui-input layui-unselect" readonly>
+                            <input type="hidden" name="fParentid" id="parentId">
+                            <i class="layui-edge"></i>
+                        </div>
+                    </div>
+                    <div class="layui-card dtree-select" id="parentTreeDiv">
+                        <div class="layui-card-body">
+                            <div id="toolbarDiv">
+                                <ul id="parentTree" class="dtree" data-id="0" style="width: 100%;"></ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+			<div class="layui-form-item">
+				   <div class="layui-form-label">分类图标</div>
+				   <div class="layui-input-block" style="width: 70%;">
+				  <div class="layui-upload">
+					  <button type="button" class="layui-btn" id="test1">上传图片</button>
+					 	 <div class="layui-upload-list" id="mainFile">
+					  </div>
+					</div>  
+					</div>
+			</div> 
+            <div class="layui-form-item">
+                <div class="layui-input-block" style="margin-left:0;text-align:center;">
+                    <input type="hidden" name="fCateid" th:value="${category?.fCateid}">
+                    <input type="hidden" name="fSortorder" th:value="${category?.fSortorder}">
+                    <input type="hidden" id="images" name="originalUrl" th:value="${category?.imageUrl}">
+                    <button class="layui-btn layui-btn-blue" th:text="${category}?'修改':'增加'" lay-submit="" data-th-lay-filter="${category}?'edit':'add'">增加</button>
+                </div>
+            </div>
+        </form>
+    </div>
+
+    <script th:src="@{/lib/jquery/jquery.min.js}"></script>
+    <script th:src="@{/lib/layui/layui.js}"></script>
+    <script th:src="@{/js/common.js}"></script>
+
+    <script th:inline="javascript">
+        layui.config({
+            base: projectName()+'/lib/layui/extend/'
+        }).use(['form', 'layer', 'dtree','upload'], function () {
+            var $ = layui.jquery,
+                form = layui.form,
+                layer = layui.layer,
+                dtree = layui.dtree,
+              upload = layui.upload; 
+            var productData=[[${category}]];
+            console.log("5443",productData);
+            var deptDTree = dtree.render({
+                elem: "#parentTree",
+                url: projectName()+"/category/tree/root",
+                dataStyle: "layuiStyle",
+                method: "GET",
+                dot: false,     // 圆点是否显示
+                accordion: true,
+                menubar: true,
+                response: {
+                    statusCode: 0,
+                    message: "msg",
+                    treeId: "fCateid",
+                    parentId: "fParentid",
+                    title: "fName"
+                },
+                done: function (response, obj) {
+                    var parentId = getQueryString('fParentid') ? getQueryString('fParentid') : [[${category?.fParentid + ''}]] ;
+                    var parent = deptDTree.getParam(parentId);
+                    
+                    if (parent) {
+                        $("#parentName").val(parent.context);
+                        $("#parentId").val(parent.nodeId);
+                    }
+                }
+            });
+
+            upload.render({
+				 elem: '#test1',
+				 url: '/',
+				 size: 1000,
+				 exts: 'jpg|png|jpeg',
+				 auto: false,
+				 before: function(obj) {
+						
+				 }
+				 ,choose: function(obj){
+					obj.preview(function(index, file, result){
+					      var htm="<img class='layui-upload-img' src='"+result+"'><input type='hidden' name='fileimg' value='"+result+"'/>";
+					      $("#mainFile").html(htm);
+					});
+	              },
+				 done: function(res) {
+					layer.close(layer.msg());//关闭上传提示窗口
+				 }
+			 });
+            if($("#images").val().length>0){
+            	var htm="<img class='layui-upload-img' src='"+$("#images").val()+"'><input type='hidden' name='fileimg' value='"+$("#images").val()+"'/>";
+  		      $("#mainFile").html(htm);	
+            }
+            
+            $("#parentName").on("click",function(){
+                $(this).toggleClass("layui-form-selected");
+                $("#parentTreeDiv").toggleClass("layui-show layui-anim layui-anim-upbit");
+            });
+
+            dtree.on("node(parentTree)", function(obj){
+                console.log(obj);
+                $("#parentName").val(obj.param.context);
+                $("#parentId").val(obj.param.nodeId);
+                $("#parentNameDiv").toggleClass("layui-form-selected");
+                $("#parentTreeDiv").toggleClass("layui-show layui-anim layui-anim-upbit");
+            });
+
+            //监听提交
+            form.on('submit(add)', function (form) {
+            	//console.log(form.field);
+                $.post(projectName()+'/category', form.field, function (result) {
+                    handlerResult(result, addDone);
+                });
+                return false;
+            });
+
+            //监听提交
+            form.on('submit(edit)', function (form) {
+                form.field._method = 'PUT';
+               // console.log("qqq",form);
+                $.post(projectName()+'/category', form.field, function (result) {
+                    handlerResult(result, editDone);
+                });
+                return false;
+            });
+
+
+            function addDone(data) {
+                console.log("add result id : ", data);
+                layer.msg("添加成功", {icon: 6});
+            }
+
+            function editDone(data) {
+                console.log("edit result id : ", data);
+                layer.msg("修改成功", {icon: 6});
+            }
+        });
+    </script>
+</body>
+
+</html>

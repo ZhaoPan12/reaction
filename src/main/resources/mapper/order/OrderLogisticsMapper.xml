@@ -1,0 +1,159 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.net.system.mapper.order.OrderLogisticsMapper">
+  
+<resultMap id="BaseResultMap" type="com.net.system.model.OrderLogistics">
+  <id column="id" jdbcType="VARCHAR" property="id" />
+  <result column="order_id" jdbcType="VARCHAR" property="orderId" />
+  <result column="logistics_name" jdbcType="VARCHAR" property="logisticsName" />
+  <result column="logistics_number" jdbcType="VARCHAR" property="logisticsNumber" />
+  <result column="add_time" jdbcType="TIMESTAMP" property="addTime" />
+</resultMap>
+
+  
+<sql id="Base_Column_List">
+  id, order_id, logistics_name, logistics_number, add_time
+</sql>
+
+  
+<delete id="delete" parameterType="java.lang.String">
+  delete from t_order_logistics
+  where id = #{id,jdbcType=VARCHAR}
+</delete>
+
+<delete id="deleteByOrderId" parameterType="java.lang.String">
+  delete from t_order_logistics
+  where order_id = #{id,jdbcType=VARCHAR}
+</delete>
+
+
+  
+<insert id="insert" parameterType="com.net.system.model.OrderLogistics">
+  insert into t_order_logistics (id, order_id, logistics_name, 
+    logistics_number, add_time)
+  values (#{id,jdbcType=VARCHAR}, #{orderId,jdbcType=VARCHAR}, #{logisticsName,jdbcType=VARCHAR}, 
+    #{logisticsNumber,jdbcType=VARCHAR}, #{addTime,jdbcType=TIMESTAMP})
+</insert>
+
+  
+<insert id="insertDynamic" parameterType="com.net.system.model.OrderLogistics">
+  insert into t_order_logistics
+  <trim prefix="(" suffix=")" suffixOverrides=",">
+    <if test="id != null">
+      id,
+    </if>
+    <if test="orderId != null">
+      order_id,
+    </if>
+    <if test="logisticsName != null">
+      logistics_name,
+    </if>
+    <if test="logisticsNumber != null">
+      logistics_number,
+    </if>
+    <if test="addTime != null">
+      add_time,
+    </if>
+  </trim>
+  <trim prefix="values (" suffix=")" suffixOverrides=",">
+    <if test="id != null">
+      #{id,jdbcType=VARCHAR},
+    </if>
+    <if test="orderId != null">
+      #{orderId,jdbcType=VARCHAR},
+    </if>
+    <if test="logisticsName != null">
+      #{logisticsName,jdbcType=VARCHAR},
+    </if>
+    <if test="logisticsNumber != null">
+      #{logisticsNumber,jdbcType=VARCHAR},
+    </if>
+    <if test="addTime != null">
+      #{addTime,jdbcType=TIMESTAMP},
+    </if>
+  </trim>
+</insert>
+
+  
+<update id="updateDynamic" parameterType="com.net.system.model.OrderLogistics">
+  update t_order_logistics
+  <set>
+    <if test="orderId != null">
+      order_id = #{orderId,jdbcType=VARCHAR},
+    </if>
+    <if test="logisticsName != null">
+      logistics_name = #{logisticsName,jdbcType=VARCHAR},
+    </if>
+    <if test="logisticsNumber != null">
+      logistics_number = #{logisticsNumber,jdbcType=VARCHAR},
+    </if>
+    <if test="addTime != null">
+      add_time = #{addTime,jdbcType=TIMESTAMP},
+    </if>
+  </set>
+  where id = #{id,jdbcType=VARCHAR}
+</update>
+
+  
+<update id="update" parameterType="com.net.system.model.OrderLogistics">
+  update t_order_logistics
+  set order_id = #{orderId,jdbcType=VARCHAR},
+    logistics_name = #{logisticsName,jdbcType=VARCHAR},
+    logistics_number = #{logisticsNumber,jdbcType=VARCHAR},
+    add_time = #{addTime,jdbcType=TIMESTAMP}
+  where id = #{id,jdbcType=VARCHAR}
+</update>
+
+  
+<select id="selectById" parameterType="java.lang.String" resultMap="BaseResultMap">
+  select
+	<include refid="Base_Column_List" />
+  from  t_order_logistics
+  where id = #{id,jdbcType=VARCHAR}
+</select>
+
+  
+<sql id="findPageWithWhere">
+    <where> 1=1 
+	<if test="id != null and id != ''" >
+	  and id = #{id,jdbcType=VARCHAR}
+	</if>
+	<if test="orderId != null and orderId != ''" >
+	  and order_id = #{orderId,jdbcType=VARCHAR}
+	</if>
+	<if test="logisticsName != null and logisticsName != ''" >
+	  and logistics_name = #{logisticsName,jdbcType=VARCHAR}
+	</if>
+	<if test="logisticsNumber != null and logisticsNumber != ''" >
+	  and logistics_number = #{logisticsNumber,jdbcType=VARCHAR}
+	</if>
+	<if test="addTime != null" >
+	  and add_time = #{addTime,jdbcType=TIMESTAMP}
+	</if>
+  </where>
+</sql>
+
+  
+<select id="findPageWithResult" parameterType="Map" resultMap="BaseResultMap">
+  select
+	<include refid="Base_Column_List" />
+  from  t_order_logistics
+  <include refid="findPageWithWhere" />
+</select>
+
+<select id="findOrderLogistics" parameterType="String" resultMap="BaseResultMap">
+  select
+	<include refid="Base_Column_List" />
+  from  t_order_logistics
+  where order_id=#{id}
+</select>
+
+<select id="findByOrderId" parameterType="com.net.system.model.Order" resultMap="BaseResultMap">
+  select
+	<include refid="Base_Column_List" />
+  from  t_order_logistics where order_id=#{id}
+</select>
+
+
+
+</mapper>

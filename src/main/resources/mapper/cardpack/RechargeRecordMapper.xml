@@ -1,0 +1,253 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.net.system.mapper.cardpack.RechargeRecordMapper">
+  
+<resultMap id="BaseResultMap" type="com.net.system.model.mall.RechargeRecord">
+  <id column="id" jdbcType="VARCHAR" property="id" />
+  <result column="orderno" jdbcType="VARCHAR" property="orderno" />
+  <result column="serialnum" jdbcType="INTEGER" property="serialnum" />
+  <result column="paytype" jdbcType="INTEGER" property="paytype" />
+  <result column="status" jdbcType="INTEGER" property="status" />
+  <result column="recharge_name" jdbcType="DECIMAL" property="rechargeName" />
+  <result column="userid" jdbcType="INTEGER" property="userid" />
+  <result column="paytime" jdbcType="TIMESTAMP" property="paytime" />
+  <result column="createtime" jdbcType="TIMESTAMP" property="createtime" />
+  <result column="closetime" jdbcType="TIMESTAMP" property="closetime" />
+  <result column="type" jdbcType="INTEGER" property="type" />
+  <result column="acckind" jdbcType="VARCHAR" property="acckind" />
+</resultMap>
+
+  
+<sql id="Base_Column_List">
+  id, orderno, serialnum, paytype, status, recharge_name, userid, paytime, createtime, 
+  closetime, type,acckind
+</sql>
+
+  
+<delete id="delete" parameterType="java.lang.String">
+  delete from t_recharge_record
+  where id = #{id,jdbcType=VARCHAR}
+</delete>
+
+  
+<insert id="insert" parameterType="com.net.system.model.mall.RechargeRecord">
+  insert into t_recharge_record (id, orderno, serialnum, 
+    paytype, status, recharge_name, 
+    userid, paytime, createtime, 
+    closetime, type)
+  values (#{id,jdbcType=VARCHAR}, #{orderno,jdbcType=VARCHAR}, #{serialnum,jdbcType=INTEGER}, 
+    #{paytype,jdbcType=INTEGER}, #{status,jdbcType=INTEGER}, #{rechargeName,jdbcType=DECIMAL}, 
+    #{userid,jdbcType=INTEGER}, #{paytime,jdbcType=TIMESTAMP}, #{createtime,jdbcType=TIMESTAMP}, 
+    #{closetime,jdbcType=TIMESTAMP}, #{type,jdbcType=INTEGER})
+</insert>
+
+  
+<insert id="insertDynamic" parameterType="com.net.system.model.mall.RechargeRecord">
+  insert into t_recharge_record
+  <trim prefix="(" suffix=")" suffixOverrides=",">
+    <if test="id != null">
+      id,
+    </if>
+    <if test="orderno != null">
+      orderno,
+    </if>
+    <if test="serialnum != null">
+      serialnum,
+    </if>
+    <if test="paytype != null">
+      paytype,
+    </if>
+    <if test="status != null">
+      status,
+    </if>
+    <if test="rechargeName != null">
+      recharge_name,
+    </if>
+    <if test="userid != null">
+      userid,
+    </if>
+    <if test="paytime != null">
+      paytime,
+    </if>
+    <if test="createtime != null">
+      createtime,
+    </if>
+    <if test="closetime != null">
+      closetime,
+    </if>
+    <if test="type != null">
+      type,
+    </if>
+    <if test="acckind!=null and acckind!=''">
+     acckind,
+    </if>
+  </trim>
+  <trim prefix="values (" suffix=")" suffixOverrides=",">
+    <if test="id != null">
+      #{id,jdbcType=VARCHAR},
+    </if>
+    <if test="orderno != null">
+      #{orderno,jdbcType=VARCHAR},
+    </if>
+    <if test="serialnum != null">
+      #{serialnum,jdbcType=INTEGER},
+    </if>
+    <if test="paytype != null">
+      #{paytype,jdbcType=INTEGER},
+    </if>
+    <if test="status != null">
+      #{status,jdbcType=INTEGER},
+    </if>
+    <if test="rechargeName != null">
+      #{rechargeName,jdbcType=DECIMAL},
+    </if>
+    <if test="userid != null">
+      #{userid,jdbcType=INTEGER},
+    </if>
+    <if test="paytime != null">
+      #{paytime,jdbcType=TIMESTAMP},
+    </if>
+    <if test="createtime != null">
+      #{createtime,jdbcType=TIMESTAMP},
+    </if>
+    <if test="closetime != null">
+      #{closetime,jdbcType=TIMESTAMP},
+    </if>
+    <if test="type != null">
+      #{type,jdbcType=INTEGER},
+    </if>
+    <if test="acckind!=null and acckind!=''">
+     #{acckind,jdbcType=VARCHAR},
+    </if>
+  </trim>
+</insert>
+
+<update id="updateOrderStatus" parameterType="com.net.system.model.mall.RechargeRecord">
+  update t_recharge_record
+  set 
+    status = #{status,jdbcType=INTEGER},
+    paytime = #{paytime,jdbcType=TIMESTAMP},
+    closetime = #{closetime,jdbcType=TIMESTAMP}
+  where id = #{id,jdbcType=VARCHAR}
+</update>
+  
+<update id="updateDynamic" parameterType="com.net.system.model.mall.RechargeRecord">
+  update t_recharge_record
+  <set>
+    <if test="orderno != null">
+      orderno = #{orderno,jdbcType=VARCHAR},
+    </if>
+    <if test="serialnum != null">
+      serialnum = #{serialnum,jdbcType=INTEGER},
+    </if>
+    <if test="paytype != null">
+      paytype = #{paytype,jdbcType=INTEGER},
+    </if>
+    <if test="status != null">
+      status = #{status,jdbcType=INTEGER},
+    </if>
+    <if test="rechargeName != null">
+      recharge_name = #{rechargeName,jdbcType=DECIMAL},
+    </if>
+    <if test="userid != null">
+      userid = #{userid,jdbcType=INTEGER},
+    </if>
+    <if test="paytime != null">
+      paytime = #{paytime,jdbcType=TIMESTAMP},
+    </if>
+    <if test="createtime != null">
+      createtime = #{createtime,jdbcType=TIMESTAMP},
+    </if>
+    <if test="closetime != null">
+      closetime = #{closetime,jdbcType=TIMESTAMP},
+    </if>
+    <if test="type != null">
+      type = #{type,jdbcType=INTEGER},
+    </if>
+    <if test="acckind!=null and acckind!=''">
+     acckind = #{acckind,jdbcType=VARCHAR},
+    </if>
+  </set>
+  where id = #{id,jdbcType=VARCHAR}
+</update>
+
+  
+<update id="update" parameterType="com.net.system.model.mall.RechargeRecord">
+  update t_recharge_record
+  set orderno = #{orderno,jdbcType=VARCHAR},
+    serialnum = #{serialnum,jdbcType=INTEGER},
+    paytype = #{paytype,jdbcType=INTEGER},
+    status = #{status,jdbcType=INTEGER},
+    recharge_name = #{rechargeName,jdbcType=DECIMAL},
+    userid = #{userid,jdbcType=INTEGER},
+    paytime = #{paytime,jdbcType=TIMESTAMP},
+    createtime = #{createtime,jdbcType=TIMESTAMP},
+    closetime = #{closetime,jdbcType=TIMESTAMP},
+    type = #{type,jdbcType=INTEGER}
+  where id = #{id,jdbcType=VARCHAR}
+</update>
+
+  
+<select id="selectByOrderNo" parameterType="java.lang.String" resultMap="BaseResultMap">
+  select
+	<include refid="Base_Column_List" />
+  from  t_recharge_record
+  where orderno = #{orderNo,jdbcType=VARCHAR}
+</select>
+
+  
+<sql id="findPageWithWhere">
+    <where> 1=1 
+	<if test="id != null and id != ''" >
+	  and id = #{id,jdbcType=VARCHAR}
+	</if>
+	<if test="orderno != null and orderno != ''" >
+	  and orderno = #{orderno,jdbcType=VARCHAR}
+	</if>
+	<if test="serialnum != null" >
+	  and serialnum = #{serialnum,jdbcType=INTEGER}
+	</if>
+	<if test="paytype != null" >
+	  and paytype = #{paytype,jdbcType=INTEGER}
+	</if>
+	<if test="status != null" >
+	  and status = #{status,jdbcType=INTEGER}
+	</if>
+	<if test="rechargeName != null" >
+	  and recharge_name = #{rechargeName,jdbcType=DECIMAL}
+	</if>
+	<if test="userid != null" >
+	  and userid = #{userid,jdbcType=INTEGER}
+	</if>
+	<if test="paytime != null" >
+	  and paytime = #{paytime,jdbcType=TIMESTAMP}
+	</if>
+	<if test="createtime != null" >
+	  and createtime = #{createtime,jdbcType=TIMESTAMP}
+	</if>
+	<if test="closetime != null" >
+	  and closetime = #{closetime,jdbcType=TIMESTAMP}
+	</if>
+	<if test="type != null" >
+	  and type = #{type,jdbcType=INTEGER}
+	</if>
+  </where>
+</sql>
+
+  
+<select id="findPageWithResult" parameterType="map" resultMap="BaseResultMap">
+  select
+	<include refid="Base_Column_List" />
+  from  t_recharge_record
+  <include refid="findPageWithWhere" />
+  order by createtime desc
+</select>
+
+  
+<select id="findPageWithCount" parameterType="map" resultType="Integer">
+  select count(1)
+  from t_recharge_record
+  <include refid="findPageWithWhere" />
+</select>
+
+</mapper>

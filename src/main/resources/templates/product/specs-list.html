@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+<meta charset="UTF-8">
+<title>页面添加</title>
+<meta name="renderer" content="webkit">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<meta name="viewport"
+	content="width=device-width,user-scalable=yes, minimum-scale=0.4, initial-scale=0.8,target-densitydpi=low-dpi" />
+<link rel="shortcut icon" type="image/x-icon" th:href="@{/favicon.ico}" />
+<link rel="stylesheet" th:href="@{/lib/layui/css/layui.css}">
+<link rel="stylesheet" th:href="@{/css/common.css}">
+<link rel="stylesheet" th:href="@{/css/addProduct/1.css}">
+<link rel="stylesheet" th:href="@{/css/animate.min.css}">
+</head>
+<style>
+.layui-form-label {
+	float: left;
+	display: block;
+	padding: 9px 15px;
+	width: 140px;
+	font-weight: 400;
+	line-height: 20px;
+	text-align: right;
+}
+
+.specs-body {
+	float: left;
+	display: block;
+	padding: 9px 15px;
+	line-height: 20px;
+	background: #f8f9fc;
+	border: 1px solid #ebeef5;
+	color: #303133;
+	width: 550px;
+	min-height: 40px;
+	border-radius: 5px;
+}
+
+.layui-input-block {
+	margin-left: 0px;
+	min-height: 36px;
+}
+
+.specs-del {
+	color: #409eff;
+	position: relative;
+	top: 5px;
+	padding-left: 4px;
+	font-size: 11px;
+}
+
+.layui-form-checkbox[lay-skin=primary] span {
+	padding-right: 0px;
+}
+
+.layui-form-item .layui-input-inline {
+	float: left;
+	width: auto;
+	margin-left: 10px;
+}
+
+.specs-add {
+	border: 1px solid #C9C9C9;
+	background-color: #fff;
+	color: #555;
+	display: inline-block;
+	height: 30px;
+	line-height: 30px;
+	padding: 0 13px;
+	white-space: nowrap;
+	text-align: center;
+	font-size: 8px;
+	border-radius: 2px;
+	cursor: pointer;
+	margin-top: 10px;
+}
+
+.attribute-li {
+	height: auto;
+}
+
+.attribute-ul {
+	clear: both;
+	padding-top: 20px;
+}
+
+.r {
+	width: 100%;
+	height: 100%;
+	border-color: #D2D2D2 !important;
+	border-width: 1px;
+	border-style: solid;
+	background-color: #fff;
+	border-radius: 2px;
+}
+
+.table-del {
+	color: #409eff;
+	padding-left: 19px;
+	font-size: 11px;
+}
+
+.specs-btn {
+	clear: both;
+	float: right;
+	width: 553px;
+	margin-right: 15px;
+}
+
+.layui-form-switch {
+	height: 24px;
+}
+
+.layui-form-switch em {
+	top: -1px;
+	font-size: 12px;
+}
+
+.layui-tab-card>.layui-tab-title .layui-this {
+	color: #fff;
+	background-color: #409eff;
+	border-color: #409eff;
+	box-shadow: -1px 0 0 0 #409eff;
+}
+
+.r {
+	text-align: center;
+}
+
+.layui-table th {
+	font-weight: bold;
+}
+</style>
+
+<body>
+	<div class="z-body animated fadeIn">
+		<form action="" method="post" class="layui-form">
+			<input type="hidden" id="productId" th:value="${productId}" />
+			<div class="layui-form-item">
+				<label for="remark" class="layui-form-label">总库存:</label>
+				<div class="layui-input-inline" style="width: 220px;">
+					<input type="number" id="proStock" name="proStock"
+						lay-verify="required|number" lay-vertype="tips" autocomplete="off"
+						th:value="${product.stock}" class="layui-input">
+				</div>
+			</div>
+			<div class="layui-form-item">
+				<label class="layui-form-label">商品上架:</label>
+				<div class="layui-input-block">
+					<input type="checkbox" checked="" name="status" lay-skin="switch"
+						lay-filter="switchTest" id="status" lay-text="上架|不上架"
+						th:checked="${product.status==1}">
+				</div>
+			</div>
+			<div class="layui-form-item " id="table_body">
+				<table id="table">
+
+
+
+				</table>
+			</div>
+			<div class="layui-form-item"
+				style="text-align: center; margin-top: 20px;">
+				<button type="button" id="add" class="layui-btn">立即提交</button>
+			</div>
+		</form>
+	</div>
+
+	<script th:src="@{/lib/jquery/jquery.min.js}"></script>
+	<script th:src="@{/lib/layui/layui.js}"></script>
+	<script th:src="@{/js/common.js}"></script>
+	<script th:src="@{/js/utils/jquery.tmpl.min.js}"></script>
+	<script th:inline="javascript">
+		layui.config({
+			base : projectName() + '/lib/layui/extend/'
+		}).use([ 'form', 'layer','table' ], function() {
+			var $ = layui.jquery, form = layui.form, layer = layui.layer;
+			var table = layui.table;
+			var skuList=[[${skuList}]];
+		
+			show(skuList);
+			
+			
+			//渲染商品规格列表
+			function show(skuList) {
+			
+			  if(skuList.length>0){
+
+				
+				var cols=[];
+				
+				var title=skuList[0].customTitle.split(",");
+                for(var i=0;i<title.length;i++){
+                	cols.push({field:i,title:title[i],align:'center'});
+				}
+               
+                cols.push({field:"price",title:"销售价格",align:'center'});
+				cols.push({field: "stock",title:"商品库存",align:'center'});
+				cols.push({field:"warningStock",title:"预警库存",align:'center'});
+				cols.push({field:"skuId",title:"SKU编号",align:'center'});	
+				
+				var data=[];
+				for(var i=0;i<skuList.length;i++){
+					var obj={};
+					
+					var value=skuList[i].customValue.split(",");
+					
+					
+					for(var j=0;j<value.length;j++){
+						obj[j]=value[j];
+					}
+					
+					obj['price']='<input class="r" type="text" value="'+skuList[i].price+'" />';
+					obj['stock']='<input class="r" type="text"  value="'+skuList[i].stock+'" />';
+					obj['warningStock']='<input class="r" type="text" value="'+skuList[i].warningStock+'" />';
+					obj['skuId']=+skuList[i].skuId;
+					data.push(obj);
+					
+				}
+				
+				
+				
+				table.render({
+				    elem: '#table'
+				    ,cols: [cols]
+				    ,data: data
+				    //,skin: 'line' //表格风格
+				    ,even: true
+				    ,page: false //是否显示分页
+				    //,limits: [5, 7, 10]
+				    ,limit: 100 //每页默认显示的数量
+				  });
+	
+				form.render();
+			  }
+			 }
+			$("#add").click(function(){
+				submitForm();
+			});
+			
+
+			function submitForm(){
+				
+				
+				
+				
+				
+				
+				$(".layui-table-body tr").each(function(i) {
+					var obj=skuList[i];
+					var td=$(this).find("td");
+					obj.price=td.eq(td.length-4).find("input").val();
+					obj.stock=td.eq(td.length-3).find("input").val();
+					obj.warningStock=td.eq(td.length-2).find("input").val();
+					skuList[i]=obj;
+				});
+				
+				
+				var proStock=$("#proStock").val();
+				var status=0;
+				
+				if($('#status').is(':checked')) {
+					status=1;
+				}else{
+					status=0;
+				}
+				
+				var data={
+					"skuList":skuList,
+					"productId":$("#productId").val(),
+					"proStock":proStock,
+					"status":status
+				}
+				
+				 $.ajax({
+	                type: "POST",
+	                async: false,
+	                url: projectName() + '/specs/update',
+	                contentType: "application/json",
+	                dataType: "json",
+	                data: JSON.stringify(data),
+	                success: function (result) {
+	                	handlerResult(result, setDone);
+	                }
+	            }); 
+			}
+			
+			function setDone(data) {
+				layer.msg("设置成功", {
+					icon : 6
+				});
+				var index = parent.layer.getFrameIndex(window.name); //先得到当前iframe层的索引
+				parent.layer.close(index); //再执行关闭
+			}
+			
+
+			
+
+		});
+	</script>
+</body>
+
+</html>

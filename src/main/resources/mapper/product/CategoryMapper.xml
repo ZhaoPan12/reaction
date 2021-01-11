@@ -1,0 +1,234 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.net.system.mapper.product.CategoryMapper">
+  
+<resultMap id="BaseResultMap" type="com.net.system.model.Category">
+  <id column="f_cateid" jdbcType="VARCHAR" property="fCateid" />
+  <result column="f_parentid" jdbcType="VARCHAR" property="fParentid" />
+  <result column="f_name" jdbcType="VARCHAR" property="fName" />
+  <result column="f_status" jdbcType="INTEGER" property="fStatus" />
+  <result column="f_sortorder" jdbcType="INTEGER" property="fSortorder" />
+  <result column="f_createtime" jdbcType="TIMESTAMP" property="fCreatetime" />
+  <result column="f_updatetime" jdbcType="TIMESTAMP" property="fUpdatetime" />
+  <result column="f_image" jdbcType="VARCHAR" property="imageUrl" />
+  <collection property="children" ofType="com.net.system.model.Category" select="selectAllCategoryTree" column="{fParentid = f_cateid}"/>
+</resultMap>
+
+<resultMap id="BaseResultsMap" type="com.net.system.model.Category">
+  <id column="f_cateid" jdbcType="VARCHAR" property="fCateid" />
+  <result column="f_parentid" jdbcType="VARCHAR" property="fParentid" />
+  <result column="f_name" jdbcType="VARCHAR" property="fName" />
+  <result column="f_status" jdbcType="INTEGER" property="fStatus" />
+  <result column="f_sortorder" jdbcType="INTEGER" property="fSortorder" />
+  <result column="f_createtime" jdbcType="TIMESTAMP" property="fCreatetime" />
+  <result column="f_updatetime" jdbcType="TIMESTAMP" property="fUpdatetime" />
+  <result column="f_image" jdbcType="VARCHAR" property="imageUrl" />
+</resultMap>
+  
+<sql id="Base_Column_List">
+  f_cateid, f_parentid, f_name, f_status, f_sortorder, f_createtime, f_updatetime,f_image
+</sql>
+
+  
+<delete id="delete" parameterType="java.lang.String">
+  delete from t_category
+  where f_cateid = #{fCateid,jdbcType=VARCHAR}
+</delete>
+
+  
+<insert id="insert" parameterType="com.net.system.model.Category">
+  insert into t_category (f_cateid, f_parentid, f_name, 
+    f_status, f_sortorder, f_createtime, 
+    f_updatetime,f_image)
+  values (#{fCateid,jdbcType=VARCHAR}, #{fParentid,jdbcType=VARCHAR}, #{fName,jdbcType=VARCHAR}, 
+    #{fStatus,jdbcType=INTEGER}, #{fSortorder,jdbcType=INTEGER}, #{fCreatetime,jdbcType=TIMESTAMP}, 
+    #{fUpdatetime,jdbcType=TIMESTAMP},#{imageUrl})
+</insert>
+
+  
+<insert id="insertDynamic" parameterType="com.net.system.model.Category">
+  insert into t_category
+  <trim prefix="(" suffix=")" suffixOverrides=",">
+    <if test="fCateid != null">
+      f_cateid,
+    </if>
+    <if test="fParentid != null">
+      f_parentid,
+    </if>
+    <if test="fName != null">
+      f_name,
+    </if>
+    <if test="fStatus != null">
+      f_status,
+    </if>
+    <if test="fSortorder != null">
+      f_sortorder,
+    </if>
+    <if test="fCreatetime != null">
+      f_createtime,
+    </if>
+    <if test="fUpdatetime != null">
+      f_updatetime,
+    </if>
+  </trim>
+  <trim prefix="values (" suffix=")" suffixOverrides=",">
+    <if test="fCateid != null">
+      #{fCateid,jdbcType=VARCHAR},
+    </if>
+    <if test="fParentid != null">
+      #{fParentid,jdbcType=VARCHAR},
+    </if>
+    <if test="fName != null">
+      #{fName,jdbcType=VARCHAR},
+    </if>
+    <if test="fStatus != null">
+      #{fStatus,jdbcType=INTEGER},
+    </if>
+    <if test="fSortorder != null">
+      #{fSortorder,jdbcType=INTEGER},
+    </if>
+    <if test="fCreatetime != null">
+      #{fCreatetime,jdbcType=TIMESTAMP},
+    </if>
+    <if test="fUpdatetime != null">
+      #{fUpdatetime,jdbcType=TIMESTAMP},
+    </if>
+  </trim>
+</insert>
+
+  
+<update id="updateDynamic" parameterType="com.net.system.model.Category">
+  update t_category
+  <set>
+    <if test="fParentid != null">
+      f_parentid = #{fParentid,jdbcType=VARCHAR},
+    </if>
+    <if test="fName != null">
+      f_name = #{fName,jdbcType=VARCHAR},
+    </if>
+    <if test="fStatus != null">
+      f_status = #{fStatus,jdbcType=INTEGER},
+    </if>
+    <if test="fSortorder != null">
+      f_sortorder = #{fSortorder,jdbcType=INTEGER},
+    </if>
+    <if test="fCreatetime != null">
+      f_createtime = #{fCreatetime,jdbcType=TIMESTAMP},
+    </if>
+    <if test="fUpdatetime != null">
+      f_updatetime = #{fUpdatetime,jdbcType=TIMESTAMP},
+    </if>
+  </set>
+  where f_cateid = #{fCateid,jdbcType=VARCHAR}
+</update>
+
+  
+<update id="update" parameterType="com.net.system.model.Category">
+  update t_category
+  set f_parentid = #{fParentid,jdbcType=VARCHAR},
+    f_name = #{fName,jdbcType=VARCHAR},
+    f_sortorder = #{fSortorder,jdbcType=INTEGER},
+    f_createtime = #{fCreatetime,jdbcType=TIMESTAMP},
+    f_updatetime = #{fUpdatetime,jdbcType=TIMESTAMP},
+    f_image=#{imageUrl,jdbcType=VARCHAR}
+  where f_cateid = #{fCateid,jdbcType=VARCHAR}
+</update>
+
+  
+<select id="selectByFCateid" parameterType="java.lang.String" resultMap="BaseResultMap">
+  select
+	<include refid="Base_Column_List" />
+  from  t_category
+  where f_cateid = #{fCateid,jdbcType=VARCHAR}
+</select>
+<select id="selectByfparentid" parameterType="java.lang.String" resultMap="BaseResultMap">
+ select
+	<include refid="Base_Column_List" />
+  from  t_category
+  where f_parentid = #{fParentid,jdbcType=VARCHAR}
+  order by f_sortorder
+</select>
+<sql id="findPageWithWhere">
+    <where> 1=1 
+	<if test="fCateid != null and fCateid != ''" >
+	  and f_cateid = #{fCateid,jdbcType=VARCHAR}
+	</if>
+	<if test="fParentid != null and fParentid != ''" >
+	  and f_parentid = #{fParentid,jdbcType=VARCHAR}
+	</if>
+	<if test="fName != null and fName != ''" >
+	  and f_name = #{fName,jdbcType=VARCHAR}
+	</if>
+	<if test="fStatus != null" >
+	  and f_status = #{fStatus,jdbcType=INTEGER}
+	</if>
+	<if test="fSortorder != null" >
+	  and f_sortorder = #{fSortorder,jdbcType=INTEGER}
+	</if>
+	<if test="fCreatetime != null" >
+	  and f_createtime = #{fCreatetime,jdbcType=TIMESTAMP}
+	</if>
+	<if test="fUpdatetime != null" >
+	  and f_updatetime = #{fUpdatetime,jdbcType=TIMESTAMP}
+	</if>
+  </where>
+</sql>
+
+  
+<select id="findPageWithResult" parameterType="map" resultMap="BaseResultsMap">
+  select
+	<include refid="Base_Column_List" />
+  from  t_category
+  <include refid="findPageWithWhere" />
+</select>
+
+  
+<select id="findPageWithCount" parameterType="map" resultType="Integer">
+  select count(1)
+  from t_category
+  <include refid="findPageWithWhere" />
+</select>
+
+<select id="selectAllCategoryTree" resultMap="BaseResultMap">
+  select f_cateid, f_parentid, f_name, 
+    f_status, f_sortorder, f_createtime, 
+    f_updatetime from t_category
+    <where>
+            <choose>
+                <when test="fParentid!=null">
+                    and f_parentid = #{fParentid}
+                </when>
+                <otherwise>
+                    and f_parentid = 0
+                </otherwise>
+            </choose>
+          and  f_status=1
+    </where>
+        order by f_sortorder
+</select>
+<select id="selectChildrenID" resultType="String">
+ SELECT f_cateid FROM t_category WHERE f_parentid=#{fCateid}
+</select>
+
+<update id="swapSort">
+ UPDATE
+            t_category AS per
+                JOIN
+                t_category AS next
+                ON 
+                        (per.f_cateid = #{currentId} AND next.f_cateid = #{swapId})
+                        OR
+                        (per.f_cateid = #{swapId} AND next.f_cateid = #{currentId})
+        SET per.`f_sortorder`  = next.`f_sortorder`,
+            next.`f_sortorder` = per.`f_sortorder`
+</update>
+<select id="getCategoryId" resultType="String">
+  SELECT max(cast(f_cateid as SIGNED)) FROM t_category
+</select>
+<select id="getOrderMax" parameterType="String" resultType="Integer">
+ SELECT max(f_sortorder) from t_category WHERE f_parentid=#{fParentid}
+</select>
+
+
+
+</mapper>

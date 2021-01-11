@@ -1,0 +1,660 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+<meta charset="UTF-8">
+<title>页面添加</title>
+<meta name="renderer" content="webkit">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<meta name="viewport"
+	content="width=device-width,user-scalable=yes, minimum-scale=0.4, initial-scale=0.8,target-densitydpi=low-dpi" />
+<link rel="shortcut icon" type="image/x-icon" th:href="@{/favicon.ico}" />
+<link rel="stylesheet" th:href="@{/lib/layui/css/layui.css}">
+<link rel="stylesheet" th:href="@{/css/common.css}">
+<link rel="stylesheet" th:href="@{/css/addProduct/1.css}">
+<link rel="stylesheet" th:href="@{/css/animate.min.css}">
+</head>
+<style>
+.layui-form-label {
+	float: left;
+	display: block;
+	padding: 9px 15px;
+	width: 140px;
+	font-weight: 400;
+	line-height: 20px;
+	text-align: right;
+}
+
+.specs-body {
+	float: left;
+	display: block;
+	padding: 9px 15px;
+	line-height: 20px;
+	background: #f8f9fc;
+	border: 1px solid #ebeef5;
+	color: #303133;
+	width: 550px;
+	min-height: 40px;
+	border-radius: 5px;
+}
+
+.layui-input-block {
+	margin-left: 0px;
+	min-height: 36px;
+}
+
+.specs-del {
+	color: #409eff;
+	position: relative;
+	top: 5px;
+	padding-left: 4px;
+	font-size: 11px;
+}
+
+.layui-form-checkbox[lay-skin=primary] span {
+	padding-right: 0px;
+}
+
+.layui-form-item .layui-input-inline {
+	float: left;
+	width: auto;
+	margin-left: 10px;
+}
+
+.specs-add {
+	border: 1px solid #C9C9C9;
+	background-color: #fff;
+	color: #555;
+	display: inline-block;
+	height: 30px;
+	line-height: 30px;
+	padding: 0 13px;
+	white-space: nowrap;
+	text-align: center;
+	font-size: 8px;
+	border-radius: 2px;
+	cursor: pointer;
+	margin-top: 10px;
+}
+
+.attribute-li {
+	height: auto;
+}
+
+.attribute-ul {
+	clear: both;
+	padding-top: 20px;
+}
+
+.r {
+	width: 100%;
+	height: 100%;
+	border-color: #D2D2D2 !important;
+	border-width: 1px;
+	border-style: solid;
+	background-color: #fff;
+	border-radius: 2px;
+}
+
+.table-del {
+	color: #409eff;
+	padding-left: 19px;
+	font-size: 11px;
+}
+
+.specs-btn {
+	clear: both;
+	float: right;
+	width: 553px;
+	margin-right: 15px;
+}
+
+.layui-form-switch {
+	height: 24px;
+}
+
+.layui-form-switch em {
+	top: -1px;
+	font-size: 12px;
+}
+
+.layui-tab-card>.layui-tab-title .layui-this {
+	color: #fff;
+	background-color: #409eff;
+	border-color: #409eff;
+	box-shadow: -1px 0 0 0 #409eff;
+}
+
+.r {
+	text-align: center;
+}
+
+.layui-table th {
+	font-weight: bold;
+}
+</style>
+
+<body>
+	<div class="z-body animated fadeIn">
+		<form action="" method="post" class="layui-form">
+			<input type="hidden" id="productId" th:value="${productId}" />
+			<div class="layui-form-item"
+				style="width: 70%; margin: auto; padding-top: 40px; border: 1px solid #ebeef5;">
+				<div class="layui-form-item">
+					<label class="layui-form-label">属性类型:</label>
+					<div class="layui-input-inline">
+						<select name="attrId" id="attrId" lay-filter="attr">
+							<option th:each="key:${attrKeyList}" th:value="${key.id}"
+								th:text="${key.name}"
+								th:selected="${key.id==productAttrVal?.attrId}"></option>
+
+						</select>
+					</div>
+				</div>
+				<div class="layui-form-item">
+					<label for="remark" class="layui-form-label">总库存:</label>
+					<div class="layui-input-inline" style="width: 220px;">
+						<input type="number" id="proStock" name="proStock"
+							 lay-verify="required|number"
+							lay-vertype="tips" autocomplete="off"  th:value="${product.stock}" class="layui-input">
+					</div>
+				</div>
+				<div class="layui-form-item">
+					<label class="layui-form-label">商品上架:</label>
+					<div class="layui-input-block">
+						<input type="checkbox" checked="" name="status" lay-skin="switch"
+							lay-filter="switchTest" id="status" lay-text="上架|不上架" th:checked="${product.status==1}">
+					</div>
+				</div>
+				<div class="layui-form-item">
+					<label class="layui-form-label">商品规格:</label>
+					<div class="specs-body" id="specs-body"></div>
+				</div>
+				<div class="layui-form-item " id="table_body">
+					<table id="table">
+
+
+
+					</table>
+				</div>
+
+				<div class="specs-btn">
+					<button type="button" id="refresh"
+						class="layui-btn layui-btn-normal layui-btn-sm">刷新列表</button>
+				</div>
+
+
+
+				<div class="layui-form-item"
+					style="text-align: center; margin-top: 20px;">
+					<button type="button" id="add" class="layui-btn">立即提交</button>
+				</div>
+		</form>
+	</div>
+	<script id="attribute-ul-li" type="text/x-jquery-tmpl">
+<div class="layui-input-inline">
+	<input type="checkbox" name="attribute-li" lay-filter="title-li" value="${name}" lay-skin="primary" title="${name}" checked="">
+    <span class="specs-del">删除</span>
+</div>
+    </script>
+
+	<script id="table-tmpl" type="text/x-jquery-tmpl">
+ <thead>
+      <tr>
+{{each(i,item) headList}}
+         <th>${item}</th>
+{{/each}}
+     </tr>
+ </thead>
+    </script>
+
+	<script id="attribute-ul" type="text/x-jquery-tmpl">
+<div class="attribute-ul" id="attribute-ul${index}">
+	<div class="attribute-title">
+<input type="checkbox" value="${name}" lay-filter="title" name="attribute-title" lay-skin="primary" title="${name}" checked="">
+</div>
+	<div class="attribute-li">
+{{if type==1 || type==3 }}
+{{each(i,item) valueList}}
+
+         {{if item.type==1 }}
+		 <div class="layui-input-inline">
+				<input type="checkbox" value="${item.name}" lay-filter="title-li" name="attribute-li" lay-skin="primary" title="${item.name}" checked="">
+		 </div>
+         {{/if}}
+{{if  item.type==2 }}
+ <div class="layui-input-inline">
+				<input type="checkbox" value="${item.name}" lay-filter="title-li" name="attribute-li" lay-skin="primary" title="${item.name}" checked="">
+                <img src="${item.img}" class="specs-img" style="height: 20px; width: 20px;" />
+ </div>
+{{/if}}
+{{/each}}
+      {{/if}}
+	</div>
+   {{if type==2 }}
+    <div class="layui-form-item">
+			<div class="layui-input-inline" style="margin-top: 10px;">
+				<input type="text" name="" style="height: 30px;"autocomplete="off" class="layui-input">
+			</div>
+			<button type="button" class="specs-add" >添加</button>
+	</div>
+   {{/if}}
+
+</div>
+    </script>
+	<script th:src="@{/lib/jquery/jquery.min.js}"></script>
+	<script th:src="@{/lib/layui/layui.js}"></script>
+	<script th:src="@{/js/common.js}"></script>
+	<script th:src="@{/js/utils/jquery.tmpl.min.js}"></script>
+	<script th:inline="javascript">
+		layui.config({
+			base : projectName() + '/lib/layui/extend/'
+		}).use([ 'form', 'layer','table' ], function() {
+			var $ = layui.jquery, form = layui.form, layer = layui.layer;
+			var table = layui.table;
+			var specsList=[[${specsList}]];
+			var skuList=[[${skuList}]];
+			
+			
+			var attrId=$("#attrId").val();
+			show(attrId,specsList,skuList);
+			
+			
+			
+			form.on('checkbox(title)', function (data) {
+				var dom=$(this).parent('.attribute-title').parent(".attribute-ul").find(".attribute-li").find("input");
+				    if( data.elem.checked){　　　　　　//判断当前多选框是选中还是取消选中
+				    	
+				    	$(dom).prop("checked", true);
+				    }else{
+				    	$(dom).prop("checked", false);
+				    }
+				
+				    form.render();
+				});
+			
+			form.on('checkbox(title-li)', function (data) {
+				var dom=$(this).parents('.attribute-ul').find(".attribute-title").find("input");
+				    if( data.elem.checked){　　　　　　//判断当前多选框是选中还是取消选中
+				    	$(dom).prop("checked", true);
+				    }
+				    form.render();
+				});
+			
+	
+			//渲染商品规格列表
+			function show(attrId,specsList,skuList) {
+				
+			  if(specsList!=null && skuList.length>0){
+				
+				var list=[];
+				for (var i = 0; i < specsList.length; i++) {
+					var strList=[];
+					
+					  var d={};
+					  d.index = i;
+					  d.name=specsList[i].name;	 
+					  d.valueList=specsList[i].valList;
+                      d.type=1;
+				      list.push(d);
+				}
+				
+				
+				for (var i = 0; i < list.length; i++) {
+						$("#attribute-ul").tmpl(list[i]).appendTo('#specs-body');
+				}
+				
+				
+				
+				
+				var cols=[];
+				var title=skuList[0].customTitle.split(",");
+                for(var i=0;i<title.length;i++){
+                	cols.push({field:i,title:title[i],align:'center'});
+				}
+                cols.push({field:"price",title:"销售价格",align:'center'});
+				cols.push({field: "stock",title:"商品库存",align:'center'});
+				cols.push({field:"warningStock",title:"预警库存",align:'center'});
+				cols.push({field:"skuId",title:"SKU编号",align:'center'});
+				cols.push({field:"operation",title:"操作",align:'center'});
+				
+				var data=[];
+				for(var i=0;i<skuList.length;i++){
+					var obj={};
+					var value=skuList[i].customValue.split(",");
+					for(var j=0;j<value.length;j++){
+						obj[j]=value[j];
+					}
+					
+					obj['price']='<input class="r" type="text" value="'+skuList[i].price+'" />';
+					obj['stock']='<input class="r" type="text"  value="'+skuList[i].stock+'" />';
+					obj['warningStock']='<input class="r" type="text" value="'+skuList[i].warningStock+'" />';
+					obj['skuId']=+skuList[i].skuId;
+					obj['operation']='<span class="table-del">删除</span>';
+					data.push(obj);
+				}
+				
+				
+				table.render({
+				    elem: '#table'
+				    ,cols: [cols]
+				    ,data: data
+				    //,skin: 'line' //表格风格
+				    ,even: true
+				    ,page: false //是否显示分页
+				    //,limits: [5, 7, 10]
+				    ,limit: 100 //每页默认显示的数量
+				  });
+				
+				
+				
+				
+				
+				form.render();
+			  }else{
+				$("#specs-body").html("");
+				$.get(projectName() + '/specs/findByAttrId',{
+					"attrId":attrId
+				}, function(
+						result) {
+					var list=result.data;
+					
+				
+					for (var i = 0; i < list.length; i++) {
+						var d = list[i];
+						d.index = i;
+						
+						$("#attribute-ul").tmpl(list[i]).appendTo('#specs-body');
+
+					}
+					form.render();
+				});
+			 }
+			}
+			
+			 form.on('select(attr)', function(data){
+				 show(data.value);
+			 })
+
+			//添加规格
+			$("#specs-body").on("click",".specs-add", function() {
+				var val = $(this).parent().find("input").val();
+				var t = $(this).parent().siblings().eq(1);
+				var flag = true;
+				if(val.trim().length!=0){
+				t.find(".layui-form-checked span").each(function() {
+					if ($(this).html().trim() == val.trim()) {
+						layer.alert("属性值不能重复");
+						flag = false;
+						return;
+					}
+				});
+				}else{
+					layer.alert("属性值不能为空");
+					flag = false;
+				}
+				if (flag == true) {
+					$("#attribute-ul-li").tmpl({
+						"name" : val
+					}).appendTo(t);
+					$(this).parent().find("input").val("");	
+					form.render();
+				}
+			});
+
+			//删除规格
+			$("#specs-body").on("click", ".specs-del", function() {
+				$(this).parent(".layui-input-inline").remove();
+			});
+			
+			//删除规格
+			$(".layui-form").on("click", ".table-del", function() {
+				$(this).parents("tr").remove();	
+			});
+			
+			$("#specs-body").on("click", ".specs-img", function() {
+				previewImg($(this).attr("src"));
+			});
+			
+			function previewImg(src) {
+				  
+				   //var height = img.height + 50; // 原图片大小
+				   //var width = img.width; //原图片大小
+				   var imgHtml = "<img src='" + src + "' width='500px' height='500px'/>"; 
+				   //弹出层
+				   layer.open({ 
+				     type: 1, 
+				     shade: 0.8,
+				     offset: 'auto',
+				     area: [500 + 'px',550+'px'], // area: [width + 'px',height+'px'] //原图显示
+				     shadeClose:true,
+				     scrollbar: false,
+				     title: "图片预览", //不显示标题 
+				     content: imgHtml, //捕获的元素，注意：最好该指定的元素要存放在body最外层，否则可能被其它的相对元素所影响 
+				     cancel: function () { 
+				       //layer.msg('捕获就是从页面已经存在的元素上，包裹layer的结构', { time: 5000, icon: 6 }); 
+				     } 
+				   }); 
+				 }
+
+			
+			
+			$("#refresh").click(function(){
+				layer.confirm('确认是否刷新？', {
+					  btn: ['是','否'] //按钮
+					}, function(){
+						merge();
+						 layer.close(layer.index);
+					}, function(){
+						
+					});
+				
+			});
+			
+			$("#add").click(function(){
+				submitForm();
+			});
+			
+			
+			
+			
+		
+			function submitForm(){
+				var father=[];
+		           
+				var titLen=$(".attribute-title").length;
+				$(".attribute-title").each(function(k) {
+					 var len=$(this).siblings(".attribute-li").find('input[name="attribute-li"]:checked');
+					if(len.length>0){
+						var children=[];
+						len.each(function(n) {
+							var img=$(this).siblings("img").attr("src");
+							if(img==undefined){
+								children.push({"name":$(this).val().trim(),"type":1,"sort":n+1})
+							}else{
+								children.push({"name":$(this).val().trim(),"type":2,"img":img,"sort":n+1})
+							}
+							
+						});
+						
+						father.push({"name":$(this).text().trim(),"sort":k+1,"valList":children});
+						
+					}
+						
+				});
+				
+				
+				var dataList=[];
+				var title="";
+				
+				$(".layui-table-header tr").each(function() {
+					
+					var td=$(this).find("th");
+					for(var i=0;i<td.length-5;i++){
+						title+=td.eq(i).find("div").text()+",";
+					}
+					title=title.substring(0,title.length-1);
+				});
+				
+				
+				$(".layui-table-body tr").each(function() {
+					var obj={};
+					var td=$(this).find("td");
+					var value="";
+					for(var i=0;i<td.length-5;i++){
+						value+=td.eq(i).find("div").text()+",";
+					}
+					obj["customTitle"]=title;
+					obj["customValue"]=value.substring(0,value.length-1);
+					obj["price"]=td.eq(td.length-5).find("input").val();
+					obj["stock"]=td.eq((td.length-5)+1).find("input").val();
+					obj["warningStock"]=td.eq((td.length-5)+2).find("input").val();
+					dataList.push(obj);
+				});
+				
+				var proStock=$("#proStock").val();
+				var status=0;
+				
+				if($('#status').is(':checked')) {
+					status=1;
+				}else{
+					status=0;
+				}
+				
+				var data={
+					"specsList":father,
+					"skuList":dataList,
+					"productId":$("#productId").val(),
+					"proStock":proStock,
+					"status":status
+				}
+				
+				 $.ajax({
+	                type: "POST",
+	                async: false,
+	                url: projectName() + '/specs/setSpecs',
+	                contentType: "application/json",
+	                dataType: "json",
+	                data: JSON.stringify(data),
+	                success: function (result) {
+	                	handlerResult(result, setDone);
+	                }
+	            }); 
+			}
+			
+			function setDone(data) {
+				layer.msg("设置成功", {
+					icon : 6
+				});
+				var index = parent.layer.getFrameIndex(window.name); //先得到当前iframe层的索引
+				parent.layer.close(index); //再执行关闭
+			}
+			
+			
+function cartesianProduct (...arrs) {
+	var arr=arrs[0];
+	
+  return _product()
+  function _product (path = [], result = []) {
+    if (path.length === arr.length) {
+      result.push(path.join('-'))
+    } else {
+      for (const n of arr[path.length]) {
+        path.push(n)
+        _product(path, result)
+        path.pop()
+      }
+    }
+    return result
+  }
+}			
+			
+
+			function merge() {
+				
+				var cols=[];
+           
+		     var h=0;
+			$(".attribute-title").each(function() {
+				var len=$(this).siblings(".attribute-li").find('input[name="attribute-li"]:checked').length;
+				if(len>0){
+					cols.push({field:h,title:$(this).find("input").val(),align:'center'});
+					h++;
+				}
+					
+			});
+			
+			if(cols.length>0){
+				cols.push({field:"price",title:"销售价格",align:'center'});
+				cols.push({field: "stock",title:"商品库存",align:'center'});
+				cols.push({field:"warningStock",title:"预警库存",align:'center'});
+				cols.push({field:"skuId",title:"SKU编号",align:'center'});
+				cols.push({field:"operation",title:"操作",align:'center'});
+			}
+			
+			
+			
+			var  a=[];
+			
+			$(".attribute-li").each(function() {
+				var b=[];
+				
+				$(this).find('input[name="attribute-li"]:checked').each(function(){ 
+			    	b.push($(this).val());
+			    });
+				if(b.length>0){
+					a.push(b);
+				}
+				
+				
+			});
+          
+			var contentList=cartesianProduct(a);
+			 
+			var data=[];
+			for(var i=0;i<contentList.length;i++){
+				var obj={};
+				var strList=contentList[i].split("-");
+				for(var j=0;j<strList.length;j++){
+					obj[j] = strList[j];
+				}
+				obj['price']='<input class="r" type="text" />';
+				obj['stock']='<input class="r" type="text" />';
+				obj['warningStock']='<input class="r" type="text" />';
+				obj['skuId']='系统生成';
+				obj['operation']='<span class="table-del">删除</span>';
+				data.push(obj);
+			}
+			
+			
+			var imgList=$(".specs-img").eq(0).parent().parent().find(".specs-img");
+			if(imgList>0){
+			
+			}
+			
+			
+			
+			
+			
+			
+				
+			
+			
+			
+			table.render({
+			    elem: '#table'
+			    ,cols: [cols]
+			    ,data: data
+			    //,skin: 'line' //表格风格
+			    ,even: true
+			    ,page: false //是否显示分页
+			    //,limits: [5, 7, 10]
+			    ,limit: 100 //每页默认显示的数量
+			  });
+			}
+
+		});
+	</script>
+</body>
+
+</html>

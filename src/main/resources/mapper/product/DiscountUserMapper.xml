@@ -1,0 +1,221 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.net.system.mapper.product.DiscountUserMapper">
+  
+<resultMap id="BaseResultMap" type="com.net.system.model.DiscountUser">
+  <id column="id" jdbcType="VARCHAR" property="id" />
+  <result column="userid" jdbcType="INTEGER" property="userid" />
+  <result column="collectiontime" jdbcType="TIMESTAMP" property="collectiontime" />
+  <result column="discountid" jdbcType="VARCHAR" property="discountid" />
+  <result column="status" jdbcType="INTEGER" property="status" />
+  <result column="usagetime" jdbcType="TIMESTAMP" property="usagetime" />
+  <result column="usageorder" jdbcType="VARCHAR" property="usageorder" />
+  <result column="invalidtime" jdbcType="TIMESTAMP" property="invalidtime" />
+  <association property="discount"  select="com.net.system.mapper.product.DiscountMapper.selectDiscountById" column="discountid"/>
+</resultMap>
+
+  
+<sql id="Base_Column_List">
+  id, userid, collectiontime, discountid, status, usagetime, usageorder, invalidtime
+</sql>
+
+  
+<delete id="delete" parameterType="java.lang.String">
+  delete from t_discount_user
+  where id = #{id,jdbcType=VARCHAR}
+</delete>
+
+  
+<insert id="insert" parameterType="com.net.system.model.DiscountUser">
+  insert into t_discount_user (id, userid, collectiontime, 
+    discountid, status, usagetime, 
+    usageorder, invalidtime)
+  values (#{id,jdbcType=VARCHAR}, #{userid,jdbcType=INTEGER}, #{collectiontime,jdbcType=TIMESTAMP}, 
+    #{discountid,jdbcType=VARCHAR}, #{status,jdbcType=INTEGER}, #{usagetime,jdbcType=TIMESTAMP}, 
+    #{usageorder,jdbcType=VARCHAR}, #{invalidtime,jdbcType=TIMESTAMP})
+</insert>
+
+  
+<insert id="insertDynamic" parameterType="com.net.system.model.DiscountUser">
+  insert into t_discount_user
+  <trim prefix="(" suffix=")" suffixOverrides=",">
+    <if test="id != null">
+      id,
+    </if>
+    <if test="userid != null">
+      userid,
+    </if>
+    <if test="collectiontime != null">
+      collectiontime,
+    </if>
+    <if test="discountid != null">
+      discountid,
+    </if>
+    <if test="status != null">
+      status,
+    </if>
+    <if test="usagetime != null">
+      usagetime,
+    </if>
+    <if test="usageorder != null">
+      usageorder,
+    </if>
+    <if test="invalidtime != null">
+      invalidtime,
+    </if>
+  </trim>
+  <trim prefix="values (" suffix=")" suffixOverrides=",">
+    <if test="id != null">
+      #{id,jdbcType=VARCHAR},
+    </if>
+    <if test="userid != null">
+      #{userid,jdbcType=INTEGER},
+    </if>
+    <if test="collectiontime != null">
+      #{collectiontime,jdbcType=TIMESTAMP},
+    </if>
+    <if test="discountid != null">
+      #{discountid,jdbcType=VARCHAR},
+    </if>
+    <if test="status != null">
+      #{status,jdbcType=INTEGER},
+    </if>
+    <if test="usagetime != null">
+      #{usagetime,jdbcType=TIMESTAMP},
+    </if>
+    <if test="usageorder != null">
+      #{usageorder,jdbcType=VARCHAR},
+    </if>
+    <if test="invalidtime != null">
+      #{invalidtime,jdbcType=TIMESTAMP},
+    </if>
+  </trim>
+</insert>
+
+  
+<update id="updateDynamic" parameterType="com.net.system.model.DiscountUser">
+  update t_discount_user
+  <set>
+    <if test="collectiontime != null">
+      collectiontime = #{collectiontime,jdbcType=TIMESTAMP},
+    </if>
+    <if test="status != null">
+      status = #{status,jdbcType=INTEGER},
+    </if>
+    <if test="usagetime != null">
+      usagetime = #{usagetime,jdbcType=TIMESTAMP},
+    </if>
+    <if test="usageorder != null">
+      usageorder = #{usageorder,jdbcType=VARCHAR},
+    </if>
+    <if test="invalidtime != null">
+      invalidtime = #{invalidtime,jdbcType=TIMESTAMP},
+    </if>
+  </set>
+  where discountid = #{discountid,jdbcType=VARCHAR} AND userid = #{userid,jdbcType=INTEGER}
+</update>
+
+  
+<update id="update" parameterType="com.net.system.model.DiscountUser">
+  update t_discount_user
+  set userid = #{userid,jdbcType=INTEGER},
+    collectiontime = #{collectiontime,jdbcType=TIMESTAMP},
+    discountid = #{discountid,jdbcType=VARCHAR},
+    status = #{status,jdbcType=INTEGER},
+    usagetime = #{usagetime,jdbcType=TIMESTAMP},
+    usageorder = #{usageorder,jdbcType=VARCHAR},
+    invalidtime = #{invalidtime,jdbcType=TIMESTAMP}
+  where id = #{id,jdbcType=VARCHAR}
+</update>
+
+  
+<select id="selectById" parameterType="java.lang.String" resultMap="BaseResultMap">
+  select
+	<include refid="Base_Column_List" />
+  from  t_discount_user
+  where id = #{id,jdbcType=VARCHAR}
+</select>
+
+  
+<sql id="findPageWithWhere">
+    <where> 1=1 
+	<if test="id != null and id != ''" >
+	  and id = #{id,jdbcType=VARCHAR}
+	</if>
+	<if test="userid != null" >
+	  and userid = #{userid,jdbcType=INTEGER}
+	</if>
+	<if test="collectiontime != null" >
+	  and collectiontime = #{collectiontime,jdbcType=TIMESTAMP}
+	</if>
+	<if test="discountid != null and discountid != ''" >
+	  and discountid = #{discountid,jdbcType=VARCHAR}
+	</if>
+	<if test="status != null and status!=''" >
+	  and status = #{status}
+	</if>
+	<if test="usagetime != null" >
+	  and usagetime = #{usagetime,jdbcType=TIMESTAMP}
+	</if>
+	<if test="usageorder != null and usageorder != ''" >
+	  and usageorder = #{usageorder,jdbcType=VARCHAR}
+	</if>
+	<if test="invalidtime != null" >
+	  and invalidtime = #{invalidtime,jdbcType=TIMESTAMP}
+	</if>
+  </where>
+</sql>
+
+  
+<select id="findPageWithResult" parameterType="map" resultMap="BaseResultMap">
+  select
+	<include refid="Base_Column_List" />
+  from  t_discount_user
+  <include refid="findPageWithWhere" />
+</select>
+
+  
+<select id="findPageWithCount" parameterType="map" resultType="Integer">
+  select count(1)
+  from t_discount_user
+  <include refid="findPageWithWhere" />
+</select>
+
+<select id="selectDiscountUserById" parameterType="com.net.system.model.DiscountUser" resultType="int">
+ SELECT COUNT(0) FROM t_discount_user WHERE userid=#{userid} AND discountid=#{discountid}
+</select>
+
+<select id="selectDiscountUserByDiscountId" parameterType="String" resultType="int">
+ SELECT COUNT(0) FROM t_discount_user WHERE  discountid=#{discountId}
+</select>
+
+
+
+<select id="filterCoupon" parameterType="String" resultType="HashMap">
+SELECT
+	u.id uid,d.id did,d.discountName,d.categoryid,d.productid,d.minconsume,u.collectionTime,u.invalidTime,d.reduction,d.Introduction,s.f_item_name itemName,s.f_serial_num type
+FROM
+	`t_discount` d
+right JOIN t_discount_user u ON d.id = u.discountId 
+left JOIN t_sys_item s ON d.restricted = s.f_item_num and s.f_dic_num='USERANGE'
+where u.userid=#{userId} and u.status=1
+</select>
+
+<select id="findCouponName" parameterType="String" resultType="String">
+SELECT
+	d.discountName
+FROM
+	`t_discount` d
+right JOIN t_discount_user u ON d.id = u.discountId 
+where u.id=#{id}
+</select>
+
+<select id="findReductionById" parameterType="String" resultType="HashMap">
+SELECT
+	d.reduction
+FROM
+	`t_discount` d
+right JOIN t_discount_user u ON d.id = u.discountId 
+where u.id=#{id} and u.status=1
+</select>
+</mapper>

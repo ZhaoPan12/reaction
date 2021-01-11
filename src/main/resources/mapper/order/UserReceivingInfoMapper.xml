@@ -1,0 +1,291 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper
+	namespace="com.net.system.mapper.order.UserReceivingInfoMapper">
+
+	<resultMap id="BaseResultMap"
+		type="com.net.system.model.UserReceivingInfo">
+		<id column="id" jdbcType="VARCHAR" property="id" />
+		<result column="user_id" jdbcType="VARCHAR"
+			property="userId" />
+		<result column="receiver_name" jdbcType="VARCHAR"
+			property="receiverName" />
+		<result column="receiver_phone" jdbcType="VARCHAR"
+			property="receiverPhone" />
+		<result column="receiver_province" jdbcType="VARCHAR"
+			property="receiverProvince" />
+		<result column="receiver_city" jdbcType="VARCHAR"
+			property="receiverCity" />
+		<result column="receiver_district" jdbcType="VARCHAR"
+			property="receiverDistrict" />
+		<result column="receiver_address" jdbcType="VARCHAR"
+			property="receiverAddress" />
+		<result column="is_default" jdbcType="VARCHAR"
+			property="isDefault" />
+		<result column="create_time" jdbcType="TIMESTAMP"
+			property="createTime" />
+		<result column="areaCode" jdbcType="VARCHAR"
+			property="areaCode" />
+		<result column="postalCode" jdbcType="VARCHAR"
+			property="postalCode" />
+		<result column="update_time" jdbcType="TIMESTAMP"
+			property="updateTime" />
+	</resultMap>
+
+
+	<sql id="Base_Column_List">
+		id, user_id, receiver_name, receiver_phone,
+		receiver_province,
+		receiver_city, receiver_district,
+		receiver_address,
+		is_default, create_time, update_time,postalCode,areaCode
+	</sql>
+
+
+	<delete id="delete" parameterType="Map">
+		delete from
+		t_user_receiving_info
+		where id = #{id}
+	</delete>
+
+
+	<insert id="insert" parameterType="Map">
+		insert into
+		t_user_receiving_info (id, user_id, receiver_name,
+		receiver_phone,
+		receiver_province, receiver_city,
+		receiver_district, receiver_address,
+		is_default,
+		create_time, update_time)
+		values (#{id}, #{userId},
+		#{receiverName},
+		#{receiverPhone}, #{receiverProvince},
+		#{receiverCity},
+		#{receiverDistrict}, #{receiverAddress}, #{isDefault},
+		#{createTime}, #{updateTime})
+	</insert>
+
+
+	<insert id="insertDynamic" parameterType="Map">
+		insert into t_user_receiving_info
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				id,
+			</if>
+			<if test="userId != null">
+				user_id,
+			</if>
+			<if test="receiverName != null">
+				receiver_name,
+			</if>
+			<if test="receiverPhone != null">
+				receiver_phone,
+			</if>
+			<if test="receiverProvince != null">
+				receiver_province,
+			</if>
+			<if test="receiverCity != null">
+				receiver_city,
+			</if>
+			<if test="receiverDistrict != null">
+				receiver_district,
+			</if>
+			<if test="receiverAddress != null">
+				receiver_address,
+			</if>
+			<if test="isDefault != null">
+				is_default,
+			</if>
+			<if test="createTime != null">
+				create_time,
+			</if>
+			<if test="updateTime != null">
+				update_time,
+			</if>
+			<if test="areaCode!=null">
+				areaCode,
+			</if>
+			<if test="postalCode!=null">
+				postalCode,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				#{id},
+			</if>
+			<if test="userId != null">
+				#{userId},
+			</if>
+			<if test="receiverName != null">
+				#{receiverName},
+			</if>
+			<if test="receiverPhone != null">
+				#{receiverPhone},
+			</if>
+			<if test="receiverProvince != null">
+				#{receiverProvince},
+			</if>
+			<if test="receiverCity != null">
+				#{receiverCity},
+			</if>
+			<if test="receiverDistrict != null">
+				#{receiverDistrict},
+			</if>
+			<if test="receiverAddress != null">
+				#{receiverAddress},
+			</if>
+			<if test="isDefault != null">
+				#{isDefault},
+			</if>
+			<if test="createTime != null">
+				#{createTime},
+			</if>
+			<if test="updateTime != null">
+				#{updateTime},
+			</if>
+			<if test="areaCode!=null">
+			    #{areaCode},
+			</if>
+			<if test="postalCode!=null">
+			 	#{postalCode},
+			</if>
+		</trim>
+	</insert>
+
+
+	<update id="updateDynamic" parameterType="Map">
+		update t_user_receiving_info
+		<set>
+			<if test="receiverName != null">
+				receiver_name = #{receiverName},
+			</if>
+			<if test="receiverPhone != null">
+				receiver_phone = #{receiverPhone},
+			</if>
+			<if test="receiverProvince != null">
+				receiver_province = #{receiverProvince},
+			</if>
+			<if test="receiverCity != null">
+				receiver_city = #{receiverCity},
+			</if>
+			<if test="receiverDistrict != null">
+				receiver_district = #{receiverDistrict},
+			</if>
+			<if test="receiverAddress != null">
+				receiver_address = #{receiverAddress},
+			</if>
+			<if test="isDefault != null">
+				is_default = #{isDefault},
+			</if>
+			<if test="createTime != null">
+				create_time = #{createTime},
+			</if>
+			<if test="updateTime != null">
+				update_time = #{updateTime},
+			</if>
+			<if test="areaCode!=null">
+			    areaCode = #{areaCode},
+			</if>
+			<if test="postalCode!=null">
+			 	postalCode = #{postalCode},
+			</if>
+		</set>
+		where
+        1=1
+		<if test="id != null">
+			and id = #{id}
+		</if>
+		<if test="userId != null">
+			and user_id = #{userId}
+		</if>
+	</update>
+
+
+	<update id="update" parameterType="Map">
+		update t_user_receiving_info
+		set user_id = #{userId},
+		receiver_name = #{receiverName},
+		receiver_phone = #{receiverPhone},
+		receiver_province =
+		#{receiverProvince},
+		receiver_city = #{receiverCity},
+		receiver_district
+		= #{receiverDistrict},
+		receiver_address = #{receiverAddress},
+		is_default = #{isDefault},
+		create_time = #{createTime},
+		update_time =
+		#{updateTime}
+		where id = #{id}
+	</update>
+
+
+	<select id="selectById" parameterType="Map"
+		resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from t_user_receiving_info
+		where id = #{id}
+	</select>
+	
+	<select id="selectByDefault" parameterType="Map"
+		resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from t_user_receiving_info
+		where user_id = #{userId} and is_default='true'
+	</select>
+
+
+	<sql id="findPageWithWhere">
+		<where>
+			1=1
+			<if test="id != null and id != ''">
+				and id = #{id}
+			</if>
+			<if test="userId != null and userId != ''">
+				and user_id = #{userId}
+			</if>
+			<if test="receiverName != null and receiverName != ''">
+				and receiver_name = #{receiverName}
+			</if>
+			<if test="receiverPhone != null and receiverPhone != ''">
+				and receiver_phone = #{receiverPhone}
+			</if>
+			<if test="receiverProvince != null and receiverProvince != ''">
+				and receiver_province = #{receiverProvince}
+			</if>
+			<if test="receiverCity != null and receiverCity != ''">
+				and receiver_city = #{receiverCity}
+			</if>
+			<if test="receiverDistrict != null and receiverDistrict != ''">
+				and receiver_district = #{receiverDistrict}
+			</if>
+			<if test="receiverAddress != null and receiverAddress != ''">
+				and receiver_address = #{receiverAddress}
+			</if>
+			<if test="isDefault != null and isDefault != ''">
+				and is_default = #{isDefault}
+			</if>
+			<if test="createTime != null and createTime != ''">
+				and create_time = #{createTime}
+			</if>
+			<if test="updateTime != null and updateTime != ''">
+				and update_time = #{updateTime}
+			</if>
+		</where>
+	</sql>
+
+
+	<select id="findUserReceivingInfo" parameterType="Map"
+		resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from t_user_receiving_info
+		where user_id = #{userId}
+		ORDER BY is_default desc,DATE_FORMAT(create_time,'%Y-%m-%d %H:%i:%s') desc
+	</select>
+
+
+
+</mapper>

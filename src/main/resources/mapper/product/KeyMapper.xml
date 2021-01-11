@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.net.system.mapper.product.KeyMapper">
+  
+<resultMap id="BaseResultMap" type="com.net.system.model.Key">
+  <id column="id" jdbcType="VARCHAR" property="id" />
+  <result column="channelId" jdbcType="VARCHAR" property="channelId" />
+  <result column="privatekey" jdbcType="VARCHAR" property="privatekey" />
+  <result column="publickey" jdbcType="VARCHAR" property="publickey" />
+</resultMap>
+
+  
+<sql id="Base_Column_List">
+  id, channelId, privatekey, publickey
+</sql>
+
+  
+<delete id="delete" parameterType="java.lang.String">
+  delete from t_key
+  where id = #{id,jdbcType=VARCHAR}
+</delete>
+
+  
+<insert id="insert" parameterType="com.net.system.model.Key">
+  insert into t_key (id, channelId, privatekey, 
+    publickey)
+  values (#{id,jdbcType=VARCHAR}, #{channelId,jdbcType=VARCHAR}, #{privatekey,jdbcType=VARCHAR}, 
+    #{publickey,jdbcType=VARCHAR})
+</insert>
+
+  
+<insert id="insertDynamic" parameterType="com.net.system.model.Key">
+  insert into t_key
+  <trim prefix="(" suffix=")" suffixOverrides=",">
+    <if test="id != null">
+      id,
+    </if>
+    <if test="channelId != null">
+      channelId,
+    </if>
+    <if test="privatekey != null">
+      privatekey,
+    </if>
+    <if test="publickey != null">
+      publickey,
+    </if>
+  </trim>
+  <trim prefix="values (" suffix=")" suffixOverrides=",">
+    <if test="id != null">
+      #{id,jdbcType=VARCHAR},
+    </if>
+    <if test="channelId != null">
+      #{channelId,jdbcType=VARCHAR},
+    </if>
+    <if test="privatekey != null">
+      #{privatekey,jdbcType=VARCHAR},
+    </if>
+    <if test="publickey != null">
+      #{publickey,jdbcType=VARCHAR},
+    </if>
+  </trim>
+</insert>
+
+  
+<update id="updateDynamic" parameterType="com.net.system.model.Key">
+  update t_key
+  <set>
+    <if test="channelId != null">
+      channelId = #{channelId,jdbcType=VARCHAR},
+    </if>
+    <if test="privatekey != null">
+      privatekey = #{privatekey,jdbcType=VARCHAR},
+    </if>
+    <if test="publickey != null">
+      publickey = #{publickey,jdbcType=VARCHAR},
+    </if>
+  </set>
+  where id = #{id,jdbcType=VARCHAR}
+</update>
+
+  
+<update id="update" parameterType="com.net.system.model.Key">
+  update t_key
+  set channelId = #{channelId,jdbcType=VARCHAR},
+    privatekey = #{privatekey,jdbcType=VARCHAR},
+    publickey = #{publickey,jdbcType=VARCHAR}
+  where id = #{id,jdbcType=VARCHAR}
+</update>
+
+  
+<select id="selectById" parameterType="java.lang.String" resultMap="BaseResultMap">
+  select
+	<include refid="Base_Column_List" />
+  from  t_key
+  where channelId = #{channelId,jdbcType=VARCHAR}
+</select>
+
+  
+<sql id="findPageWithWhere">
+    <where> 1=1 
+	<if test="id != null and id != ''" >
+	  and id = #{id,jdbcType=VARCHAR}
+	</if>
+	<if test="channelId != null and channelId != ''" >
+	  and channelId = #{channelId,jdbcType=VARCHAR}
+	</if>
+	<if test="privatekey != null and privatekey != ''" >
+	  and privatekey = #{privatekey,jdbcType=VARCHAR}
+	</if>
+	<if test="publickey != null and publickey != ''" >
+	  and publickey = #{publickey,jdbcType=VARCHAR}
+	</if>
+  </where>
+</sql>
+
+  
+<select id="findPageWithResult" parameterType="map" resultMap="BaseResultMap">
+  select
+	<include refid="Base_Column_List" />
+  from  t_key
+  <include refid="findPageWithWhere" />
+</select>
+
+  
+<select id="findPageWithCount" parameterType="map" resultType="Integer">
+  select count(1)
+  from t_key
+  <include refid="findPageWithWhere" />
+</select>
+
+</mapper>

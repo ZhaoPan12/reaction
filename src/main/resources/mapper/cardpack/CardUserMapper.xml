@@ -1,0 +1,231 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.net.system.mapper.cardpack.CardUserMapper">
+  
+<resultMap id="BaseResultMap" type="com.net.system.model.CardUser">
+  <id column="id" jdbcType="VARCHAR" property="id" />
+  <result column="cardnum" jdbcType="INTEGER" property="cardnum" />
+  <result column="productid" jdbcType="VARCHAR" property="productid" />
+  <result column="userid" jdbcType="INTEGER" property="userid" />
+  <result column="status" jdbcType="INTEGER" property="status" />
+  <result column="addtime" jdbcType="TIMESTAMP" property="addtime" />
+  <result column="endtime" jdbcType="TIMESTAMP" property="endtime" />
+  <result column="effecttime" jdbcType="TIMESTAMP" property="effecttime" />
+  <result column="orderNo" jdbcType="VARCHAR" property="orderNo" />
+  <result column="day" jdbcType="VARCHAR" property="day" />
+  <association property="product"  select="com.net.system.mapper.product.ProductMapper.selectById" column="productid"/>
+</resultMap>
+
+  
+<sql id="Base_Column_List">
+  id, cardnum, productid, userid, status, addtime, endtime, effecttime,orderNo,day
+</sql>
+
+<select id="selectByUserCardVo" parameterType="String" resultType="com.net.system.model.vo.CardUserVo">
+ SELECT t.orderNo orderNo,u.idCard idCard,'00' idType,u.username `name`,u.phone phoneNo,p.card_type cardType,DATE_FORMAT(t.effectTime,'%Y%m%d%H%i%s') activityTime,t.`day` activityDays,u.imageUrl userImgUrl,'00' cardStatus FROM t_card_user t LEFT JOIN `user` u ON t.userId=u.user_id LEFT JOIN t_product p ON t.productId=p.id WHERE u.idCard=#{idCard} AND t.`status`=2 
+</select>
+
+ <delete id="delete" parameterType="java.lang.String">
+  delete from t_card_user
+  where id = #{id,jdbcType=VARCHAR}
+</delete>
+
+<update id="updateByUserCardStatus" parameterType="com.net.system.model.CardUser">
+ update t_card_user set status=#{status} where id=#{id}
+</update>
+  
+<insert id="insert" parameterType="com.net.system.model.CardUser">
+  insert into t_card_user (id, cardnum, productid, 
+    userid, status, addtime, 
+    endtime, effecttime,orderNo)
+  values (#{id,jdbcType=VARCHAR}, #{cardnum,jdbcType=INTEGER}, #{productid,jdbcType=VARCHAR}, 
+    #{userid,jdbcType=INTEGER}, #{status,jdbcType=INTEGER}, #{addtime,jdbcType=TIMESTAMP}, 
+    #{endtime,jdbcType=TIMESTAMP}, #{effecttime,jdbcType=TIMESTAMP},#{orderNo})
+</insert>
+
+  
+<insert id="insertDynamic" parameterType="com.net.system.model.CardUser">
+  insert into t_card_user
+  <trim prefix="(" suffix=")" suffixOverrides=",">
+    <if test="id != null">
+      id,
+    </if>
+    <if test="cardnum != null">
+      cardnum,
+    </if>
+    <if test="productid != null">
+      productid,
+    </if>
+    <if test="userid != null">
+      userid,
+    </if>
+    <if test="status != null">
+      status,
+    </if>
+    <if test="addtime != null">
+      addtime,
+    </if>
+    <if test="endtime != null">
+      endtime,
+    </if>
+    <if test="effecttime != null">
+      effecttime,
+    </if>
+    <if test="orderNo!=null">
+      orderNo,
+    </if>
+    <if test="day!=null and day!=''">
+   	 day,
+    </if>
+  </trim>
+  <trim prefix="values (" suffix=")" suffixOverrides=",">
+    <if test="id != null">
+      #{id,jdbcType=VARCHAR},
+    </if>
+    <if test="cardnum != null">
+      #{cardnum,jdbcType=INTEGER},
+    </if>
+    <if test="productid != null">
+      #{productid,jdbcType=VARCHAR},
+    </if>
+    <if test="userid != null">
+      #{userid,jdbcType=INTEGER},
+    </if>
+    <if test="status != null">
+      #{status,jdbcType=INTEGER},
+    </if>
+    <if test="addtime != null">
+      #{addtime,jdbcType=TIMESTAMP},
+    </if>
+    <if test="endtime != null">
+      #{endtime,jdbcType=TIMESTAMP},
+    </if>
+    <if test="effecttime != null">
+      #{effecttime,jdbcType=TIMESTAMP},
+    </if>
+    <if test="orderNo!=null">
+     #{orderNo},
+    </if>
+    <if test="day!=null and day!=''">
+     #{day}
+    </if>
+  </trim>
+</insert>
+
+  
+<update id="updateDynamic" parameterType="com.net.system.model.CardUser">
+  update t_card_user
+  <set>
+    <if test="cardnum != null">
+      cardnum = #{cardnum,jdbcType=INTEGER},
+    </if>
+    <if test="productid != null">
+      productid = #{productid,jdbcType=VARCHAR},
+    </if>
+    <if test="userid != null">
+      userid = #{userid,jdbcType=INTEGER},
+    </if>
+    <if test="status != null">
+      status = #{status,jdbcType=INTEGER},
+    </if>
+    <if test="addtime != null">
+      addtime = #{addtime,jdbcType=TIMESTAMP},
+    </if>
+    <if test="endtime != null">
+      endtime = #{endtime,jdbcType=TIMESTAMP},
+    </if>
+    <if test="effecttime != null">
+      effecttime = #{effecttime,jdbcType=TIMESTAMP},
+    </if>
+    <if test="orderNo!=null">
+      orderNo = #{orderNo},
+    </if>
+    <if test="day!=null">
+       day = #{day}
+     </if>
+  </set>
+  where id = #{id,jdbcType=VARCHAR}
+</update>
+
+  
+<update id="update" parameterType="com.net.system.model.CardUser">
+  update t_card_user
+  set cardnum = #{cardnum,jdbcType=INTEGER},
+    productid = #{productid,jdbcType=VARCHAR},
+    userid = #{userid,jdbcType=INTEGER},
+    status = #{status,jdbcType=INTEGER},
+    addtime = #{addtime,jdbcType=TIMESTAMP},
+    endtime = #{endtime,jdbcType=TIMESTAMP},
+    effecttime = #{effecttime,jdbcType=TIMESTAMP}
+  where id = #{id,jdbcType=VARCHAR}
+</update>
+
+  
+<select id="selectById" parameterType="java.lang.String" resultMap="BaseResultMap">
+  select
+	<include refid="Base_Column_List" />
+  from  t_card_user
+  where id = #{id,jdbcType=VARCHAR}
+</select>
+
+<select id="selectByUserCard" parameterType="com.net.system.model.CardUser" resultMap="BaseResultMap">
+  select
+	<include refid="Base_Column_List" />
+  from  t_card_user
+  where userid = #{userid} and productid=#{productid} and status!=0
+</select>
+
+ <select id="selectByOrderNo" parameterType="java.lang.String" resultMap="BaseResultMap">
+  select
+	<include refid="Base_Column_List" />
+  from  t_card_user
+  where orderNo = #{orderNo,jdbcType=VARCHAR}
+</select>
+<sql id="findPageWithWhere">
+    <where>status!=0
+	<if test="id != null and id != ''" >
+	  and id = #{id,jdbcType=VARCHAR}
+	</if>
+	<if test="cardnum != null" >
+	  and cardnum = #{cardnum,jdbcType=INTEGER}
+	</if>
+	<if test="productid != null and productid != ''" >
+	  and productid = #{productid,jdbcType=VARCHAR}
+	</if>
+	<if test="userid != null" >
+	  and userid = #{userid,jdbcType=INTEGER}
+	</if>
+	<if test="status != null" >
+	  and status = #{status,jdbcType=INTEGER}
+	</if>
+	<if test="addtime != null" >
+	  and addtime = #{addtime,jdbcType=TIMESTAMP}
+	</if>
+	<if test="endtime != null" >
+	  and endtime = #{endtime,jdbcType=TIMESTAMP}
+	</if>
+	<if test="effecttime != null" >
+	  and effecttime = #{effecttime,jdbcType=TIMESTAMP}
+	</if>
+  </where>
+</sql>
+
+  
+<select id="findPageWithResult" parameterType="map" resultMap="BaseResultMap">
+  select
+	<include refid="Base_Column_List" />
+  from  t_card_user
+  <include refid="findPageWithWhere" />
+</select>
+
+  
+<select id="findPageWithCount" parameterType="map" resultType="Integer">
+  select count(1)
+  from t_card_user
+  <include refid="findPageWithWhere" />
+</select>
+
+<select id="selectIsCard" parameterType="map" resultType="Integer">
+SELECT COUNT(1) FROM t_card_user t LEFT JOIN t_product p ON t.productid=p.id WHERE p.id=(select supId FROM t_product WHERE id=#{productId}) AND t.userId=#{userId} AND t.`status`=2
+</select>
+</mapper>

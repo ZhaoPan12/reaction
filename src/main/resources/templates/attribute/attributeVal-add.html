@@ -1,0 +1,465 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+<meta charset="UTF-8">
+<title>商品类型添加</title>
+<meta name="renderer" content="webkit">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<meta name="viewport"
+	content="width=device-width,user-scalable=yes, minimum-scale=0.4, initial-scale=0.8,target-densitydpi=low-dpi" />
+<link rel="shortcut icon" type="image/x-icon" th:href="@{/favicon.ico}" />
+<link rel="stylesheet" th:href="@{/lib/layui/css/layui.css}">
+<link rel="stylesheet" th:href="@{/css/common.css}">
+<link rel="stylesheet" th:href="@{/css/animate.min.css}">
+</head>
+<style>
+.layui-form-label {
+	float: left;
+	display: block;
+	padding: 9px 15px;
+	width: 140px;
+	font-weight: 400;
+	line-height: 20px;
+	text-align: right;
+}
+
+.layui-input-label {
+	display: inline-block;
+	padding: 9px 15px;
+	width: auto;
+	font-weight: 400;
+	line-height: 20px;
+	text-align: right;
+	position: relative;
+	top: 5px;
+}
+
+.layui-input-block {
+	float: left;
+	width: 500px;
+	margin-left: 0px;
+}
+
+.layui-form-switch {
+	height: 24px;
+}
+
+.layui-form-switch em {
+	top: -1px;
+	font-size: 12px;
+}
+
+.layui-tab-card>.layui-tab-title .layui-this {
+	color: #fff;
+	background-color: #409eff;
+	border-color: #409eff;
+	box-shadow: -1px 0 0 0 #409eff;
+}
+
+.layui-tab-title li {
+	display: inline-block;
+	*display: inline;
+	*zoom: 1;
+	vertical-align: middle;
+	font-size: 14px;
+	transition: all .2s;
+	-webkit-transition: all .2s;
+	position: relative;
+	line-height: 40px;
+	min-width: 65px;
+	padding: 0 15px;
+	text-align: center;
+	cursor: pointer;
+	color: #606266;
+	font-size: 12px;
+}
+
+.help-block {
+	color: #999;
+	font-size: 12px;
+}
+
+.label-required-next:after {
+	top: 6px;
+	right: 5px;
+	color: red;
+	content: '*';
+	position: absolute;
+	margin-left: 4px;
+	font-weight: 700;
+	line-height: 1.8em;
+}
+
+.img-li {
+	float: left;
+	width: 100px;
+	height: 100px;
+	width: 100px;
+	margin-left: 20px;
+	margin-top: 60px;
+}
+
+.img-li img {
+	width: 100%;
+	height: 100%;
+	border-radius: 3px;
+}
+
+.img-li input {
+	width: 100%;
+	margin-top: 10px;
+	border: 0px;
+	background-color: #F0F0F0;
+	height: 26px;
+	padding-left: 10px;
+	border-radius: 3px;
+	padding-left: 10px;
+}
+
+.img-li i {
+	position: relative;
+	top: 10%;
+	left: 90%;
+}
+</style>
+
+<body>
+	<div class="z-body animated fadeIn">
+		<form action="" method="post" class="layui-form">
+			<div class="layui-form-item"
+				style="width: 70%; margin: auto; padding-top: 10px;">
+				<div class="layui-form-item">
+					<label class="layui-form-label label-required-next">属性名称:</label>
+					<div class="layui-input-block ">
+						<input type="text" name="name" lay-verify="required"
+							placeholder="请输入属性名称" autocomplete="off"
+							th:value="${productAttrVal?.name}" class="layui-input">
+					</div>
+				</div>
+				<div class="layui-form-item">
+					<label class="layui-form-label">商品类型:</label>
+					<div class="layui-input-inline">
+						<select name="attrId">
+							<option th:each="key:${attrKeyList}" th:value="${key.id}"
+								th:text="${key.name}"
+								th:selected="${key.id==productAttrVal?.attrId}"></option>
+
+						</select>
+					</div>
+				</div>
+
+
+				<div class="layui-form-item" pane="">
+					<label class="layui-form-label">属性值入录方式:</label>
+					<div class="layui-input-block">
+						<input type="radio" lay-filter="type" name="type" value="1"
+							title="从下面列表选择" th:if="${productAttrVal==null}" checked="">
+						<input type="radio" name="type" lay-filter="type" value="1"
+							th:if="${productAttrVal!=null}" title="从下面列表选择"
+							th:checked="${productAttrVal?.type==1}"> <input
+							type="radio" name="type" lay-filter="type" value="2" title="手工入录"
+							th:checked="${productAttrVal?.type==2}"> <input
+							type="radio" name="type" lay-filter="type" value="3"
+							title="手工入录带图片" th:checked="${productAttrVal?.type==3}">
+					</div>
+				</div>
+				<div
+					th:style="${productAttrVal?.type==3}?'display:block':'display:none'"
+					class="layui-form-item layui-form-text" id="li-img">
+					<label class="layui-form-label">属性值图片列表:</label>
+					<div class="layui-input-block">
+						<div id="img-body"></div>
+						<div class="layui-input-block" style="margin-top: 70px;">
+							<div class="layui-btn layui-btn-blue"
+								style="width: 100%; height: 40px;" id="slide-pc">图片上传</div>
+						</div>
+					</div>
+
+				</div>
+
+				<div
+					th:style="${productAttrVal?.type==1}?'display:block':'display:none'"
+					class="layui-form-item layui-form-text" id="li-text"
+					style="margin-top: 80px;">
+					<label class="layui-form-label">属性值可选列表:</label>
+					<div class="layui-input-block">
+						<textarea placeholder="请输入列表" type="text" class="layui-textarea"
+							id="aidChildBirthDiagnosisOther"
+							style="min-height: 34px; height: 33px;" lay-verify="value"></textarea>
+					</div>
+				</div>
+
+				<div class="layui-form-item">
+					<label class="layui-form-label label-required-next">属性排序:</label>
+					<div class="layui-input-block ">
+						<input type="sort" name="sort" lay-verify="required"
+							placeholder="请输入属性排序序号" autocomplete="off"
+							th:value="${productAttrVal?.sort}" class="layui-input">
+					</div>
+				</div>
+
+
+			</div>
+
+			<div class="layui-form-item"
+				style="text-align: center; margin-top: 20px;">
+				<div class="layui-input-block"
+					style="margin-left: 0; text-align: center;">
+					<input type="hidden" name="id" th:value="${productAttrVal?.id}">
+					<button class="layui-btn layui-btn-blue"
+						th:text="${productAttrVal}?'修改':'添加'" lay-submit=""
+						data-th-lay-filter="${productAttrVal}?'edit':'add'">添加</button>
+				</div>
+			</div>
+
+		</form>
+	</div>
+
+	<script id="add-img-li" type="text/x-jquery-tmpl">
+<div class="img-li">
+		<i class="layui-icon layui-icon-close img-close"  style="font-size: 18px; color: red;"></i> 
+        <img src="${src}" class="img-src" />
+        <input type="text" value="${value}" class="img-txt" placeholder="描述" />
+</div>
+    </script>
+
+	<script th:src="@{/lib/jquery/jquery.min.js}"></script>
+	<script th:src="@{/lib/layui/layui.js}"></script>
+	<script th:src="@{/js/common.js}"></script>
+	<script th:src="@{/js/utils/jquery.tmpl.min.js}"></script>
+	<script th:inline="javascript">
+		layui.use([ 'form', 'layer','upload'], function() {
+			$ = layui.jquery;
+			var form = layui.form, layer = layui.layer;
+			var upload = layui.upload;  
+			var obj=[[${productAttrVal}]];
+			init(obj);
+			
+			
+			 upload.render({
+				 elem: '#slide-pc',
+				 url: projectName()+'/specs/upload/images',
+				 size: 1000,
+				 exts: 'jpg|png|jpeg',
+				 multiple: false,
+				 auto: true,
+				 before: function(obj) {
+						
+				 },
+				 done: function(res) {
+					
+					$("#add-img-li").tmpl({"src":res.data,"value":""}).appendTo('#img-body');
+					layer.close(layer.msg());//关闭上传提示窗口
+				 }
+			 });
+			 
+			 
+			 form.on('radio(type)', function (data) {
+				　var value = data.value;   //  当前选中的value值
+                  
+				    if(value==1){　　　　　　//判断当前多选框是选中还是取消选中
+				       $("#li-img").css("display","none");
+				       $("#li-text").css("display","block");
+				    }else if(value==2){　　　　　　//判断当前多选框是选中还是取消选中
+				       $("#li-img").css("display","none");
+					   $("#li-text").css("display","none");
+				    }else if(value==3){　　　　　　//判断当前多选框是选中还是取消选中
+					   $("#li-img").css("display","block");
+					   $("#li-text").css("display","none");
+					}
+				　
+				});
+			
+			
+
+			$("#aidChildBirthDiagnosisOther").keydown(function(e) {
+
+				if (e.keyCode != 13) {
+					return;
+				} else {//当按键输入为回车时，执行下列操作
+					event.preventDefault();//为了兼容IE8
+					var t = $("#aidChildBirthDiagnosisOther");
+					var val = t.val() + '\n';//手动增加换行符
+					t.val(val).focus();//定义焦点还是在这个控件上
+					t.css("height", "+=20");
+
+				}
+			});
+			
+			function verify(){
+				form.verify({
+					value: function (value, item) {
+	                    var t=/^[^\s]+[\s]*.+$/;
+	                    
+						if (t.test(value)==false) {
+	                        return '不能为空!';
+	                    }
+	                }
+	            });
+			}
+			
+			$("#img-body").on("click", ".img-src", function() {
+				previewImg($(this).attr("src"));
+			});
+			
+			function previewImg(src) {
+				  
+				   //var height = img.height + 50; // 原图片大小
+				   //var width = img.width; //原图片大小
+				   var imgHtml = "<img src='" + src + "' width='500px' height='500px'/>"; 
+				   //弹出层
+				   layer.open({ 
+				     type: 1, 
+				     shade: 0.8,
+				     offset: 'auto',
+				     area: [500 + 'px',550+'px'], // area: [width + 'px',height+'px'] //原图显示
+				     shadeClose:true,
+				     scrollbar: false,
+				     title: "图片预览", //不显示标题 
+				     content: imgHtml, //捕获的元素，注意：最好该指定的元素要存放在body最外层，否则可能被其它的相对元素所影响 
+				     cancel: function () { 
+				       //layer.msg('捕获就是从页面已经存在的元素上，包裹layer的结构', { time: 5000, icon: 6 }); 
+				     } 
+				   }); 
+				 }
+			
+			
+			$("#img-body").on("click",".img-close",function(){
+				  $(this).parent().remove()
+			});
+
+			// 监听提交
+			form.on('submit(add)', function(form) {
+
+				var value=$("#aidChildBirthDiagnosisOther").val();
+				if(form.field.type=="1"){
+					verify();
+					form.field.value=splitStr(value,form.field.type);
+					form.field.img='';
+				}else if(form.field.type=="3"){
+					form.field.value=splitStr(value,form.field.type);
+					form.field.img=splitImg();
+				}else{
+					form.field.img='';
+					form.field.value='';
+				}
+				
+				
+				$.post(projectName() + '/specs', form.field, function(
+						result) {
+					handlerResult(result, addDone);
+				});
+				return false;
+				
+			});
+			
+			
+			
+
+			// 监听提交
+			form.on('submit(edit)', function(form) {
+				
+				var value=$("#aidChildBirthDiagnosisOther").val();
+				if(form.field.type=="1"){
+					verify();
+					form.field.value=splitStr(value,form.field.type);
+					form.field.img='';
+				}else if(form.field.type=="3"){
+					form.field.value=splitStr(value,form.field.type);
+					form.field.img=splitImg();
+				}else{
+					form.field.img='';
+					form.field.value='';
+				}
+				
+				form.field._method = 'PUT';
+				$.post(projectName() + '/specs', form.field, function(
+						result) {
+								handlerResult(result, editDone);
+				});
+				return false;
+				
+			});
+
+			function addDone(data) {
+				layer.msg("添加成功", {
+					icon : 6
+				});
+				var index = parent.layer.getFrameIndex(window.name); //先得到当前iframe层的索引
+				parent.layer.close(index); //再执行关闭
+			}
+
+			function editDone(data) {
+				layer.msg("修改成功", {
+					icon : 6
+				});
+				var index = parent.layer.getFrameIndex(window.name); //先得到当前iframe层的索引
+				parent.layer.close(index); //再执行关闭
+			}
+			
+            function init(obj){
+				if(obj!=null){
+                    if(obj.type=='1'){
+                    	var valueList=obj.value.split(",");
+    					var t = $("#aidChildBirthDiagnosisOther");
+    					
+    					for(var i=0;i<valueList.length;i++){
+    						var val = t.val()+valueList[i];//手动增加换行符
+    							
+    						
+    						if(i!=(valueList.length-1)){
+    							val+='\n';
+    							t.css("height", "+=60");
+    						}
+    						t.val(val);	
+    					}
+					}else if(obj.type=='3'){
+		                    	var valueList=obj.value.split(",");
+		                    	var imgList=obj.img.split(",");
+		    					for(var i=0;i<valueList.length;i++){
+		    						$("#add-img-li").tmpl({"src":imgList[i],"value":valueList[i]}).appendTo('#img-body');
+		    		           }
+							
+					
+					
+					 }	
+					
+				}
+			}
+            
+            function splitStr(str,type){
+            	  var spl="";
+            	if(type=="1"){
+            		snsArr=str.split(/[(\r\n)\r\n]+/);
+                	snsArr.forEach((item,index)=>{
+                	      if(!item){
+                	          snsArr.splice(index,1);//删除空项
+                	      }
+                	})
+                  
+                	for(var i=0;i<snsArr.length;i++){
+                		spl+=snsArr[i]+",";
+                	}
+            	}else if(type=="3"){
+            		$(".img-txt").each(function(i) {
+            			spl+=$(this).val()+",";
+					});
+            	}
+            	spl=spl.substring(0,spl.length-1);
+            	return spl;
+            }
+            
+            function splitImg(){
+            	var spl="";
+            	$(".img-src").each(function(i) {
+        			spl+=$(this).attr("src")+",";
+				});
+            	spl=spl.substring(0,spl.length-1);
+            	return spl;
+            }
+		});
+	</script>
+</body>
+
+</html>

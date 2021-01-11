@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.net.system.mapper.product.LabelMapper">
+  
+<resultMap id="BaseResultMap" type="com.net.system.model.Label">
+  <id column="id" jdbcType="VARCHAR" property="id" />
+  <result column="label" jdbcType="VARCHAR" property="label" />
+  <result column="productid" jdbcType="VARCHAR" property="productid" />
+</resultMap>
+
+<resultMap id="BaseTupResultMap" type="com.net.system.model.Tup">
+  <result column="value" jdbcType="VARCHAR" property="f_item_num" />
+  <result column="label" jdbcType="VARCHAR" property="f_item_name" />
+</resultMap>  
+<sql id="Base_Column_List">
+  id, label, productid
+</sql>
+
+  <select id="findTupList" parameterType="map" resultType="com.net.system.model.Tup">
+  select
+	f_item_num value,f_item_name label
+  from  t_sys_item
+  <where>
+  <if test="label!=null and label!=''">
+   AND f_dic_num=#{label}
+  </if>
+  </where>
+  
+  order by f_serial_num asc
+</select>
+
+
+<delete id="delete" parameterType="java.lang.String">
+  delete from t_label
+  where productid = #{productId,jdbcType=VARCHAR}
+</delete>
+
+  
+<insert id="insert" parameterType="com.net.system.model.Label">
+  insert into t_label (id, label, productid
+    )
+  values (#{id,jdbcType=VARCHAR}, #{label,jdbcType=VARCHAR}, #{productid,jdbcType=VARCHAR}
+    )
+</insert>
+
+  
+<insert id="insertDynamic" parameterType="com.net.system.model.Label">
+  insert into t_label
+  <trim prefix="(" suffix=")" suffixOverrides=",">
+    <if test="id != null">
+      id,
+    </if>
+    <if test="label != null">
+      label,
+    </if>
+    <if test="productid != null">
+      productid,
+    </if>
+  </trim>
+  <trim prefix="values (" suffix=")" suffixOverrides=",">
+    <if test="id != null">
+      #{id,jdbcType=VARCHAR},
+    </if>
+    <if test="label != null">
+      #{label,jdbcType=VARCHAR},
+    </if>
+    <if test="productid != null">
+      #{productid,jdbcType=VARCHAR},
+    </if>
+  </trim>
+</insert>
+
+  
+<update id="updateDynamic" parameterType="com.net.system.model.Label">
+  update t_label
+  <set>
+    <if test="label != null">
+      label = #{label,jdbcType=VARCHAR},
+    </if>
+    <if test="productid != null">
+      productid = #{productid,jdbcType=VARCHAR},
+    </if>
+  </set>
+  where id = #{id,jdbcType=VARCHAR}
+</update>
+
+  
+<update id="update" parameterType="com.net.system.model.Label">
+  update t_label
+  set label = #{label,jdbcType=VARCHAR},
+    productid = #{productid,jdbcType=VARCHAR}
+  where id = #{id,jdbcType=VARCHAR}
+</update>
+
+  
+<select id="selectById" parameterType="java.lang.String" resultMap="BaseResultMap">
+  select
+	<include refid="Base_Column_List" />
+  from  t_label
+  where id = #{id,jdbcType=VARCHAR}
+</select>
+
+  
+<sql id="findPageWithWhere">
+    <where> 1=1 
+	<if test="id != null and id != ''" >
+	  and id = #{id,jdbcType=VARCHAR}
+	</if>
+	<if test="label != null and label != ''" >
+	  and label = #{label,jdbcType=VARCHAR}
+	</if>
+	<if test="productid != null and productid != ''" >
+	  and productid = #{productid,jdbcType=VARCHAR}
+	</if>
+  </where>
+</sql>
+
+  
+<select id="findPageWithResult" parameterType="map" resultMap="BaseResultMap">
+  select
+	<include refid="Base_Column_List" />
+  from  t_label
+  <include refid="findPageWithWhere" />
+</select>
+
+<select id="selectLabelByProductId" parameterType="String" resultMap="BaseResultMap">
+select
+	<include refid="Base_Column_List" />
+  from  t_label
+  where productid=#{productId}
+</select>
+  
+<select id="findPageWithCount" parameterType="map" resultType="Integer">
+  select count(1)
+  from t_label
+  <include refid="findPageWithWhere" />
+</select>
+
+</mapper>

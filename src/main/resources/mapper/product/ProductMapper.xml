@@ -1,0 +1,482 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.net.system.mapper.product.ProductMapper">
+  
+<resultMap id="BaseResultMap" type="com.net.system.model.Product">
+  <id column="id" jdbcType="VARCHAR" property="id" />
+  <result column="productname" jdbcType="VARCHAR" property="productname" />
+  <result column="mainimage" jdbcType="VARCHAR" property="mainimage" />
+  <result column="title" jdbcType="VARCHAR" property="title" />
+  <result column="subtitle" jdbcType="VARCHAR" property="subtitle" />
+  <result column="price" jdbcType="DECIMAL" property="price" />
+  <result column="type" jdbcType="VARCHAR" property="type" />
+  <result column="unit" jdbcType="VARCHAR" property="unit" />
+  <result column="address" jdbcType="VARCHAR" property="address" />
+  <result column="status" jdbcType="INTEGER" property="status" />
+  <result column="weights" jdbcType="INTEGER" property="weights" />
+  <result column="createtime" jdbcType="TIMESTAMP" property="createtime" />
+  <result column="createuser" jdbcType="INTEGER" property="createuser" />
+  <result column="updatetime" jdbcType="TIMESTAMP" property="updatetime" />
+  <result column="description"  property="description" />
+  <result column="tabletext"  property="tabletext" />
+  <result column="supId" jdbcType="VARCHAR" property="supId" />
+  <result column="product_sn" jdbcType="INTEGER" property="productSn" />
+  <result column="stock" jdbcType="INTEGER" property="stock" />
+  <result column="classify" jdbcType="VARCHAR" property="classify" />
+  <result column="classifyName" jdbcType="VARCHAR" property="classifyName" />
+  <result column="supName" jdbcType="VARCHAR" property="supName" />
+  <result column="cardType" jdbcType="VARCHAR" property="cardType" />
+  <result column="channelId" jdbcType="VARCHAR" property="channelId" />
+  <collection property="labelList" ofType="com.net.system.model.Label" select="com.net.system.mapper.product.LabelMapper.selectLabelByProductId" column="id"/>
+</resultMap>
+
+
+<resultMap id="SkuBaseResultMap" type="com.net.system.model.vo.ProductSkuInfoVo">
+  <id column="id" jdbcType="VARCHAR" property="id" />
+  <result column="productname" jdbcType="VARCHAR" property="productname" />
+  <result column="mainimage" jdbcType="VARCHAR" property="mainimage" />
+  <result column="title" jdbcType="VARCHAR" property="title" />
+  <result column="subtitle" jdbcType="VARCHAR" property="subtitle" />
+  <result column="price" jdbcType="DECIMAL" property="price" />
+  <result column="type" jdbcType="VARCHAR" property="type" />
+  <result column="unit" jdbcType="VARCHAR" property="unit" />
+  <result column="address" jdbcType="VARCHAR" property="address" />
+  <result column="status" jdbcType="INTEGER" property="status" />
+  <result column="weights" jdbcType="INTEGER" property="weights" />
+  <result column="createtime" jdbcType="TIMESTAMP" property="createtime" />
+  <result column="createuser" jdbcType="INTEGER" property="createuser" />
+  <result column="updatetime" jdbcType="TIMESTAMP" property="updatetime" />
+  <result column="description"  property="description" />
+  <result column="tabletext"  property="tabletext" />
+  <result column="supId" jdbcType="VARCHAR" property="supId" />
+  <result column="product_sn" jdbcType="INTEGER" property="productSn" />
+  <result column="stock" jdbcType="INTEGER" property="stock" />
+  <result column="classify" jdbcType="VARCHAR" property="classify" />
+  <result column="classifyName" jdbcType="VARCHAR" property="classifyName" />
+  <result column="supName" jdbcType="VARCHAR" property="supName" />
+  <result column="cardType" jdbcType="VARCHAR" property="card_type" />
+  <result column="channelId" jdbcType="VARCHAR" property="channelId" />
+  <collection property="specsList" ofType="com.net.system.model.vo.ProductSkuKeyVo" select="com.net.system.mapper.product.ProductSkuKeyMapper.findSpecsByProductId" column="{productId=id}"/>
+  <collection property="skuList" ofType="com.net.system.model.ProductSku" select="com.net.system.mapper.product.ProductSkuMapper.findPageWithResult" column="{productId=id}"/>
+  <collection property="labelList" ofType="com.net.system.model.Label" select="com.net.system.mapper.product.LabelMapper.selectLabelByProductId" column="id"/>
+  <collection property="fileList" ofType="com.net.system.model.Files" select="com.net.system.mapper.product.FileMapper.findProductFile" column="id"/>
+</resultMap>
+
+
+  
+<sql id="Base_Column_List">
+  id, productname, mainimage, title, subtitle, price, type, address, status,weights, createtime, 
+  createuser, updatetime,description,tabletext,stock,classify,unit,supId,product_sn
+</sql>
+
+  
+<delete id="delete" parameterType="java.lang.String">
+  delete from t_product
+  where id = #{id,jdbcType=VARCHAR}
+</delete>
+
+  
+<insert id="insert" parameterType="com.net.system.model.Product">
+  insert into t_product (id, productname, mainimage, 
+    title, subtitle, price, 
+    type, address, status,weights,description,tabletext
+    createtime, createuser, updatetime,stock,classify,unit
+    )
+  values (#{id,jdbcType=VARCHAR}, #{productname,jdbcType=VARCHAR}, #{mainimage,jdbcType=VARCHAR}, 
+    #{title,jdbcType=VARCHAR}, #{subtitle,jdbcType=VARCHAR}, #{price,jdbcType=DECIMAL}, 
+    #{type,jdbcType=VARCHAR}, #{address,jdbcType=VARCHAR}, #{status,jdbcType=INTEGER}, #{weights,jdbcType=INTEGER},#{description},#{tabletext},
+    #{createtime,jdbcType=TIMESTAMP}, #{createuser,jdbcType=INTEGER}, #{updatetime,jdbcType=TIMESTAMP},#{stock,jdbcType=INTEGER},#{classify,jdbcType=VARCHAR},#{unit,jdbcType=VARCHAR}
+    )
+</insert>
+
+  
+<insert id="insertDynamic" parameterType="com.net.system.model.Product">
+  insert into t_product
+  <trim prefix="(" suffix=")" suffixOverrides=",">
+    <if test="id != null">
+      id,
+    </if>
+    <if test="productname != null">
+      productname,
+    </if>
+    <if test="mainimage != null">
+      mainimage,
+    </if>
+    <if test="title != null">
+      title,
+    </if>
+    <if test="subtitle != null">
+      subtitle,
+    </if>
+    <if test="price != null">
+      price,
+    </if>
+    <if test="type != null and type!=''">
+      type,
+    </if>
+    <if test="address != null">
+      address,
+    </if>
+    <if test="status != null">
+      status,
+    </if>
+    <if test="weights != null">
+       weights,
+    </if>
+    <if test="description!=null and description!=''">
+       description,
+    </if>
+    <if test="tabletext!=null and tabletext!=''">
+       tabletext,
+    </if>
+    <if test="createtime != null">
+      createtime,
+    </if>
+    <if test="createuser != null">
+      createuser,
+    </if>
+    <if test="updatetime != null">
+      updatetime,
+    </if>
+    <if test="stock!=null">
+      stock,
+    </if>
+    <if test="classify!=null and classify != ''">
+     classify,
+    </if>
+    <if test="unit!=null and unit!=''">
+     unit,
+    </if>
+    <if test="supId!=null and supId!=''">
+     supId,  channelId,card_type
+    </if>
+    <if test="channelId!=null and channelId!=''">
+     channelId,  
+    </if>
+    <if test="cardType!=null and cardType!=''">
+     card_type,
+    </if>
+  </trim>
+  <trim prefix="values (" suffix=")" suffixOverrides=",">
+    <if test="id != null">
+      #{id,jdbcType=VARCHAR},
+    </if>
+    <if test="productname != null">
+      #{productname,jdbcType=VARCHAR},
+    </if>
+    <if test="mainimage != null">
+      #{mainimage,jdbcType=VARCHAR},
+    </if>
+    <if test="title != null">
+      #{title,jdbcType=VARCHAR},
+    </if>
+    <if test="subtitle != null">
+      #{subtitle,jdbcType=VARCHAR},
+    </if>
+    <if test="price != null">
+      #{price,jdbcType=DECIMAL},
+    </if>
+    <if test="type != null and type!=''">
+      #{type,jdbcType=VARCHAR},
+    </if>
+    <if test="address != null">
+      #{address,jdbcType=VARCHAR},
+    </if>
+    <if test="status != null">
+      #{status,jdbcType=INTEGER},
+    </if>
+    <if test="weights!=null">
+       #{weights,jdbcType=INTEGER},
+    </if>
+    <if test="description!=null and description!=''">
+       #{description},
+    </if>
+    <if test="tabletext!=null and tabletext!=''">
+       #{tabletext},
+    </if>
+    <if test="createtime != null">
+      #{createtime,jdbcType=TIMESTAMP},
+    </if>
+    <if test="createuser != null">
+      #{createuser,jdbcType=INTEGER},
+    </if>
+    <if test="updatetime != null">
+      #{updatetime,jdbcType=TIMESTAMP},
+    </if>
+    <if test="stock!=null">
+      #{stock,jdbcType=INTEGER},
+    </if>
+    <if test="classify!=null and classify != ''">
+     #{classify,jdbcType=VARCHAR},
+    </if>
+    <if test="unit!=null and unit!=''">
+     #{unit,jdbcType=VARCHAR},
+    </if>
+    <if test="supId!=null and supId!=''">
+     #{supId,jdbcType=VARCHAR},
+    </if>
+    <if test="channelId!=null and channelId!=''">
+     #{channelId,jdbcType=VARCHAR},  
+    </if>
+    <if test="cardType!=null and cardType!=''">
+     #{cardType,jdbcType=VARCHAR},
+    </if>
+  </trim>
+</insert>
+
+  
+<update id="updateDynamic" parameterType="com.net.system.model.Product">
+  update t_product
+  <set>
+    <if test="productname != null">
+      productname = #{productname,jdbcType=VARCHAR},
+    </if>
+    <if test="mainimage != null">
+      mainimage = #{mainimage,jdbcType=VARCHAR},
+    </if>
+    <if test="title != null">
+      title = #{title,jdbcType=VARCHAR},
+    </if>
+    <if test="subtitle != null">
+      subtitle = #{subtitle,jdbcType=VARCHAR},
+    </if>
+    <if test="price != null">
+      price = #{price,jdbcType=DECIMAL},
+    </if>
+    <if test="type != null and type!=''">
+      type = #{type,jdbcType=VARCHAR},
+    </if>
+    <if test="address != null">
+      address = #{address,jdbcType=VARCHAR},
+    </if>
+    <if test="status != null">
+      status = #{status,jdbcType=INTEGER},
+    </if>
+    <if test="weights!=null">
+      weights= #{weights,jdbcType=INTEGER},
+    </if>
+    <if test="description!=null and description!=''">
+      description=#{description},
+    </if>
+    <if test="tabletext!=null and tabletext!=''">
+      tabletext=#{tabletext},
+    </if>
+    <if test="createtime != null">
+      createtime = #{createtime,jdbcType=TIMESTAMP},
+    </if>
+    <if test="createuser != null">
+      createuser = #{createuser,jdbcType=INTEGER},
+    </if>
+    <if test="updatetime != null">
+      updatetime = #{updatetime,jdbcType=TIMESTAMP},
+    </if>
+    <if test="stock!=null">
+      stock = #{stock,jdbcType=INTEGER},
+    </if>
+    <if test="classify!=null and classify != ''">
+      classify = #{classify,jdbcType=VARCHAR},
+    </if>
+    <if test="unit!=null and unit!=''">
+      unit = #{unit,jdbcType=VARCHAR},
+    </if>
+    <if test="supId!=null and supId!=''">
+      supId = #{supId,jdbcType=VARCHAR},
+    </if>
+    <if test="channelId!=null and channelId!=''">
+      channelId=#{channelId,jdbcType=VARCHAR},  
+    </if>
+    <if test="cardType!=null and cardType!=''">
+      card_type=#{cardType,jdbcType=VARCHAR},
+    </if>
+  </set>
+  where id = #{id,jdbcType=VARCHAR}
+</update>
+
+  
+<update id="update" parameterType="com.net.system.model.Product">
+  update t_product
+  set productname = #{productname,jdbcType=VARCHAR},
+    mainimage = #{mainimage,jdbcType=VARCHAR},
+    title = #{title,jdbcType=VARCHAR},
+    subtitle = #{subtitle,jdbcType=VARCHAR},
+    price = #{price,jdbcType=DECIMAL},
+    type = #{type,jdbcType=VARCHAR},
+    address = #{address,jdbcType=VARCHAR},
+    status = #{status,jdbcType=INTEGER},
+    weights=#{weights,jdbcType=INTEGER},
+    description=#{description},
+    tabletext=#{tabletext},
+    createtime = #{createtime,jdbcType=TIMESTAMP},
+    createuser = #{createuser,jdbcType=INTEGER},
+    updatetime = #{updatetime,jdbcType=TIMESTAMP},
+    stock = #{stock,jdbcType=INTEGER},
+    classify = #{classify,jdbcType=VARCHAR},
+    unit = #{unit,jdbcType=VARCHAR},
+  where id = #{id,jdbcType=VARCHAR}
+</update>
+
+  
+<select id="selectById" parameterType="java.lang.String" resultMap="BaseResultMap">
+  select
+	<include refid="Base_Column_List" />
+  from  t_product
+  where id = #{id,jdbcType=VARCHAR}
+</select>
+
+  
+<sql id="findPageWithWhere">
+    <where> 1=1 
+	<if test="id != null and id != ''" >
+	  and id = #{id,jdbcType=VARCHAR}
+	</if>
+	<if test="productname != null and productname != ''" >
+	  and productname = #{productname,jdbcType=VARCHAR}
+	</if>
+	<if test="mainimage != null and mainimage != ''" >
+	  and mainimage = #{mainimage,jdbcType=VARCHAR}
+	</if>
+	<if test="title != null and title != ''" >
+	  and title = #{title,jdbcType=VARCHAR}
+	</if>
+	<if test="subtitle != null and subtitle != ''" >
+	  and subtitle = #{subtitle,jdbcType=VARCHAR}
+	</if>
+	<if test="price != null" >
+	  and price = #{price,jdbcType=DECIMAL}
+	</if>
+	<if test="type != null and type!=''" >
+	  and type = #{type,jdbcType=VARCHAR}
+	</if>
+	<if test="address != null and address != ''" >
+	  and address = #{address,jdbcType=VARCHAR}
+	</if>
+	<if test="status != null and status!=''" >
+	  and status = #{status}
+	</if>
+	<if test="weights!=null">
+	  and weights= #{weights,jdbcType=INTEGER}
+	</if>
+	<if test="createtime != null" >
+	  and createtime = #{createtime,jdbcType=TIMESTAMP}
+	</if>
+	<if test="createuser != null" >
+	  and createuser = #{createuser,jdbcType=INTEGER}
+	</if>
+	<if test="updatetime != null" >
+	  and updatetime = #{updatetime,jdbcType=TIMESTAMP}
+	</if>
+	<if test="unit!=null and unit!=''">
+	  and unit = #{unit,jdbcType=VARCHAR}
+	</if>
+	<if test="supId!=null and supId!=''">
+	 and supId=#{supId}
+	</if>
+	  AND status!=2
+  </where>
+</sql>
+
+  
+<select id="findPageWithResult" parameterType="map" resultMap="BaseResultMap">
+  SELECT id, productname, mainimage, title, subtitle, price, type, address, status,weights, createtime, 
+  createuser, updatetime,description,tabletext,stock,classify,c.f_name classifyName,unit,supId,(SELECT d.productName FROM t_product d WHERE d.id=t.supId) supName FROM t_product t LEFT JOIN t_category c ON c.f_cateid=t.classify
+  <include refid="findPageWithWhere" />
+</select>
+
+
+<select id="selectBychannelId" parameterType="String" resultMap="BaseResultMap">
+  select
+	<include refid="Base_Column_List" />
+  from  t_product
+  where channelId = #{channelId,jdbcType=VARCHAR}
+</select>
+
+  
+<select id="findPageWithCount" parameterType="map" resultType="Integer">
+  select count(1)
+  from t_product
+  <include refid="findPageWithWhere"/>
+</select>
+
+
+<select id="selectByName" parameterType="map" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List"/>
+    from t_product
+    where
+        status=1
+        and type = #{type, jdbcType=VARCHAR}
+        <if test="name!=null and name!=''">
+        AND  (productname like CONCAT('%',#{name, jdbcType=VARCHAR},'%') or
+        title like CONCAT('%',#{name, jdbcType=VARCHAR},'%') or
+        subtitle like CONCAT('%',#{name, jdbcType=VARCHAR},'%')
+        )
+        </if>
+        <if test="classId!=null and classId!=''">
+        AND  classify=#{classId}
+        </if>
+        <if test="salePriceLow!=null and salePriceLow!=''">
+        AND price <![CDATA[>=]]> #{salePriceLow}
+        </if>
+        <if test="salePriceHigh!=null and salePriceHigh!=''">
+        AND price <![CDATA[<=]]> #{salePriceHigh}
+        </if>
+
+    order by
+    <choose>
+      <when test="saleNum != null and saleNum!='' and saleNum=='desc'">
+        product_sn desc
+      </when>
+      <when test="orderBy != null and orderBy!='' and orderBy=='asc'">
+         price asc
+      </when>
+      <when test="orderBy != null and orderBy!='' and orderBy=='desc'">
+         price desc
+      </when>
+
+      <otherwise>
+         weights desc
+      </otherwise>
+    </choose>
+  </select>
+
+  <select id="selectProductListByProductName" parameterType="string" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List"></include>
+    from  t_product
+    <where>
+        status=1
+        <if test="productname!=null and name!=''">
+        and  (productname = #{productname,jdbcType=VARCHAR} or
+        title = #{productname,jdbcType=VARCHAR} or
+        subtitle = #{productname,jdbcType=VARCHAR})
+        </if>
+    </where>
+  </select>
+
+  
+  
+  <update id="returnStock" parameterType="com.net.system.model.OrderProduct">
+  update t_product
+  set 
+    stock = (stock+#{quantity})
+  where id = #{proId}
+</update>
+
+
+  <update id="reduceStock" parameterType="com.net.system.model.OrderProduct">
+  update t_product
+  set 
+    stock = (stock+#{quantity})
+  where id = #{proId}
+</update>
+
+
+<select id="findProductSkuByid" parameterType="String" resultMap="SkuBaseResultMap">
+  SELECT id, productname, mainimage, title, subtitle, price, type, address, status,weights, createtime, 
+  createuser, updatetime,description,stock,classify,c.f_name classifyName,unit FROM t_product p LEFT JOIN t_category c ON c.f_cateid=p.classify
+  where p.id=#{id}
+</select>
+  <select id="selectByRightDtlCode" resultType="com.net.system.model.Product">
+
+  </select>
+</mapper>

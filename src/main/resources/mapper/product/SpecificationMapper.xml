@@ -1,0 +1,217 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.net.system.mapper.product.SpecificationMapper">
+  
+<resultMap id="BaseResultMap" type="com.net.system.model.Specification">
+  <id column="id" jdbcType="INTEGER" property="id" />
+  <result column="cateid" jdbcType="VARCHAR" property="cateid" />
+  <result column="pid" jdbcType="INTEGER" property="pid" />
+  <result column="name" jdbcType="VARCHAR" property="name" />
+  <result column="solr" jdbcType="INTEGER" property="solr" />
+  <result column="pic" jdbcType="VARCHAR" property="pic" />
+  <result column="sevalue" jdbcType="VARCHAR" property="sevalue" />
+  <result column="istable" jdbcType="INTEGER" property="istable" />
+  <result column="ismanual" jdbcType="INTEGER" property="ismanual" />
+  <result column="createtime" jdbcType="TIMESTAMP" property="createtime" />
+  <result column="count" jdbcType="INTEGER" property="count" />
+</resultMap>
+
+  
+<sql id="Base_Column_List">
+  id, cateid, pid, name, solr, pic, sevalue, istable, ismanual, createtime
+</sql>
+
+  
+<delete id="delete" parameterType="java.lang.Integer">
+  delete from t_specification
+  where id = #{id,jdbcType=INTEGER}
+</delete>
+
+  
+<insert id="insert" parameterType="com.net.system.model.Specification">
+  insert into t_specification (id, cateid, pid, 
+    name, solr, pic, sevalue, 
+    istable, ismanual, createtime
+    )
+  values (#{id,jdbcType=INTEGER}, #{cateid,jdbcType=VARCHAR}, #{pid,jdbcType=INTEGER}, 
+    #{name,jdbcType=VARCHAR}, #{solr,jdbcType=INTEGER}, #{pic,jdbcType=VARCHAR}, #{sevalue,jdbcType=VARCHAR}, 
+    #{istable,jdbcType=INTEGER}, #{ismanual,jdbcType=INTEGER}, #{createtime,jdbcType=TIMESTAMP}
+    )
+</insert>
+
+  
+<insert id="insertDynamic" parameterType="com.net.system.model.Specification">
+  insert into t_specification
+  <trim prefix="(" suffix=")" suffixOverrides=",">
+    <if test="id != null">
+      id,
+    </if>
+    <if test="cateid != null">
+      cateid,
+    </if>
+    <if test="pid != null">
+      pid,
+    </if>
+    <if test="name != null">
+      name,
+    </if>
+    <if test="solr != null">
+      solr,
+    </if>
+    <if test="pic != null">
+      pic,
+    </if>
+    <if test="sevalue != null">
+      sevalue,
+    </if>
+    <if test="istable != null">
+      istable,
+    </if>
+    <if test="ismanual != null">
+      ismanual,
+    </if>
+    <if test="createtime != null">
+      createtime,
+    </if>
+  </trim>
+  <trim prefix="values (" suffix=")" suffixOverrides=",">
+    <if test="id != null">
+      #{id,jdbcType=INTEGER},
+    </if>
+    <if test="cateid != null">
+      #{cateid,jdbcType=VARCHAR},
+    </if>
+    <if test="pid != null">
+      #{pid,jdbcType=INTEGER},
+    </if>
+    <if test="name != null">
+      #{name,jdbcType=VARCHAR},
+    </if>
+    <if test="solr != null">
+      #{solr,jdbcType=INTEGER},
+    </if>
+    <if test="pic != null">
+      #{pic,jdbcType=VARCHAR},
+    </if>
+    <if test="sevalue != null">
+      #{sevalue,jdbcType=VARCHAR},
+    </if>
+    <if test="istable != null">
+      #{istable,jdbcType=INTEGER},
+    </if>
+    <if test="ismanual != null">
+      #{ismanual,jdbcType=INTEGER},
+    </if>
+    <if test="createtime != null">
+      #{createtime,jdbcType=TIMESTAMP},
+    </if>
+  </trim>
+</insert>
+
+  
+<update id="updateDynamic" parameterType="com.net.system.model.Specification">
+  update t_specification
+  <set>
+    <if test="cateid != null">
+      cateid = #{cateid,jdbcType=VARCHAR},
+    </if>
+    <if test="pid != null">
+      pid = #{pid,jdbcType=INTEGER},
+    </if>
+    <if test="name != null">
+      name = #{name,jdbcType=VARCHAR},
+    </if>
+    <if test="solr != null">
+      solr = #{solr,jdbcType=INTEGER},
+    </if>
+    <if test="pic != null">
+      pic = #{pic,jdbcType=VARCHAR},
+    </if>
+    <if test="sevalue != null">
+      sevalue = #{sevalue,jdbcType=VARCHAR},
+    </if>
+    <if test="istable != null">
+      istable = #{istable,jdbcType=INTEGER},
+    </if>
+    <if test="ismanual != null">
+      ismanual = #{ismanual,jdbcType=INTEGER},
+    </if>
+    <if test="createtime != null">
+      createtime = #{createtime,jdbcType=TIMESTAMP},
+    </if>
+  </set>
+  where id = #{id,jdbcType=INTEGER}
+</update>
+
+  
+<update id="update" parameterType="com.net.system.model.Specification">
+  update t_specification
+  set cateid = #{cateid,jdbcType=VARCHAR},
+    pid = #{pid,jdbcType=INTEGER},
+    name = #{name,jdbcType=VARCHAR},
+    solr = #{solr,jdbcType=INTEGER},
+    pic = #{pic,jdbcType=VARCHAR},
+    sevalue = #{sevalue,jdbcType=VARCHAR},
+    istable = #{istable,jdbcType=INTEGER},
+    ismanual = #{ismanual,jdbcType=INTEGER},
+    createtime = #{createtime,jdbcType=TIMESTAMP}
+  where id = #{id,jdbcType=INTEGER}
+</update>
+
+  
+<select id="selectById" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+  select
+	<include refid="Base_Column_List" />
+  from  t_specification
+  where id = #{id,jdbcType=INTEGER}
+</select>
+
+  
+<sql id="findPageWithWhere">
+    <where> 1=1 
+	<if test="id != null" >
+	  and id = #{id,jdbcType=INTEGER}
+	</if>
+	<if test="cateid != null and cateid != ''" >
+	  and cateid = #{cateid,jdbcType=VARCHAR}
+	</if>
+	<if test="pid != null" >
+	  and pid = #{pid,jdbcType=INTEGER}
+	</if>
+	<if test="name != null and name != ''" >
+	  and name = #{name,jdbcType=VARCHAR}
+	</if>
+	<if test="solr != null" >
+	  and solr = #{solr,jdbcType=INTEGER}
+	</if>
+	<if test="pic != null and pic != ''" >
+	  and pic = #{pic,jdbcType=VARCHAR}
+	</if>
+	<if test="sevalue != null and sevalue != ''" >
+	  and sevalue = #{sevalue,jdbcType=VARCHAR}
+	</if>
+	<if test="istable != null" >
+	  and istable = #{istable,jdbcType=INTEGER}
+	</if>
+	<if test="ismanual != null" >
+	  and ismanual = #{ismanual,jdbcType=INTEGER}
+	</if>
+	<if test="createtime != null" >
+	  and createtime = #{createtime,jdbcType=TIMESTAMP}
+	</if>
+  </where>
+</sql>
+
+  
+<select id="findPageWithResult" parameterType="map" resultMap="BaseResultMap">
+ SELECT t.*,(SELECT COUNT(1) FROM t_specification s where s.cateId=t.f_cateid) count FROM t_category t  WHERE t.f_parentid=0
+</select>
+
+  
+<select id="findPageWithCount" parameterType="map" resultType="Integer">
+  select count(1)
+  from t_specification
+  <include refid="findPageWithWhere" />
+</select>
+
+</mapper>

@@ -1,0 +1,423 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.net.system.mapper.product.DiscountMapper">
+  
+<resultMap id="BaseResultMap" type="com.net.system.model.Discount">
+  <id column="id" jdbcType="VARCHAR" property="id" />
+  <result column="discountname" jdbcType="VARCHAR" property="discountname" />
+  <result column="introduction" jdbcType="VARCHAR" property="introduction" />
+  <result column="label" jdbcType="VARCHAR" property="label" />
+  <result column="minconsume" jdbcType="DECIMAL" property="minconsume" />
+  <result column="reduction" jdbcType="DECIMAL" property="reduction" />
+  <result column="type" jdbcType="VARCHAR" property="type" />
+  <result column="validperiod" jdbcType="INTEGER" property="validperiod" />
+  <result column="starttime" jdbcType="TIMESTAMP" property="starttime" />
+  <result column="endtime" jdbcType="TIMESTAMP" property="endtime" />
+  <result column="day" jdbcType="INTEGER" property="day" />
+  <result column="quantity" jdbcType="INTEGER" property="quantity" />
+  <result column="restricted" jdbcType="VARCHAR" property="restricted" />
+  <result column="categoryid" jdbcType="VARCHAR" property="categoryid" />
+  <result column="productid" jdbcType="VARCHAR" property="productid" />
+  <result column="redemptioncode" jdbcType="VARCHAR" property="redemptioncode" />
+  <result column="status" jdbcType="INTEGER" property="status" />
+  <result column="limitedcollar" jdbcType="INTEGER" property="limitedcollar" />
+  <result column="addTime" jdbcType="TIMESTAMP" property="addTime" />
+</resultMap>
+
+  
+<sql id="Base_Column_List">
+  id, discountname, introduction, label, minconsume, reduction, type, validperiod, 
+  starttime, endtime, day, quantity, restricted, categoryid, productid, redemptioncode, 
+  status, addTime,limitedcollar
+</sql>
+
+<sql id="Base_Column_User_List">
+  id, discountname, introduction, label, minconsume, reduction, type, 
+   restricted
+</sql>
+  
+<delete id="delete" parameterType="java.lang.String">
+  delete from t_discount
+  where id = #{id,jdbcType=VARCHAR}
+</delete>
+
+  
+<insert id="insert" parameterType="com.net.system.model.Discount">
+  insert into t_discount (id, discountname, introduction, 
+    label, minconsume, reduction, 
+    type, validperiod, starttime, 
+    endtime, day, quantity, 
+    restricted, categoryid, productid, 
+    redemptioncode, status, addTime,limitedcollar
+    )
+  values (#{id,jdbcType=VARCHAR}, #{discountname,jdbcType=VARCHAR}, #{introduction,jdbcType=VARCHAR}, 
+    #{label,jdbcType=VARCHAR}, #{minconsume,jdbcType=DECIMAL}, #{reduction,jdbcType=DECIMAL}, 
+    #{type,jdbcType=VARCHAR}, #{validperiod,jdbcType=INTEGER}, #{starttime,jdbcType=TIMESTAMP}, 
+    #{endtime,jdbcType=TIMESTAMP}, #{day,jdbcType=INTEGER}, #{quantity,jdbcType=INTEGER}, 
+    #{restricted,jdbcType=VARCHAR}, #{categoryid,jdbcType=VARCHAR}, #{productid,jdbcType=VARCHAR}, 
+    #{redemptioncode,jdbcType=VARCHAR}, #{status,jdbcType=INTEGER}, #{addTime,jdbcType=TIMESTAMP},#{limitedcollar,jdbcType=INTEGER}
+    )
+</insert>
+
+  
+<insert id="insertDynamic" parameterType="com.net.system.model.Discount">
+  insert into t_discount
+  <trim prefix="(" suffix=")" suffixOverrides=",">
+    <if test="id != null">
+      id,
+    </if>
+    <if test="discountname != null">
+      discountname,
+    </if>
+    <if test="introduction != null">
+      introduction,
+    </if>
+    <if test="label != null">
+      label,
+    </if>
+    <if test="minconsume != null">
+      minconsume,
+    </if>
+    <if test="reduction != null">
+      reduction,
+    </if>
+    <if test="type != null">
+      type,
+    </if>
+    <if test="validperiod != null">
+      validperiod,
+    </if>
+    <if test="starttime != null">
+      starttime,
+    </if>
+    <if test="endtime != null">
+      endtime,
+    </if>
+    <if test="day != null">
+      day,
+    </if>
+    <if test="quantity != null">
+      quantity,
+    </if>
+    <if test="restricted != null and restricted!=''">
+      restricted,
+    </if>
+    <if test="categoryid != null">
+      categoryid,
+    </if>
+    <if test="productid != null">
+      productid,
+    </if>
+    <if test="redemptioncode != null">
+      redemptioncode,
+    </if>
+    <if test="status != null">
+      status,
+    </if>
+    <if test="addTime != null">
+      addTime,
+    </if>
+    <if test="limitedcollar != null">
+      limitedcollar,
+    </if>
+  </trim>
+  <trim prefix="values (" suffix=")" suffixOverrides=",">
+    <if test="id != null">
+      #{id,jdbcType=VARCHAR},
+    </if>
+    <if test="discountname != null">
+      #{discountname,jdbcType=VARCHAR},
+    </if>
+    <if test="introduction != null">
+      #{introduction,jdbcType=VARCHAR},
+    </if>
+    <if test="label != null">
+      #{label,jdbcType=VARCHAR},
+    </if>
+    <if test="minconsume != null">
+      #{minconsume,jdbcType=DECIMAL},
+    </if>
+    <if test="reduction != null">
+      #{reduction,jdbcType=DECIMAL},
+    </if>
+    <if test="type != null">
+      #{type,jdbcType=VARCHAR},
+    </if>
+    <if test="validperiod != null">
+      #{validperiod,jdbcType=INTEGER},
+    </if>
+    <if test="starttime != null">
+      #{starttime,jdbcType=TIMESTAMP},
+    </if>
+    <if test="endtime != null">
+      #{endtime,jdbcType=TIMESTAMP},
+    </if>
+    <if test="day != null">
+      #{day,jdbcType=INTEGER},
+    </if>
+    <if test="quantity != null">
+      #{quantity,jdbcType=INTEGER},
+    </if>
+    <if test="restricted != null and restricted!=''">
+      #{restricted,jdbcType=VARCHAR},
+    </if>
+    <if test="categoryid != null">
+      #{categoryid,jdbcType=VARCHAR},
+    </if>
+    <if test="productid != null">
+      #{productid,jdbcType=VARCHAR},
+    </if>
+    <if test="redemptioncode != null">
+      #{redemptioncode,jdbcType=VARCHAR},
+    </if>
+    <if test="status != null">
+      #{status,jdbcType=INTEGER},
+    </if>
+    <if test="addTime != null">
+      #{addTime,jdbcType=TIMESTAMP},
+    </if>
+     <if test="limitedcollar != null">
+       #{limitedcollar,jdbcType=INTEGER},
+    </if>
+  </trim>
+</insert>
+
+  
+<update id="updateDynamic" parameterType="com.net.system.model.Discount">
+  update t_discount
+  <set>
+    <if test="discountname != null">
+      discountname = #{discountname,jdbcType=VARCHAR},
+    </if>
+    <if test="introduction != null">
+      introduction = #{introduction,jdbcType=VARCHAR},
+    </if>
+    <if test="label != null">
+      label = #{label,jdbcType=VARCHAR},
+    </if>
+    <if test="minconsume != null">
+      minconsume = #{minconsume,jdbcType=DECIMAL},
+    </if>
+    <if test="reduction != null">
+      reduction = #{reduction,jdbcType=DECIMAL},
+    </if>
+    <if test="type != null">
+      type = #{type,jdbcType=VARCHAR},
+    </if>
+    <if test="validperiod != null">
+      validperiod = #{validperiod,jdbcType=INTEGER},
+    </if>
+    <if test="starttime != null">
+      starttime = #{starttime,jdbcType=TIMESTAMP},
+    </if>
+    <if test="endtime != null">
+      endtime = #{endtime,jdbcType=TIMESTAMP},
+    </if>
+    <if test="day != null">
+      day = #{day,jdbcType=INTEGER},
+    </if>
+    <if test="quantity != null">
+      quantity = #{quantity,jdbcType=INTEGER},
+    </if>
+    <if test="restricted != null and restricted!=''">
+      restricted = #{restricted,jdbcType=VARCHAR},
+    </if>
+    <if test="categoryid != null">
+      categoryid = #{categoryid,jdbcType=VARCHAR},
+    </if>
+    <if test="productid != null">
+      productid = #{productid,jdbcType=VARCHAR},
+    </if>
+    <if test="redemptioncode != null">
+      redemptioncode = #{redemptioncode,jdbcType=VARCHAR},
+    </if>
+    <if test="status != null">
+      status = #{status,jdbcType=INTEGER},
+    </if>
+    <if test="addTime != null">
+      addTime = #{addTime,jdbcType=TIMESTAMP},
+    </if>
+    <if test="limitedcollar != null">
+      limitedcollar = #{limitedcollar,jdbcType=INTEGER},
+    </if>
+  </set>
+  where id = #{id,jdbcType=VARCHAR}
+</update>
+
+  
+<update id="update" parameterType="com.net.system.model.Discount">
+  update t_discount
+  set discountname = #{discountname,jdbcType=VARCHAR},
+    introduction = #{introduction,jdbcType=VARCHAR},
+    label = #{label,jdbcType=VARCHAR},
+    minconsume = #{minconsume,jdbcType=DECIMAL},
+    reduction = #{reduction,jdbcType=DECIMAL},
+    type = #{type,jdbcType=VARCHAR},
+    validperiod = #{validperiod,jdbcType=INTEGER},
+    starttime = #{starttime,jdbcType=TIMESTAMP},
+    endtime = #{endtime,jdbcType=TIMESTAMP},
+    day = #{day,jdbcType=INTEGER},
+    quantity = #{quantity,jdbcType=INTEGER},
+    restricted = #{restricted,jdbcType=VARCHAR},
+    categoryid = #{categoryid,jdbcType=VARCHAR},
+    productid = #{productid,jdbcType=VARCHAR},
+    redemptioncode = #{redemptioncode,jdbcType=VARCHAR},
+    status = #{status,jdbcType=INTEGER},
+    addTime = #{addTime,jdbcType=TIMESTAMP},
+    limitedcollar = #{limitedcollar,jdbcType=INTEGER}
+  where id = #{id,jdbcType=VARCHAR}
+</update>
+
+  
+<select id="selectById" parameterType="java.lang.String" resultMap="BaseResultMap">
+  select
+	<include refid="Base_Column_List" />
+  from  t_discount
+  where id = #{id,jdbcType=VARCHAR}
+</select>
+<select id="selectDiscountById" parameterType="java.lang.String" resultMap="BaseResultMap">
+  select
+	<include refid="Base_Column_User_List" />
+  from  t_discount
+  where id = #{id,jdbcType=VARCHAR}
+</select>
+  
+<sql id="findPageWithWhere">
+    <where> 1=1 
+	<if test="id != null and id != ''" >
+	  and id = #{id,jdbcType=VARCHAR}
+	</if>
+	<if test="discountname != null and discountname != ''" >
+	  and  discountname like concat('%',#{discountname},'%')
+	</if>
+	<if test="introduction != null and introduction != ''" >
+	  and introduction = #{introduction,jdbcType=VARCHAR}
+	</if>
+	<if test="label != null and label != ''" >
+	  and label = #{label,jdbcType=VARCHAR}
+	</if>
+	<if test="minconsume != null" >
+	  and minconsume = #{minconsume,jdbcType=DECIMAL}
+	</if>
+	<if test="reduction != null" >
+	  and reduction = #{reduction,jdbcType=DECIMAL}
+	</if>
+	<if test="type != null and type != ''" >
+	  and type = #{type,jdbcType=VARCHAR}
+	</if>
+	<if test="validperiod != null" >
+	  and validperiod = #{validperiod,jdbcType=INTEGER}
+	</if>
+	<if test="starttime != null" >
+	  and starttime = #{starttime,jdbcType=TIMESTAMP}
+	</if>
+	<if test="endtime != null" >
+	  and endtime = #{endtime,jdbcType=TIMESTAMP}
+	</if>
+	<if test="day != null" >
+	  and day = #{day,jdbcType=INTEGER}
+	</if>
+	<if test="quantity != null" >
+	  and quantity = #{quantity,jdbcType=INTEGER}
+	</if>
+	<if test="restricted != null and restricted!=''" >
+	  and restricted = #{restricted,jdbcType=VARCHAR}
+	</if>
+	<if test="categoryid != null and categoryid != ''" >
+	  and categoryid = #{categoryid,jdbcType=VARCHAR}
+	</if>
+	<if test="productid != null and productid != ''" >
+	  and productid = #{productid,jdbcType=VARCHAR}
+	</if>
+	<if test="redemptioncode != null and redemptioncode != ''" >
+	  and redemptioncode = #{redemptioncode,jdbcType=VARCHAR}
+	</if>
+	<if test="status != null and status!=''" >
+	  and status = #{status}
+	</if>
+	<if test="addTime != null" >
+	  and addTime = #{addTime,jdbcType=TIMESTAMP}
+	</if>
+  </where>
+</sql>
+
+  
+<select id="findPageWithResult" parameterType="map" resultMap="BaseResultMap">
+  select
+	id, discountname, introduction, label, minconsume, reduction, validperiod, 
+  starttime, endtime, day, quantity, categoryid, productid, redemptioncode, 
+  status, addTime,limitedcollar,s.f_item_name type,d.f_item_name restricted
+  from  t_discount t LEFT JOIN t_sys_item s ON t.type=s.f_item_num LEFT JOIN t_sys_item d ON t.restricted=d.f_item_num
+  <include refid="findPageWithWhere" />
+</select>
+
+  
+<select id="findPageWithCount" parameterType="map" resultType="Integer">
+  select count(1)
+  from t_discount
+  <include refid="findPageWithWhere" />
+</select>
+
+
+  <select id="selectMyDiscountList" parameterType="map" resultMap="BaseResultMap">
+        select
+            t.id,
+            t.discountName,
+            t.Introduction,
+            t.label,
+            t.minconsume,
+            t.reduction,
+            t.type,
+            t.validPeriod,
+            t.startTime,
+            u.invalidTime endTime,
+            t.day,
+            t.quantity,
+            t.restricted,
+            t.categoryid,
+            t.productid,
+            t.redemptionCode,
+            u.status,
+            u.collectionTime addTime,
+            t.limitedcollar
+        from t_discount t
+        left join t_discount_user u on t.id=u.discountId
+        <where>
+             t.status=1 and u.status in (1,3)
+             and u.userid = #{userid}
+        </where>
+        order by t.addTime desc
+  </select>
+  <select id="selectIsReceiveDiscountList" parameterType="map" resultMap="BaseResultMap">
+        select
+            t.id,
+            t.discountName,
+            t.Introduction,
+            t.label,
+            t.minconsume,
+            t.reduction,
+            t.type,
+            t.validPeriod,
+            t.startTime,
+            t.endTime,
+            t.day,
+            t.quantity,
+            t.restricted,
+            t.categoryid,
+            t.productid,
+            t.redemptionCode,
+            t.status,
+            t.addTime,
+            t.limitedcollar
+        from t_discount t
+        left join t_sys_item s on t.type=s.f_item_num
+        where
+        t.status=1
+        and (SELECT COUNT(*) FROM  t_discount_user u  WHERE u.userid = #{userid} AND u.discountId=t.id) &lt; t.limitedcollar
+        and (SELECT COUNT(*) FROM  t_discount_user u  WHERE u.discountId = t.id) &lt;= t.quantity
+  </select>
+
+  <insert id="insertDiscount">
+
+  </insert>
+</mapper>

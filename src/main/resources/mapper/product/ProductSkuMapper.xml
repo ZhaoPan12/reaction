@@ -1,0 +1,208 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.net.system.mapper.product.ProductSkuMapper">
+  
+<resultMap id="BaseResultMap" type="com.net.system.model.ProductSku">
+  <id column="sku_id" jdbcType="VARCHAR" property="skuId" />
+  <result column="product_id" jdbcType="VARCHAR" property="productId" />
+  <result column="attr_symbol_path" jdbcType="VARCHAR" property="attrSymbolPath" />
+  <result column="price" jdbcType="DECIMAL" property="price" />
+  <result column="stock" jdbcType="INTEGER" property="stock" />
+  <result column="warning_stock" jdbcType="INTEGER" property="warningStock" />
+  <result column="custom_title" jdbcType="VARCHAR" property="customTitle" />
+  <result column="custom_value" jdbcType="VARCHAR" property="customValue" />
+   <result column="describe" jdbcType="VARCHAR" property="describe" />
+  
+</resultMap>
+
+  
+<sql id="Base_Column_List">
+  sku_id, product_id, attr_symbol_path, price, stock, warning_stock, custom_title, 
+  custom_value,`describe`
+</sql>
+
+  
+<delete id="delete" parameterType="String">
+  delete from t_product_sku
+  where sku_id = #{skuId}
+</delete>
+
+  
+<delete id="deleteByProductId" parameterType="String">
+  delete from t_product_sku
+  where product_id = #{productId}
+</delete>
+
+  
+<insert id="insert" parameterType="com.net.system.model.ProductSku">
+  insert into t_product_sku (sku_id, product_id, attr_symbol_path, 
+    price, stock, warning_stock, 
+    custom_title, custom_value,describe)
+  values (#{skuId}, #{productId,jdbcType=VARCHAR}, #{attrSymbolPath,jdbcType=VARCHAR}, 
+    #{price,jdbcType=DECIMAL}, #{stock,jdbcType=INTEGER}, #{warningStock,jdbcType=INTEGER}, 
+    #{customTitle,jdbcType=VARCHAR}, #{customValue,jdbcType=VARCHAR},#{describe})
+</insert>
+
+  
+<insert id="insertDynamic" parameterType="com.net.system.model.ProductSku">
+  insert into t_product_sku
+  <trim prefix="(" suffix=")" suffixOverrides=",">
+    <if test="skuId != null">
+      sku_id,
+    </if>
+    <if test="productId != null">
+      product_id,
+    </if>
+    <if test="attrSymbolPath != null">
+      attr_symbol_path,
+    </if>
+    <if test="price != null">
+      price,
+    </if>
+    <if test="stock != null">
+      stock,
+    </if>
+    <if test="warningStock != null">
+      warning_stock,
+    </if>
+    <if test="customTitle != null">
+      custom_title,
+    </if>
+    <if test="customValue != null">
+      custom_value,
+    </if>
+    <if test="describe != null">
+      `describe`,
+    </if>
+    
+  </trim>
+  <trim prefix="values (" suffix=")" suffixOverrides=",">
+    <if test="skuId != null">
+      #{skuId},
+    </if>
+    <if test="productId != null">
+      #{productId,jdbcType=VARCHAR},
+    </if>
+    <if test="attrSymbolPath != null">
+      #{attrSymbolPath,jdbcType=VARCHAR},
+    </if>
+    <if test="price != null">
+      #{price,jdbcType=DECIMAL},
+    </if>
+    <if test="stock != null">
+      #{stock,jdbcType=INTEGER},
+    </if>
+    <if test="warningStock != null">
+      #{warningStock,jdbcType=INTEGER},
+    </if>
+    <if test="customTitle != null">
+      #{customTitle,jdbcType=VARCHAR},
+    </if>
+    <if test="customValue != null">
+      #{customValue,jdbcType=VARCHAR},
+    </if>
+    <if test="describe != null">
+      #{describe,jdbcType=VARCHAR},
+    </if>
+  </trim>
+</insert>
+
+  
+<update id="updateDynamic" parameterType="com.net.system.model.ProductSku">
+  update t_product_sku
+  <set>
+    <if test="productId != null">
+      product_id = #{productId,jdbcType=VARCHAR},
+    </if>
+    <if test="attrSymbolPath != null">
+      attr_symbol_path = #{attrSymbolPath,jdbcType=VARCHAR},
+    </if>
+    <if test="price != null">
+      price = #{price,jdbcType=DECIMAL},
+    </if>
+    <if test="stock != null">
+      stock = #{stock,jdbcType=INTEGER},
+    </if>
+    <if test="warningStock != null">
+      warning_stock = #{warningStock,jdbcType=INTEGER},
+    </if>
+    <if test="customTitle != null">
+      custom_title = #{customTitle,jdbcType=VARCHAR},
+    </if>
+    <if test="customValue != null">
+      custom_value = #{customValue,jdbcType=VARCHAR},
+    </if>
+    <if test="describe != null">
+      `describe` = #{describe,jdbcType=VARCHAR},
+    </if>
+  </set>
+  where sku_id = #{skuId}
+</update>
+
+
+  
+<update id="returnStock" parameterType="com.net.system.model.OrderProduct">
+  update t_product_sku
+  set 
+    stock = (stock+#{quantity})
+  where sku_id = #{sku}
+</update>
+
+<update id="reduceStock" parameterType="com.net.system.model.OrderProduct">
+  update t_product_sku
+  set
+    stock = (stock-#{quantity})
+  where sku_id = #{sku}
+</update>
+  
+<select id="selectBySkuId" parameterType="String" resultMap="BaseResultMap">
+  select
+	<include refid="Base_Column_List" />
+  from  t_product_sku
+  where sku_id = #{skuId}
+</select>
+
+  
+<sql id="findPageWithWhere">
+    <where> 1=1 
+	<if test="skuId != null" >
+	  and sku_id = #{skuId}
+	</if>
+	<if test="productId != null and productId != ''" >
+	  and product_id = #{productId,jdbcType=VARCHAR}
+	</if>
+	<if test="attrSymbolPath != null and attrSymbolPath != ''" >
+	  and attr_symbol_path = #{attrSymbolPath,jdbcType=VARCHAR}
+	</if>
+	<if test="price != null" >
+	  and price = #{price,jdbcType=DECIMAL}
+	</if>
+	<if test="stock != null" >
+	  and stock = #{stock,jdbcType=INTEGER}
+	</if>
+	<if test="warningStock != null" >
+	  and warning_stock = #{warningStock,jdbcType=INTEGER}
+	</if>
+	<if test="customTitle != null and customTitle != ''" >
+	  and custom_title = #{customTitle,jdbcType=VARCHAR}
+	</if>
+	<if test="customValue != null and customValue != ''" >
+	  and custom_value = #{customValue,jdbcType=VARCHAR}
+	</if>
+  </where>
+</sql>
+
+  
+<select id="findPageWithResult" parameterType="Map" resultMap="BaseResultMap">
+  select
+	<include refid="Base_Column_List" />
+  from  t_product_sku
+  <include refid="findPageWithWhere" />
+</select>
+
+
+
+  
+
+
+</mapper>

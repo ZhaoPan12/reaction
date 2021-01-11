@@ -1,0 +1,262 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.net.system.mapper.cardpack.WriteOffMapper">
+  
+<resultMap id="BaseResultMap" type="com.net.system.model.WriteOff">
+  <id column="id" jdbcType="VARCHAR" property="id" />
+  <result column="reqid" jdbcType="VARCHAR" property="reqid" />
+  <result column="userid" jdbcType="INTEGER" property="userid" />
+  <result column="rightcode" jdbcType="VARCHAR" property="rightcode" />
+  <result column="rightname" jdbcType="VARCHAR" property="rightname" />
+  <result column="checktime" jdbcType="TIMESTAMP" property="checktime" />
+  <result column="checktype" jdbcType="VARCHAR" property="checktype" />
+  <result column="machinetype" jdbcType="VARCHAR" property="machinetype" />
+  <result column="vouchertype" jdbcType="VARCHAR" property="vouchertype" />
+  <result column="checkno" jdbcType="VARCHAR" property="checkno" />
+  <result column="channelid" jdbcType="VARCHAR" property="channelid" />
+</resultMap>
+<resultMap id="BaseResultMapVo" type="com.net.system.model.vo.WriteOffVo">
+  <result column="rightDtlCode" jdbcType="VARCHAR" property="rightDtlCode" />
+  <result column="rightDtlName" jdbcType="VARCHAR" property="rightDtlName" />
+  <result column="checkTime"  property="checkTime" />
+  <result column="checkType" jdbcType="VARCHAR" property="checkType" />
+  <result column="machineType" jdbcType="VARCHAR" property="machineType" />
+  <result column="voucherType" jdbcType="VARCHAR" property="voucherType" />
+  <result column="checkNo" jdbcType="VARCHAR" property="checkNo" />
+  <result column="orderNo" jdbcType="VARCHAR" property="orderNo" />
+</resultMap>
+  
+<sql id="Base_Column_List">
+  id, reqid, userid, rightcode, rightname, checktime, checktype, machinetype, vouchertype, 
+  checkno, channelid,orderNo
+</sql>
+
+  
+<delete id="delete" parameterType="java.lang.String">
+  delete from t_write_off
+  where id = #{id,jdbcType=VARCHAR}
+</delete>
+
+<select id="findWithResult" parameterType="com.net.system.model.WriteOff" resultMap="BaseResultMapVo">
+select
+	 rightcode rightDtlCode, rightname rightDtlName,  checkType, machineType, voucherType, DATE_FORMAT(checkTime,'%Y%m%d%H%i%s') checkTime,
+  checkNo,orderNo
+  from  t_write_off
+  where channelid=#{channelid} and orderNo=#{orderNo}
+</select>
+
+<select id="selectByWriteOff" parameterType="com.net.system.model.WriteOff" resultMap="BaseResultMap">
+  select
+	<include refid="Base_Column_List" />
+  from  t_write_off
+  where orderNo=#{orderNo} AND reqid=#{reqid}
+</select>
+<insert id="insert" parameterType="com.net.system.model.WriteOff">
+  insert into t_write_off (id, reqid, userid, 
+    rightcode, rightname, checktime, 
+    checktype, machinetype, vouchertype, 
+    checkno, channelid)
+  values (#{id,jdbcType=VARCHAR}, #{reqid,jdbcType=VARCHAR}, #{userid,jdbcType=INTEGER}, 
+    #{rightcode,jdbcType=VARCHAR}, #{rightname,jdbcType=VARCHAR}, #{checktime,jdbcType=TIMESTAMP}, 
+    #{checktype,jdbcType=VARCHAR}, #{machinetype,jdbcType=VARCHAR}, #{vouchertype,jdbcType=VARCHAR}, 
+    #{checkno,jdbcType=VARCHAR}, #{channelid,jdbcType=VARCHAR})
+</insert>
+
+  
+<insert id="insertDynamic" parameterType="com.net.system.model.WriteOff">
+  insert into t_write_off
+  <trim prefix="(" suffix=")" suffixOverrides=",">
+    <if test="id != null">
+      id,
+    </if>
+    <if test="reqid != null">
+      reqid,
+    </if>
+    <if test="userid != null">
+      userid,
+    </if>
+    <if test="rightcode != null">
+      rightcode,
+    </if>
+    <if test="rightname != null">
+      rightname,
+    </if>
+    <if test="checktime != null">
+      checktime,
+    </if>
+    <if test="checktype != null">
+      checktype,
+    </if>
+    <if test="machinetype != null">
+      machinetype,
+    </if>
+    <if test="vouchertype != null">
+      vouchertype,
+    </if>
+    <if test="checkno != null">
+      checkno,
+    </if>
+    <if test="channelid != null">
+      channelid,
+    </if>
+    <if test="orderNo !=null">
+     orderNo,
+    </if>
+  </trim>
+  <trim prefix="values (" suffix=")" suffixOverrides=",">
+    <if test="id != null">
+      #{id,jdbcType=VARCHAR},
+    </if>
+    <if test="reqid != null">
+      #{reqid,jdbcType=VARCHAR},
+    </if>
+    <if test="userid != null">
+      #{userid,jdbcType=INTEGER},
+    </if>
+    <if test="rightcode != null">
+      #{rightcode,jdbcType=VARCHAR},
+    </if>
+    <if test="rightname != null">
+      #{rightname,jdbcType=VARCHAR},
+    </if>
+    <if test="checktime != null">
+      #{checktime,jdbcType=TIMESTAMP},
+    </if>
+    <if test="checktype != null">
+      #{checktype,jdbcType=VARCHAR},
+    </if>
+    <if test="machinetype != null">
+      #{machinetype,jdbcType=VARCHAR},
+    </if>
+    <if test="vouchertype != null">
+      #{vouchertype,jdbcType=VARCHAR},
+    </if>
+    <if test="checkno != null">
+      #{checkno,jdbcType=VARCHAR},
+    </if>
+    <if test="channelid != null">
+      #{channelid,jdbcType=VARCHAR},
+    </if>
+     <if test="orderNo !=null">
+       #{orderNo,jdbcType=VARCHAR},
+    </if>
+  </trim>
+</insert>
+
+  
+<update id="updateDynamic" parameterType="com.net.system.model.WriteOff">
+  update t_write_off
+  <set>
+    <if test="reqid != null">
+      reqid = #{reqid,jdbcType=VARCHAR},
+    </if>
+    <if test="userid != null">
+      userid = #{userid,jdbcType=INTEGER},
+    </if>
+    <if test="rightcode != null">
+      rightcode = #{rightcode,jdbcType=VARCHAR},
+    </if>
+    <if test="rightname != null">
+      rightname = #{rightname,jdbcType=VARCHAR},
+    </if>
+    <if test="checktime != null">
+      checktime = #{checktime,jdbcType=TIMESTAMP},
+    </if>
+    <if test="checktype != null">
+      checktype = #{checktype,jdbcType=VARCHAR},
+    </if>
+    <if test="machinetype != null">
+      machinetype = #{machinetype,jdbcType=VARCHAR},
+    </if>
+    <if test="vouchertype != null">
+      vouchertype = #{vouchertype,jdbcType=VARCHAR},
+    </if>
+    <if test="checkno != null">
+      checkno = #{checkno,jdbcType=VARCHAR},
+    </if>
+    <if test="channelid != null">
+      channelid = #{channelid,jdbcType=VARCHAR},
+    </if>
+  </set>
+  where id = #{id,jdbcType=VARCHAR}
+</update>
+
+  
+<update id="update" parameterType="com.net.system.model.WriteOff">
+  update t_write_off
+  set reqid = #{reqid,jdbcType=VARCHAR},
+    userid = #{userid,jdbcType=INTEGER},
+    rightcode = #{rightcode,jdbcType=VARCHAR},
+    rightname = #{rightname,jdbcType=VARCHAR},
+    checktime = #{checktime,jdbcType=TIMESTAMP},
+    checktype = #{checktype,jdbcType=VARCHAR},
+    machinetype = #{machinetype,jdbcType=VARCHAR},
+    vouchertype = #{vouchertype,jdbcType=VARCHAR},
+    checkno = #{checkno,jdbcType=VARCHAR},
+    channelid = #{channelid,jdbcType=VARCHAR}
+  where id = #{id,jdbcType=VARCHAR}
+</update>
+
+  
+<select id="selectById" parameterType="map" resultMap="BaseResultMap">
+  select
+	<include refid="Base_Column_List" />
+  from  t_write_off
+  where reqid = #{reqId,jdbcType=VARCHAR}
+</select>
+
+  
+<sql id="findPageWithWhere">
+    <where> 1=1 
+	<if test="id != null and id != ''" >
+	  and id = #{id,jdbcType=VARCHAR}
+	</if>
+	<if test="reqid != null and reqid != ''" >
+	  and reqid = #{reqid,jdbcType=VARCHAR}
+	</if>
+	<if test="userid != null" >
+	  and userid = #{userid,jdbcType=INTEGER}
+	</if>
+	<if test="rightcode != null and rightcode != ''" >
+	  and rightcode = #{rightcode,jdbcType=VARCHAR}
+	</if>
+	<if test="rightname != null and rightname != ''" >
+	  and rightname = #{rightname,jdbcType=VARCHAR}
+	</if>
+	<if test="checktime != null" >
+	  and checktime = #{checktime,jdbcType=TIMESTAMP}
+	</if>
+	<if test="checktype != null and checktype != ''" >
+	  and checktype = #{checktype,jdbcType=VARCHAR}
+	</if>
+	<if test="machinetype != null and machinetype != ''" >
+	  and machinetype = #{machinetype,jdbcType=VARCHAR}
+	</if>
+	<if test="vouchertype != null and vouchertype != ''" >
+	  and vouchertype = #{vouchertype,jdbcType=VARCHAR}
+	</if>
+	<if test="checkno != null and checkno != ''" >
+	  and checkno = #{checkno,jdbcType=VARCHAR}
+	</if>
+	<if test="channelid != null and channelid != ''" >
+	  and channelid = #{channelid,jdbcType=VARCHAR}
+	</if>
+  </where>
+</sql>
+
+  
+<select id="findPageWithResult" parameterType="map" resultMap="BaseResultMap">
+  select
+	<include refid="Base_Column_List" />
+  from  t_write_off
+  <include refid="findPageWithWhere" />
+</select>
+
+  
+<select id="findPageWithCount" parameterType="map" resultType="Integer">
+  select count(1)
+  from t_write_off
+  <include refid="findPageWithWhere" />
+</select>
+
+</mapper>

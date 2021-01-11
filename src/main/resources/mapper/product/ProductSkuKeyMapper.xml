@@ -1,0 +1,176 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper
+	namespace="com.net.system.mapper.product.ProductSkuKeyMapper">
+
+	<resultMap id="BaseResultMap"
+		type="com.net.system.model.ProductSkuKey">
+		<id column="id" jdbcType="INTEGER" property="id" />
+		<result column="name" jdbcType="VARCHAR" property="name" />
+		<result column="sort" jdbcType="INTEGER" property="sort" />
+		<result column="product_id" jdbcType="VARCHAR"
+			property="productId" />
+	</resultMap>
+
+    	
+	<resultMap id="BaseResultMapVo"
+		type="com.net.system.model.vo.ProductSkuKeyVo">
+		<id column="id" jdbcType="INTEGER" property="id" />
+		<result column="name" jdbcType="VARCHAR" property="name" />
+		<result column="sort" jdbcType="INTEGER" property="sort" />
+		<result column="product_id" jdbcType="VARCHAR"
+			property="productId" />
+		<collection property="valList"
+			ofType="com.net.system.model.ProductSkuVal" select="findValByKeyId"
+			column="{attrId = id}" />
+	</resultMap>
+
+	<resultMap id="BaseResultMapVal"
+		type="com.net.system.model.ProductSkuVal">
+		<id column="id" jdbcType="INTEGER" property="id" />
+		<result column="attr_key_id" jdbcType="INTEGER"
+			property="attrKeyId" />
+		<result column="name" jdbcType="VARCHAR" property="name" />
+		<result column="sort" jdbcType="INTEGER" property="sort" />
+	</resultMap>
+
+
+
+	<select id="findValByKeyId" resultMap="BaseResultMapVal">
+		select * from t_product_sku_val where attr_key_id=#{attrId} order by sort desc
+	</select>
+
+
+
+	<sql id="Base_Column_List">
+		id, name, sort,product_id
+	</sql>
+
+
+	<delete id="delete" parameterType="java.lang.Integer">
+		delete from t_product_sku_key
+		where id = #{id,jdbcType=INTEGER}
+	</delete>
+
+
+	<insert id="insert"
+		parameterType="com.net.system.model.ProductSkuKey"
+		useGeneratedKeys="true" keyProperty="id">
+		insert into t_product_sku_key (name, sort,product_id
+		)
+		values (#{name,jdbcType=VARCHAR}, #{sort,jdbcType=INTEGER},#{productId}
+		)
+	</insert>
+
+
+	<insert id="insertDynamic"
+		parameterType="com.net.system.model.ProductSkuKey">
+		insert into t_product_sku_key
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				id,
+			</if>
+			<if test="name != null">
+				name,
+			</if>
+			<if test="sort != null">
+				sort,
+			</if>
+			<if test="productId != null">
+				product_id,
+			</if>
+
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				#{id,jdbcType=INTEGER},
+			</if>
+			<if test="name != null">
+				#{name,jdbcType=VARCHAR},
+			</if>
+			<if test="sort != null">
+				#{sort,jdbcType=INTEGER},
+			</if>
+			<if test="productId != null">
+				#{productId},
+			</if>
+
+		</trim>
+	</insert>
+
+
+	<update id="updateDynamic"
+		parameterType="com.net.system.model.ProductSkuKey">
+		update t_product_sku_key
+		<set>
+			<if test="name != null">
+				name = #{name,jdbcType=VARCHAR},
+			</if>
+			<if test="sort != null">
+				sort = #{sort,jdbcType=INTEGER},
+			</if>
+		</set>
+		where id = #{id,jdbcType=INTEGER}
+	</update>
+
+
+	<update id="update"
+		parameterType="com.net.system.model.ProductSkuKey">
+		update t_product_sku_key
+		set name = #{name,jdbcType=VARCHAR},
+		sort = #{sort,jdbcType=INTEGER}
+		where id = #{id,jdbcType=INTEGER}
+	</update>
+
+
+	<select id="selectById" parameterType="java.lang.Integer"
+		resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from t_product_sku_key
+		where id = #{id,jdbcType=INTEGER}
+	</select>
+
+
+	<sql id="findPageWithWhere">
+		<where>
+			1=1
+			<if test="id != null">
+				and id = #{id,jdbcType=INTEGER}
+			</if>
+			<if test="name != null and name != ''">
+				and name = #{name,jdbcType=VARCHAR}
+			</if>
+			<if test="sort != null">
+				and sort = #{sort,jdbcType=INTEGER}
+			</if>
+			<if test="productId != null">
+				and product_id = #{productId}
+			</if>
+
+		</where>
+	</sql>
+
+
+	<select id="findPageWithResult" parameterType="Map"
+		resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from t_product_sku_key
+		<include refid="findPageWithWhere" />
+	</select>
+
+
+	<select id="findSpecsByProductId"
+		parameterType="com.net.system.model.ProductSkuKey"
+		resultMap="BaseResultMapVo">
+		select
+		<include refid="Base_Column_List" />
+		from t_product_sku_key
+		<include refid="findPageWithWhere" />
+		order by sort asc
+	</select>
+
+
+
+</mapper>

@@ -1,0 +1,219 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.net.system.mapper.product.CarouselMapper">
+  
+<resultMap id="BaseResultMap" type="com.net.system.model.Carousel">
+  <id column="id" jdbcType="VARCHAR" property="id" />
+  <result column="image_url" jdbcType="VARCHAR" property="imageUrl" />
+  <result column="background_color" jdbcType="VARCHAR" property="backgroundColor" />
+  <result column="proid" jdbcType="VARCHAR" property="proid" />
+  <result column="cateid" jdbcType="VARCHAR" property="cateid" />
+  <result column="type" jdbcType="INTEGER" property="type" />
+  <result column="sort" jdbcType="INTEGER" property="sort" />
+  <result column="is_show" jdbcType="INTEGER" property="isShow" />
+  <result column="address" jdbcType="VARCHAR" property="address" />
+  <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+  <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+  
+</resultMap>
+
+  
+<sql id="Base_Column_List">
+  id, image_url, background_color,address, proid, cateid, type, sort, is_show, create_time, 
+  update_time
+</sql>
+
+  
+<delete id="delete" parameterType="java.lang.String">
+  delete from t_carousel
+  where id = #{id,jdbcType=VARCHAR}
+</delete>
+
+  
+<insert id="insert" parameterType="com.net.system.model.Carousel">
+  insert into t_carousel (id, image_url, background_color, 
+    proid, cateid, type, 
+    sort, is_show, create_time, 
+    update_time,address)
+  values (#{id,jdbcType=VARCHAR}, #{imageUrl,jdbcType=VARCHAR}, #{backgroundColor,jdbcType=VARCHAR}, 
+    #{proid,jdbcType=VARCHAR}, #{cateid,jdbcType=VARCHAR}, #{type,jdbcType=INTEGER}, 
+    #{sort,jdbcType=INTEGER}, #{isShow,jdbcType=INTEGER}, #{createTime,jdbcType=TIMESTAMP}, 
+    #{updateTime,jdbcType=TIMESTAMP},#{address})
+</insert>
+
+  
+<insert id="insertDynamic" parameterType="com.net.system.model.Carousel">
+  insert into t_carousel
+  <trim prefix="(" suffix=")" suffixOverrides=",">
+    <if test="id != null">
+      id,
+    </if>
+    <if test="imageUrl != null">
+      image_url,
+    </if>
+    <if test="backgroundColor != null">
+      background_color,
+    </if>
+    <if test="proid != null">
+      proid,
+    </if>
+    <if test="cateid != null">
+      cateid,
+    </if>
+    <if test="type != null">
+      type,
+    </if>
+    <if test="sort != null">
+      sort,
+    </if>
+    <if test="isShow != null">
+      is_show,
+    </if>
+    <if test="createTime != null">
+      create_time,
+    </if>
+    <if test="updateTime != null">
+      update_time,
+    </if>
+    
+    
+  </trim>
+  <trim prefix="values (" suffix=")" suffixOverrides=",">
+    <if test="id != null">
+      #{id,jdbcType=VARCHAR},
+    </if>
+    <if test="imageUrl != null">
+      #{imageUrl,jdbcType=VARCHAR},
+    </if>
+    <if test="backgroundColor != null">
+      #{backgroundColor,jdbcType=VARCHAR},
+    </if>
+    <if test="proid != null">
+      #{proid,jdbcType=VARCHAR},
+    </if>
+    <if test="cateid != null">
+      #{cateid,jdbcType=VARCHAR},
+    </if>
+    <if test="type != null">
+      #{type,jdbcType=INTEGER},
+    </if>
+    <if test="sort != null">
+      #{sort,jdbcType=INTEGER},
+    </if>
+    <if test="isShow != null">
+      #{isShow,jdbcType=INTEGER},
+    </if>
+    <if test="createTime != null">
+      #{createTime,jdbcType=TIMESTAMP},
+    </if>
+    <if test="updateTime != null">
+      #{updateTime,jdbcType=TIMESTAMP},
+    </if>
+  </trim>
+</insert>
+
+  
+<update id="updateDynamic" parameterType="com.net.system.model.Carousel">
+  update t_carousel
+  <set>
+    <if test="imageUrl != null">
+      image_url = #{imageUrl,jdbcType=VARCHAR},
+    </if>
+    <if test="backgroundColor != null">
+      background_color = #{backgroundColor,jdbcType=VARCHAR},
+    </if>
+    <if test="proid != null">
+      proid = #{proid,jdbcType=VARCHAR},
+    </if>
+    <if test="cateid != null">
+      cateid = #{cateid,jdbcType=VARCHAR},
+    </if>
+    <if test="type != null">
+      type = #{type,jdbcType=INTEGER},
+    </if>
+    <if test="sort != null">
+      sort = #{sort,jdbcType=INTEGER},
+    </if>
+    <if test="isShow != null">
+      is_show = #{isShow,jdbcType=INTEGER},
+    </if>
+    <if test="createTime != null">
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+    </if>
+    <if test="updateTime != null">
+      update_time = #{updateTime,jdbcType=TIMESTAMP},
+    </if>
+     <if test="address != null and address != ''">
+      address = #{address},
+    </if>
+    
+  </set>
+  where id = #{id,jdbcType=VARCHAR}
+</update>
+
+  
+<update id="update" parameterType="com.net.system.model.Carousel">
+  update t_carousel
+  set image_url = #{imageUrl,jdbcType=VARCHAR},
+    background_color = #{backgroundColor,jdbcType=VARCHAR},
+    proid = #{proid,jdbcType=VARCHAR},
+    cateid = #{cateid,jdbcType=VARCHAR},
+    type = #{type,jdbcType=INTEGER},
+    address = #{address},
+    is_show = #{isShow,jdbcType=INTEGER},
+    update_time = #{updateTime,jdbcType=TIMESTAMP}
+  where id = #{id,jdbcType=VARCHAR}
+</update>
+
+  
+<select id="selectById" parameterType="java.lang.String" resultMap="BaseResultMap">
+  select
+	<include refid="Base_Column_List" />
+  from  t_carousel
+  where id = #{id,jdbcType=VARCHAR}
+</select>
+
+  
+<sql id="findPageWithWhere">
+    <where> 1=1 
+	
+	<if test="proid != null and proid != ''" >
+	  and proid = #{proid,jdbcType=VARCHAR}
+	</if>
+	<if test="cateid != null and cateid != ''" >
+	  and cateid = #{cateid,jdbcType=VARCHAR}
+	</if>
+	<if test="type != null and type!=''" >
+	  and type = #{type}
+	</if>
+	<if test="sort != null" >
+	  and sort = #{sort,jdbcType=INTEGER}
+	</if>
+	<if test="isShow != null and isShow!=''" >
+	  and is_show = #{isShow}
+	</if>
+	<if test="createTime != null" >
+	  and create_time = #{createTime,jdbcType=TIMESTAMP}
+	</if>
+	<if test="updateTime != null" >
+	  and update_time = #{updateTime,jdbcType=TIMESTAMP}
+	</if>
+  </where>
+</sql>
+
+  
+<select id="findPageWithResult" parameterType="map" resultMap="BaseResultMap">
+  select
+	<include refid="Base_Column_List" />
+  from  t_carousel
+  <include refid="findPageWithWhere" />
+</select>
+
+  
+<select id="findPageWithCount" parameterType="map" resultType="Integer">
+  select count(1)
+  from t_carousel
+  <include refid="findPageWithWhere" />
+</select>
+
+</mapper>

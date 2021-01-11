@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <title>商品新增</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport"
+          content="width=device-width,user-scalable=yes, minimum-scale=0.4, initial-scale=0.8,target-densitydpi=low-dpi"/>
+    <link rel="shortcut icon" type="image/x-icon" th:href="@{/favicon.ico}"/>
+    <link rel="stylesheet" th:href="@{/lib/layui/css/layui.css}">
+    <link rel="stylesheet" th:href="@{/css/common.css}">
+    <link rel="stylesheet" th:href="@{/css/animate.min.css}">
+    <link rel="stylesheet" th:href="@{/lib/layui/extend/formSelects-v4.css}" />
+</head>
+<style>
+.layui-upload-img { width: 90px; height: 90px; margin: 0; }
+.pic-more { width:100%; left; margin: 10px 0px 0px 0px;}
+.pic-more li { width:90px; float: left; margin-right: 5px;}
+.pic-more li .layui-input { display: initial; }
+.pic-more li a { position: absolute; top: 0; display: block; }
+.pic-more li a i { font-size: 24px; background-color: #008800; }   
+#slide-pc-priview .item_img img{ width: 90px; height: 90px;}
+#slide-pc-priview li{position: relative;}
+#slide-pc-priview li .operate{ color: #000; display: none;}
+#slide-pc-priview li .toleft{ position: absolute;top: 40px; left: 1px; cursor:pointer;}
+#slide-pc-priview li .toright{ position: absolute;top: 40px; right: 1px;cursor:pointer;}
+#slide-pc-priview li .close{position: absolute;top: 5px; right: 5px;cursor:pointer;}
+#slide-pc-priview li:hover .operate{ display: block;}   
+.layui-form-label{
+	width:110px;
+}
+ .tox .tox-dialog{
+        border: none;
+     }
+    .tox .tox-dialog,
+    .tox .tox-button,
+    .tox .tox-textarea,
+    .tox .tox-textfield,
+    .tox .tox-selectfield select,
+    .tox .tox-toolbar-textfield{
+        border-radius: 0;
+    }
+    .tox .tox-dialog-wrap__backdrop{
+        background-color: rgba(0, 0, 0, .3);
+    }
+    .layui-form-item .layui-input-inline {
+ 	   width: 250px;
+}
+.next-tag-medium{
+    margin: 0 8px 0 0;
+    display: inline-block;
+    background: #f9f9f9;
+    width: 90px;
+    height: 80px;
+}
+.select-img {
+    width: 36px;
+    height: 36px;
+    position: relative;
+    top: 15px;
+    left: 25px;
+}
+.NodeType_2iyIp .next-tag-medium {
+    border: 1px solid #d3d5d5;
+    border-radius: 0;
+    position: relative;
+}
+.next-tag-checkable{
+	color: #0070cc;
+	border:1px solid #0070cc;
+}
+.select-text {
+    font-family: PingFangSC-Regular;
+    font-size: 12px;
+    text-align: center;
+    line-height: 20px;
+    position: relative;
+    top: 15px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+.layui-input{
+    display: block;
+    padding-left: 10px;
+}
+</style>
+<body>
+    <div class="z-body animated fadeIn">
+   <form class="layui-form" action="return false" id="demofrom" method="post" >
+   <input type="hidden" th:value="${fRelatedId}" name="fRelatedId">
+  	 <div id="tab">
+  	 	
+	 </div>
+	  <div class="layui-form-item">
+	    <div class="layui-input-inline">
+	      <button type="button" class="layui-btn layui-btn-xs" id="addLabel"><i class="layui-icon layui-icon-addition"></i>新增标签</button>
+	    </div>
+	  </div>
+	</form>
+    </div>
+
+    <script th:src="@{/lib/jquery/jquery.min.js}"></script>
+    <script th:src="@{/lib/layui/layui.js}"></script>
+    <script th:src="@{/js/common.js}"></script>
+<script th:inline="javascript">
+    	layui.config({
+            base: projectName()+'/lib/layui/extend/'
+        }).use(['table', 'element', 'form', 'dtree', 'tablePlug', 'layedit', 'laydate','layer','util','upload'], function () {
+        var util = layui.util;
+        var $ = layui.jquery;
+        var upload = layui.upload,   
+        form = layui.form
+        ,layer = layui.layer
+        ,layedit = layui.layedit
+        ,laydate = layui.laydate;
+        var callbackdata=parent.callbackdata;
+       
+		  //自定义验证规则
+		  form.verify({
+		    title: function(value){
+		      if(value.length < 2){
+		        return '标题至少得2个字符啊';
+		      }
+		    }
+		    ,pass: [
+		      /^[\S]{6,12}$/
+		      ,'密码必须6到12位，且不能出现空格'
+		    ]
+		    ,content: function(value){
+		      layedit.sync(editIndex);
+		    }
+		  });
+		  
+		  function loadData(obj){
+			  var tar="";
+			 
+			  if(obj!=undefined){
+				  console.log(obj.length);
+				  if(typeof(obj)=="string"){
+					  var str=randomString(5);
+				      tar +="<div class=\"layui-form-item labelDiv\" id=\"divLine_"+str+"\">";
+				    	 tar += "<div class=\"layui-input-inline\">";
+				    	 tar += "<input type=\"text\" name=\"fKeys\" lay-verify=\"required\" value='"+obj+"'  placeholder=\"请输入标签\" class=\"layui-input\">";
+				    	 tar += "</div>";
+				    	 tar += "<div class=\"inline\" style=\"padding-top:10px\">";
+				    	 tar +=  "<span><a style=\"color:#0070cc\" href=\"javascript:void(0);\" ar='"+str+"' class='delete'>删除</a></span>";
+				    	 tar += "</div>";
+				    	 tar +="</div>";
+				    	 $("#tab").html(tar);
+	            	}else{
+	            		  for (var i = 0; i < obj.length; i++) {
+	    					  var str=randomString(5);
+	    					      tar +="<div class=\"layui-form-item labelDiv\" id=\"divLine_"+str+"\">";
+	    					    	 tar += "<div class=\"layui-input-inline\">";
+	    					    	 tar += "<input type=\"text\" name=\"fKeys\" lay-verify=\"required\" value='"+obj[i]+"'  placeholder=\"请输入标签\" class=\"layui-input\">";
+	    					    	 tar += "</div>";
+	    					    	 tar += "<div class=\"inline\" style=\"padding-top:10px\">";
+	    					    	 tar +=  "<span><a style=\"color:#0070cc\" href=\"javascript:void(0);\" ar='"+str+"' class='delete'>删除</a></span>";
+	    					    	 tar += "</div>";
+	    					    	 tar +="</div>";
+	    					    	 $("#tab").html(tar);
+	    				}  
+	            	}
+				
+			  }
+		  }
+		  loadData(callbackdata);
+		     $("body").on("click","#addLabel",function () {
+		    	 if($("#addLabel").hasClass("layui-btn-disabled")){
+		    		 return;
+		    	 }
+		    	var str=randomString(5);
+			    var  tar ="<div class=\"layui-form-item labelDiv\" id=\"divLine_"+str+"\">";
+			    	 tar += "<div class=\"layui-input-inline\">";
+			    	 tar += "<input type=\"text\" name=\"fKeys\" lay-verify=\"required\"  placeholder=\"请输入标签\" class=\"layui-input\">";
+			    	 tar += "</div>";
+			    	 tar += "<div class=\"inline\" style=\"padding-top:10px\">";
+			    	 tar +=  "<span><a style=\"color:#0070cc\" href=\"javascript:void(0);\" ar='"+str+"' class='delete'>删除</a></span>";
+			    	 tar += "</div>";
+			    	 tar +="</div>";
+			    	 $("#tab").append(tar);
+			    	 var dd=$(".labelDiv");
+			    	 console.log(dd.length);
+			    	 if(dd.length==10){
+			    		$("#addLabel").addClass("layui-btn-disabled");
+			    	 }
+		      })
+		      
+		      //删除一行
+		      function deleteNewLine(id){
+		      	var line = $("#divLine_1"+id);
+				$("#divLine_1"+id).remove();
+		    	
+		      }
+		     $("body").on("click",".delete",function () {
+		    	 $("#addLabel").removeClass("layui-btn-disabled");
+		    	 var line = $(this).attr("ar");
+		    	 $("#divLine_"+line).remove();
+		     })
+		     
+		     function randomString(len) {
+			　　len = len || 32;
+			　　var $chars = 'ABCDEFGHJKMNPQRSTWXYZabcdefhijkmnprstwxyz2345678';    /****默认去掉了容易混淆的字符oOLl,9gq,Vv,Uu,I1****/
+			　　var maxPos = $chars.length;
+			　　var pwd = '';
+			　　for (i = 0; i < len; i++) {
+			　　　　pwd += $chars.charAt(Math.floor(Math.random() * maxPos));
+			　　}
+			　　return pwd;
+			}
+    });
+</script>
+
+</body>
+
+</html>

@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+<meta charset="UTF-8">
+<title>轮播图管理</title>
+<meta name="renderer" content="webkit">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<meta name="viewport"
+	content="width=device-width,user-scalable=yes, minimum-scale=0.4, initial-scale=0.8,target-densitydpi=low-dpi" />
+<link rel="shortcut icon" type="image/x-icon" th:href="@{/favicon.ico}" />
+<link rel="stylesheet" th:href="@{/lib/layui/css/layui.css}">
+<link rel="stylesheet" th:href="@{/css/common.css}">
+<link rel="stylesheet" th:href="@{/css/animate.min.css}">
+<link rel="stylesheet" th:href="@{/iconfont/iconfont.css}">
+
+</head>
+<style>
+.layui-form-label {
+	width: 100px;
+}
+
+.layui-table .layui-table-cell {
+	height: auto;
+	overflow: visible;
+	text-overflow: inherit;
+	white-space: normal;
+}
+
+.layui-table-fixed {
+	display: none;
+}
+</style>
+<body>
+
+	<div class="page-loading">
+		<div class="rubik-loader"></div>
+	</div>
+
+	<div class="z-body animated fadeIn">
+		<form class="layui-form zadmin-search-area input">
+			<fieldset class="layui-elem-field">
+				<legend>筛选搜索</legend>
+				<div class="layui-field-box">
+					<div class="layui-form-item" style="width: 700px; float: left;">
+						<div class="layui-inline">
+
+							<label for="fName" class="layui-form-label">订单号</label>
+							<div class="layui-input-inline">
+								<input type="text" name="serialNumber" autocomplete="off"
+									id="serialNumber" class="layui-input" placeholder="订单编号">
+							</div>
+						</div>
+						<div class="layui-inline">
+							<label class="layui-form-label">订单类型</label>
+							<div class="layui-input-inline">
+								<select name="type" id="type">
+									<option value="">请选择</option>
+									<option value="1" selected="selected">商品订单</option>
+									<option value="2">悠悠卡订单</option>
+									<option value="3">预约订单</option>
+
+								</select>
+							</div>
+						</div>
+						<div class="layui-inline">
+							<label for="fName" class="layui-form-label">提交时间</label>
+							<div class="layui-input-inline">
+								<input type="text" name="rangeTime" autocomplete="off" id="date"
+									class="layui-input" placeholder=" - ">
+							</div>
+						</div>
+						<div class="layui-inline">
+							<label class="layui-form-label">订单状态</label>
+							<div class="layui-input-inline">
+								<select name="orderType" id="orderType">
+									<option value="">请选择</option>
+									<option value="1">待付款</option>
+									<option value="2">待发货</option>
+									<option value="3">已发货</option>
+									<option value="3">已完成</option>
+									<option value="3">已关闭</option>
+
+								</select>
+							</div>
+
+						</div>
+						<div class="layui-inline">
+
+							<label for="fName" class="layui-form-label">收货人</label>
+							<div class="layui-input-inline">
+								<input type="text" name="consignee" autocomplete="off"
+									id="consignee" class="layui-input" placeholder="收货人姓名/手机号">
+							</div>
+						</div>
+						<div class="layui-inline">
+							<label for="fName" class="layui-form-label">商品名称</label>
+							<div class="layui-input-inline">
+								<input type="text" name="proName" autocomplete="off"
+									id="proName" class="layui-input" placeholder="商品名称">
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="layui-inline"
+					style="margin-top: -10px; margin-left: 120px;">
+					<button type="reset"
+						class="layui-btn layui-btn-sm layui-btn-primary table-action">
+						重置</button>
+					<button lay-submit="" lay-filter="search"
+						class="layui-btn layui-btn-sm layui-btn-normal table-action">
+						查询搜索</button>
+				</div>
+			</fieldset>
+		</form>
+		<fieldset class="layui-elem-field">
+			<legend>数据列表</legend>
+			<table class="layui-hide" id="user-table"></table>
+		</fieldset>
+	</div>
+
+	<script type="text/html" id="toolbar">
+        
+    </script>
+
+	<script type="text/html" id="column-toolbar">
+
+        <shiro:hasPermission name="order:edit">
+            <a lay-event="edit">
+                <i class="zadmin-icon zadmin-icon-edit-square zadmin-oper-area zadmin-blue" title="编辑"></i>
+            </a>
+        </shiro:hasPermission>
+    </script>
+
+
+
+
+	<script th:src="@{/lib/jquery/jquery.min.js}"></script>
+	<script th:src="@{/lib/layui/layui.js}"></script>
+	<script th:src="@{/js/common.js}"></script>
+
+	<script>
+		layui.config({
+			base : projectName() + '/lib/layui/extend/'
+		})
+				.use(
+						[ 'table', 'element', 'form', 'dtree', 'tablePlug',
+								'laydate' ],
+						function() {
+							var table = layui.table;
+							var $ = layui.$;
+							var form = layui.form;
+							var dtree = layui.dtree;
+							var tablePlug = layui.tablePlug;
+							var laydate = layui.laydate;
+
+							//日期时间范围
+							laydate.render({
+								elem : '#date',
+								range : true,
+								trigger : 'click'
+							});
+
+							tablePlug.smartReload.enable(true);
+							table.render({
+								elem : '#user-table',
+								url : projectName()
+										+ '/order/findPageWithResultByType',
+								page : true,
+								toolbar : '#toolbar',
+								where : {
+
+								},
+								smartReloadModel : true,
+								cols : [ [ {
+									type : 'numbers',
+									title : '序号',
+								
+								}, {
+									field : 'id',
+									title : 'ID',
+					
+									hide : true
+								}, {
+									field : 'serialNumber',
+									title : '订单号',
+									width : '17%',
+									align : 'center'
+								}, {
+									field : 'proName',
+									title : '商品名称',
+									width : '17%',
+
+									
+									align : 'center'
+								}, {
+									field : 'quantity',
+									title : '数量',
+									align : 'center'
+								}, {
+									field : 'activityType',
+									title : '订单类型',
+									width : '10%',
+									templet : function(d) {
+										var str = '';
+										if (d.activityType == 1) {
+											str = "普通商品";
+										} else if (d.activityType == 2) {
+											str = "悠悠卡";
+										} else if (d.activityType == 3) {
+											str = "预约";
+										}
+										return str;
+									},
+									align : 'center'
+								}, {
+									field : 'total',
+									title : '总金额',
+									align : 'center'
+								}, {
+									field : 'actual',
+									title : '实付',
+									align : 'center'
+								}, {
+									field : 'addTime',
+									title : '下单时间',
+									width : '17%',
+
+									align : 'center'
+								}, {
+									field : 'status',
+									title : '订单状态',
+									align : 'center',
+									templet : function(d) {
+										var str = '';
+										if (d.activityType == 1) {
+											if(d.status==1){
+												str='待支付';
+											}else if(d.status==2){
+												str='待发货';
+											}else if(d.status==3){
+												str='已取消';
+											}else if(d.status==4){
+												str='订单已驳回';
+											}else if(d.status==5){
+												str='已发货';
+											}else if(d.status==6){
+												str='已完成';
+											}else if(d.status==7){
+												str='已退款';
+											}
+										} else if (d.activityType == 2) {
+											if(d.status==1){
+												str='待支付';
+											}else if(d.status==2){
+												str='已支付';
+											}else if(d.status==3){
+												str='已取消';
+											}
+										}
+										return str;
+									},
+								}, {
+									title : '操作',
+									fixed : 'right',
+									align : 'center',
+									width : '10%',
+									toolbar : '#column-toolbar'
+								} ] ],
+								done : function(res, curr, count) {
+									hoverOpenImg();//显示大图
+
+								}
+							});
+
+							// 工具条点击事件
+							table.on('toolbar', function(obj) {
+								var data = obj.data;
+								var event = obj.event;
+
+								if (event === 'add') {
+									add();
+								}
+							});
+
+							// 行点击事件 
+							table.on('tool', function(obj) {
+								var data = obj.data;
+								var event = obj.event;
+								if (event === 'edit') {
+									if(data.activityType==1){
+										layer.open({
+											content : projectName() + '/order/orderProductInfo/'+data.id,
+											title : "订单详情",
+											area : [ '100%', '100%' ],
+											type : 2,
+											maxmin : true,
+											shadeClose : true,
+											end : function() {
+												/* table.reload('specs-table'); */
+											}
+										});
+									}else if(data.activityType==2){
+										layer.open({
+											content : projectName() + '/order/orderCardInfo/'+data.id,
+											title : "订单详情",
+											area : [ '100%', '100%' ],
+											type : 2,
+											maxmin : true,
+											shadeClose : true,
+											end : function() {
+												/* table.reload('specs-table'); */
+											}
+										});
+									}
+									
+								} else if (event === 'del') {
+									del(obj);
+								}
+							});
+
+							form.on('submit(search)', function(form) {
+
+								table.reload('user-table', {
+									where : form.field
+								});
+								return false;
+							});
+
+						});
+	</script>
+</body>
+
+</html>
